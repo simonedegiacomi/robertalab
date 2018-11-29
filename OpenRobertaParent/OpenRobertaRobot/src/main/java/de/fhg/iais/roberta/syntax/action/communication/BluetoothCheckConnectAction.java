@@ -8,12 +8,13 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -22,8 +23,8 @@ import de.fhg.iais.roberta.visitor.hardware.actor.IBluetoothVisitor;
 public class BluetoothCheckConnectAction<V> extends Action<V> {
     private final Expr<V> _connection;
 
-    private BluetoothCheckConnectAction(Expr<V> _connection, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("BLUETOOTH_CHECK_CONNECT_ACTION"), properties, comment);
+    private BluetoothCheckConnectAction(Expr<V> _connection, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("BLUETOOTH_CHECK_CONNECT_ACTION"), properties, comment, error);
         Assert.isTrue(_connection.isReadOnly() && _connection != null);
         this._connection = _connection;
         setReadOnly();
@@ -36,8 +37,8 @@ public class BluetoothCheckConnectAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link BluetoothCheckConnectAction}
      */
-    public static <V> BluetoothCheckConnectAction<V> make(Expr<V> _connection, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new BluetoothCheckConnectAction<V>(_connection, properties, comment);
+    public static <V> BluetoothCheckConnectAction<V> make(Expr<V> _connection, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new BluetoothCheckConnectAction<V>(_connection, properties, comment, error);
     }
 
     public Expr<V> getConnection() {
@@ -65,7 +66,11 @@ public class BluetoothCheckConnectAction<V> extends Action<V> {
         List<Value> values = helper.extractValues(block, (short) 1);
         Phrase<V> bluetoothConnectAddress = helper.extractValue(values, new ExprParam(BlocklyConstants.CONNECTION, BlocklyType.STRING));
         return BluetoothCheckConnectAction
-            .make(helper.convertPhraseToExpr(bluetoothConnectAddress), helper.extractBlockProperties(block), helper.extractComment(block));
+            .make(
+                helper.convertPhraseToExpr(bluetoothConnectAddress),
+                helper.extractBlockProperties(block),
+                helper.extractComment(block),
+                helper.extractError(block));
     }
 
     @Override

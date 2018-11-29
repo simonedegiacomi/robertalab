@@ -6,6 +6,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
@@ -25,8 +26,8 @@ public class Var<V> extends Expr<V> {
     private final BlocklyType typeVar;
     private final String name;
 
-    private Var(BlocklyType typeVar, String value, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("VAR"), properties, comment);
+    private Var(BlocklyType typeVar, String value, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("VAR"), properties, comment, error);
         Assert.isTrue(!value.equals("") && typeVar != null);
         this.name = value;
         this.typeVar = typeVar;
@@ -42,8 +43,8 @@ public class Var<V> extends Expr<V> {
      * @param comment added from the user,
      * @return read only object of class {@link Var}
      */
-    public static <V> Var<V> make(BlocklyType typeVar, String value, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new Var<V>(typeVar, value, properties, comment);
+    public static <V> Var<V> make(BlocklyType typeVar, String value, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new Var<V>(typeVar, value, properties, comment, error);
     }
 
     /**

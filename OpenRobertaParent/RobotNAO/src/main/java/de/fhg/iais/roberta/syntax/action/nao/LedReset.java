@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
@@ -25,8 +26,8 @@ public final class LedReset<V> extends Action<V> {
 
     private final Led led;
 
-    private LedReset(Led led, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("LED_RESET"), properties, comment);
+    private LedReset(Led led, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("LED_RESET"), properties, comment, error);
         this.led = led;
         setReadOnly();
     }
@@ -38,8 +39,8 @@ public final class LedReset<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link LedReset}
      */
-    private static <V> LedReset<V> make(Led led, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new LedReset<V>(led, properties, comment);
+    private static <V> LedReset<V> make(Led led, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new LedReset<V>(led, properties, comment, error);
     }
 
     public Led getLed() {
@@ -67,7 +68,7 @@ public final class LedReset<V> extends Action<V> {
         List<Field> fields = helper.extractFields(block, (short) 1);
         String leds = helper.extractField(fields, BlocklyConstants.LED);
 
-        return LedReset.make(Led.get(leds), helper.extractBlockProperties(block), helper.extractComment(block));
+        return LedReset.make(Led.get(leds), helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

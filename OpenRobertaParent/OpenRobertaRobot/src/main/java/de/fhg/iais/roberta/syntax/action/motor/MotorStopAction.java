@@ -11,6 +11,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.MoveAction;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
@@ -28,8 +29,8 @@ import de.fhg.iais.roberta.visitor.hardware.actor.IMotorVisitor;
 public class MotorStopAction<V> extends MoveAction<V> {
     private final IMotorStopMode mode;
 
-    private MotorStopAction(String port, IMotorStopMode mode, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(port, BlockTypeContainer.getByName("MOTOR_STOP_ACTION"), properties, comment);
+    private MotorStopAction(String port, IMotorStopMode mode, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(port, BlockTypeContainer.getByName("MOTOR_STOP_ACTION"), properties, comment, error);
         Assert.isTrue(port != null);
         this.mode = mode;
         setReadOnly();
@@ -44,8 +45,13 @@ public class MotorStopAction<V> extends MoveAction<V> {
      * @param comment added from the user,
      * @return read only object of class {@link MotorStopAction}
      */
-    private static <V> MotorStopAction<V> make(String port, IMotorStopMode mode, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new MotorStopAction<V>(port, mode, properties, comment);
+    private static <V> MotorStopAction<V> make(
+        String port,
+        IMotorStopMode mode,
+        BlocklyBlockProperties properties,
+        BlocklyComment comment,
+        BlocklyError error) {
+        return new MotorStopAction<V>(port, mode, properties, comment, error);
     }
 
     /**
@@ -84,10 +90,16 @@ public class MotorStopAction<V> extends MoveAction<V> {
         if ( fields.size() > 1 ) {
             String modeName = helper.extractField(fields, BlocklyConstants.MODE);
             return MotorStopAction
-                .make(factory.sanitizePort(portName), factory.getMotorStopMode(modeName), helper.extractBlockProperties(block), helper.extractComment(block));
+                .make(
+                    factory.sanitizePort(portName),
+                    factory.getMotorStopMode(modeName),
+                    helper.extractBlockProperties(block),
+                    helper.extractComment(block),
+                    helper.extractError(block));
 
         }
-        return MotorStopAction.make(factory.sanitizePort(portName), null, helper.extractBlockProperties(block), helper.extractComment(block));
+        return MotorStopAction
+            .make(factory.sanitizePort(portName), null, helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
 
     }
 

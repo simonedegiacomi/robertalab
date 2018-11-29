@@ -9,8 +9,6 @@ import java.util.Arrays;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.dbc.DbcException;
-
 public class Util1Test {
     private static ServerProperties serverProperties;
 

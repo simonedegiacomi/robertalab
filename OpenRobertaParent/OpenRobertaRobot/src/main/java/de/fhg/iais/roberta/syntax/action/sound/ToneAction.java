@@ -10,12 +10,13 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -32,8 +33,8 @@ public class ToneAction<V> extends Action<V> {
     private final Expr<V> duration;
     private final String port;
 
-    private ToneAction(Expr<V> frequency, Expr<V> duration, String port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("TONE_ACTION"), properties, comment);
+    private ToneAction(Expr<V> frequency, Expr<V> duration, String port, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("TONE_ACTION"), properties, comment, error);
         Assert.isTrue(frequency.isReadOnly() && duration.isReadOnly() && (frequency != null) && (duration != null));
         this.frequency = frequency;
         this.duration = duration;
@@ -51,8 +52,14 @@ public class ToneAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link ToneAction}.
      */
-    public static <V> ToneAction<V> make(Expr<V> frequency, Expr<V> duration, String port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ToneAction<>(frequency, duration, port, properties, comment);
+    public static <V> ToneAction<V> make(
+        Expr<V> frequency,
+        Expr<V> duration,
+        String port,
+        BlocklyBlockProperties properties,
+        BlocklyComment comment,
+        BlocklyError error) {
+        return new ToneAction<>(frequency, duration, port, properties, comment, error);
     }
 
     /**
@@ -72,7 +79,7 @@ public class ToneAction<V> extends Action<V> {
     /**
      * @return port of the buzzer.
      */
-    public String  getPort() {
+    public String getPort() {
         return this.port;
     }
 
@@ -106,7 +113,7 @@ public class ToneAction<V> extends Action<V> {
                 helper.convertPhraseToExpr(right),
                 factory.sanitizePort(port),
                 helper.extractBlockProperties(block),
-                helper.extractComment(block));
+                helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

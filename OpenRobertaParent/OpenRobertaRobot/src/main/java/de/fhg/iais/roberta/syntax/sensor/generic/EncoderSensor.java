@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
@@ -26,8 +27,8 @@ import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
  * To create an instance from this class use the method {@link #make(EncoderSensorMode, ActorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 public class EncoderSensor<V> extends ExternalSensor<V> {
-    private EncoderSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(sensorMetaDataBean, BlockTypeContainer.getByName("ENCODER_SENSING"), properties, comment);
+    private EncoderSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(sensorMetaDataBean, BlockTypeContainer.getByName("ENCODER_SENSING"), properties, comment, error);
         setReadOnly();
     }
 
@@ -40,8 +41,8 @@ public class EncoderSensor<V> extends ExternalSensor<V> {
      * @param comment added from the user,
      * @return read only object of {@link EncoderSensor}
      */
-    public static <V> EncoderSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new EncoderSensor<V>(sensorMetaDataBean, properties, comment);
+    public static <V> EncoderSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new EncoderSensor<V>(sensorMetaDataBean, properties, comment, error);
     }
 
     @Override
@@ -64,10 +65,10 @@ public class EncoderSensor<V> extends ExternalSensor<V> {
             String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
             sensorData =
                 new SensorMetaDataBean(factory.sanitizePort(portName), factory.getMode("RESET"), factory.sanitizeSlot(BlocklyConstants.NO_SLOT), false);
-            return EncoderSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
+            return EncoderSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
         }
         sensorData = extractPortAndModeAndSlot(block, helper);
-        return EncoderSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
+        return EncoderSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

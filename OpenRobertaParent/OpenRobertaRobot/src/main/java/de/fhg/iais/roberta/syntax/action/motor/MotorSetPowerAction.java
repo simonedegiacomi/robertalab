@@ -10,12 +10,13 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.MoveAction;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -30,8 +31,8 @@ import de.fhg.iais.roberta.visitor.hardware.actor.IMotorVisitor;
 public class MotorSetPowerAction<V> extends MoveAction<V> {
     private final Expr<V> power;
 
-    private MotorSetPowerAction(String port, Expr<V> power, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(port, BlockTypeContainer.getByName("MOTOR_SET_POWER_ACTION"), properties, comment);
+    private MotorSetPowerAction(String port, Expr<V> power, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(port, BlockTypeContainer.getByName("MOTOR_SET_POWER_ACTION"), properties, comment, error);
         Assert.isTrue(port != null && power.isReadOnly());
         this.power = power;
         setReadOnly();
@@ -46,8 +47,8 @@ public class MotorSetPowerAction<V> extends MoveAction<V> {
      * @param comment added from the user,
      * @return read only object of class {@link MotorSetPowerAction}
      */
-    private static <V> MotorSetPowerAction<V> make(String port, Expr<V> power, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new MotorSetPowerAction<V>(port, power, properties, comment);
+    private static <V> MotorSetPowerAction<V> make(String port, Expr<V> power, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new MotorSetPowerAction<V>(port, power, properties, comment, error);
     }
 
     /**
@@ -81,7 +82,12 @@ public class MotorSetPowerAction<V> extends MoveAction<V> {
         String portName = helper.extractField(fields, BlocklyConstants.MOTORPORT);
         Phrase<V> left = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, BlocklyType.NUMBER_INT));
         return MotorSetPowerAction
-            .make(factory.sanitizePort(portName), helper.convertPhraseToExpr(left), helper.extractBlockProperties(block), helper.extractComment(block));
+            .make(
+                factory.sanitizePort(portName),
+                helper.convertPhraseToExpr(left),
+                helper.extractBlockProperties(block),
+                helper.extractComment(block),
+                helper.extractError(block));
     }
 
     @Override

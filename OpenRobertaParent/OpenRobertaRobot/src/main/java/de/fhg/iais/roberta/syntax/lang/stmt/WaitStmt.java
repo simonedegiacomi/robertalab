@@ -13,11 +13,12 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt.Mode;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -32,8 +33,8 @@ import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 public class WaitStmt<V> extends Stmt<V> {
     private final StmtList<V> statements;
 
-    private WaitStmt(StmtList<V> statements, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("WAIT_STMT"), properties, comment);
+    private WaitStmt(StmtList<V> statements, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("WAIT_STMT"), properties, comment, error);
         Assert.isTrue(statements != null && statements.isReadOnly());
         this.statements = statements;
         setReadOnly();
@@ -47,8 +48,8 @@ public class WaitStmt<V> extends Stmt<V> {
      * @param comment for the block,
      * @return
      */
-    public static <V> WaitStmt<V> make(StmtList<V> statements, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new WaitStmt<>(statements, properties, comment);
+    public static <V> WaitStmt<V> make(StmtList<V> statements, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new WaitStmt<>(statements, properties, comment, error);
     }
 
     /**
@@ -94,10 +95,10 @@ public class WaitStmt<V> extends Stmt<V> {
             Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.WAIT + i, BlocklyType.BOOLEAN));
             statement = helper.extractStatement(statementss, BlocklyConstants.DO + i);
             list.addStmt(
-                RepeatStmt.make(Mode.WAIT, helper.convertPhraseToExpr(expr), statement, helper.extractBlockProperties(block), helper.extractComment(block)));
+                RepeatStmt.make(Mode.WAIT, helper.convertPhraseToExpr(expr), statement, helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block)));
         }
         list.setReadOnly();
-        return WaitStmt.make(list, helper.extractBlockProperties(block), helper.extractComment(block));
+        return WaitStmt.make(list, helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

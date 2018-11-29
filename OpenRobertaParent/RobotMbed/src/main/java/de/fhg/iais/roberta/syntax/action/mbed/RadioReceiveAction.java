@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
@@ -20,14 +21,14 @@ import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
 public class RadioReceiveAction<V> extends Action<V> {
     private final BlocklyType type;
 
-    private RadioReceiveAction(BlocklyType type, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("RADIO_RECEIVE_ACTION"), properties, comment);
+    private RadioReceiveAction(BlocklyType type, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("RADIO_RECEIVE_ACTION"), properties, comment, error);
         this.type = type;
         setReadOnly();
     }
 
-    public static <V> RadioReceiveAction<V> make(BlocklyType type, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new RadioReceiveAction<>(type, properties, comment);
+    public static <V> RadioReceiveAction<V> make(BlocklyType type, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new RadioReceiveAction<>(type, properties, comment, error);
     }
 
     @Override
@@ -55,7 +56,7 @@ public class RadioReceiveAction<V> extends Action<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         List<Field> fields = helper.extractFields(block, (short) 1);
         String type = helper.extractField(fields, BlocklyConstants.TYPE);
-        return RadioReceiveAction.make(BlocklyType.get(type), helper.extractBlockProperties(block), helper.extractComment(block));
+        return RadioReceiveAction.make(BlocklyType.get(type), helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
 
     }
 

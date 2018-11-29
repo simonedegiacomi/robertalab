@@ -12,13 +12,14 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.MotionParam;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -43,8 +44,9 @@ public class CurveAction<V> extends Action<V> {
         MotionParam<V> paramLeft,
         MotionParam<V> paramRight,
         BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("CURVE_ACTION"), properties, comment);
+        BlocklyComment comment,
+        BlocklyError error) {
+        super(BlockTypeContainer.getByName("CURVE_ACTION"), properties, comment, error);
         Assert.isTrue(direction != null && paramLeft != null && paramRight != null);
         this.direction = direction;
         this.paramLeft = paramLeft;
@@ -67,8 +69,9 @@ public class CurveAction<V> extends Action<V> {
         MotionParam<V> paramLeft,
         MotionParam<V> paramRight,
         BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        return new CurveAction<>(direction, paramLeft, paramRight, properties, comment);
+        BlocklyComment comment,
+        BlocklyError error) {
+        return new CurveAction<>(direction, paramLeft, paramRight, properties, comment, error);
     }
 
     /**
@@ -133,7 +136,14 @@ public class CurveAction<V> extends Action<V> {
             mpLeft = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(left)).build();
             mpRight = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(right)).build();
         }
-        return CurveAction.make(factory.getDriveDirection(mode), mpLeft, mpRight, helper.extractBlockProperties(block), helper.extractComment(block));
+        return CurveAction
+            .make(
+                factory.getDriveDirection(mode),
+                mpLeft,
+                mpRight,
+                helper.extractBlockProperties(block),
+                helper.extractComment(block),
+                helper.extractError(block));
     }
 
     @Override

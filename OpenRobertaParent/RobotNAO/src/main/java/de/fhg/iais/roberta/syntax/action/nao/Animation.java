@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
@@ -28,8 +29,8 @@ public final class Animation<V> extends Action<V> {
 
     private final Move move;
 
-    private Animation(Move move, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("SET_MODE"), properties, comment);
+    private Animation(Move move, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("SET_MODE"), properties, comment, error);
         Assert.notNull(move, "Missing Move in Mode block!");
         this.move = move;
         setReadOnly();
@@ -43,8 +44,8 @@ public final class Animation<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link Animation}
      */
-    private static <V> Animation<V> make(Move Move, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new Animation<V>(Move, properties, comment);
+    private static <V> Animation<V> make(Move Move, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new Animation<V>(Move, properties, comment, error);
     }
 
     public Move getMove() {
@@ -73,7 +74,7 @@ public final class Animation<V> extends Action<V> {
 
         String move = helper.extractField(fields, BlocklyConstants.MOVE);
 
-        return Animation.make(Move.get(move), helper.extractBlockProperties(block), helper.extractComment(block));
+        return Animation.make(Move.get(move), helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

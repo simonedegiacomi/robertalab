@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
@@ -29,8 +30,8 @@ import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
 public class LedColor<V> extends Expr<V> {
     private final String value;
 
-    private LedColor(String color, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("LED_COLOR_CONST"), properties, comment);
+    private LedColor(String color, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("LED_COLOR_CONST"), properties, comment, error);
         Assert.notNull(color);
         this.value = color;
         setReadOnly();
@@ -44,8 +45,8 @@ public class LedColor<V> extends Expr<V> {
      * @param comment added from the user,
      * @return read only object of class {@link LedColor}.
      */
-    public static <V> LedColor<V> make(String value, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new LedColor<>(value, properties, comment);
+    public static <V> LedColor<V> make(String value, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new LedColor<>(value, properties, comment, error);
     }
 
     /**
@@ -107,7 +108,7 @@ public class LedColor<V> extends Expr<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         List<Field> fields = helper.extractFields(block, (short) 1);
         String color = helper.extractField(fields, BlocklyConstants.COLOUR);
-        return LedColor.make(color, helper.extractBlockProperties(block), helper.extractComment(block));
+        return LedColor.make(color, helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

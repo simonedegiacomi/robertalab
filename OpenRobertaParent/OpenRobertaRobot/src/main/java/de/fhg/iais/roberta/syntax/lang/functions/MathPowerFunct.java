@@ -7,6 +7,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
@@ -27,8 +28,8 @@ public class MathPowerFunct<V> extends Expr<V> {
     private final FunctionNames functName;
     private final List<Expr<V>> param;
 
-    private MathPowerFunct(FunctionNames name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("FUNCTIONS"), properties, comment);
+    private MathPowerFunct(FunctionNames name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("FUNCTIONS"), properties, comment, error);
         Assert.isTrue(name != null && param != null);
         this.functName = name;
         this.param = param;
@@ -44,8 +45,8 @@ public class MathPowerFunct<V> extends Expr<V> {
      * @param comment that user has added to the block,
      * @return read only object of class {@link MathPowerFunct}
      */
-    public static <V> MathPowerFunct<V> make(FunctionNames name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new MathPowerFunct<V>(name, param, properties, comment);
+    public static <V> MathPowerFunct<V> make(FunctionNames name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new MathPowerFunct<V>(name, param, properties, comment, error);
     }
 
     /**

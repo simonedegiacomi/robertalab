@@ -10,12 +10,13 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
@@ -25,8 +26,8 @@ public class RadioSendAction<V> extends Action<V> {
     private final BlocklyType type;
     private final String power;
 
-    private RadioSendAction(Expr<V> msg, BlocklyType type, String power, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("RADIO_SEND_ACTION"), properties, comment);
+    private RadioSendAction(Expr<V> msg, BlocklyType type, String power, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("RADIO_SEND_ACTION"), properties, comment, error);
         this.message = msg;
         this.type = type;
         this.power = power;
@@ -40,8 +41,8 @@ public class RadioSendAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link RadioSendAction}
      */
-    public static <V> RadioSendAction<V> make(Expr<V> expr, BlocklyType type, String power, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new RadioSendAction<>(expr, type, power, properties, comment);
+    public static <V> RadioSendAction<V> make(Expr<V> expr, BlocklyType type, String power, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new RadioSendAction<>(expr, type, power, properties, comment, error);
     }
 
     public Expr<V> getMsg() {
@@ -80,7 +81,7 @@ public class RadioSendAction<V> extends Action<V> {
         String power = helper.extractField(fields, BlocklyConstants.POWER);
         String type = helper.extractField(fields, BlocklyConstants.TYPE);
         
-        return RadioSendAction.make(helper.convertPhraseToExpr(message), BlocklyType.get(type), power, helper.extractBlockProperties(block), helper.extractComment(block));
+        return RadioSendAction.make(helper.convertPhraseToExpr(message), BlocklyType.get(type), power, helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
     
     @Override

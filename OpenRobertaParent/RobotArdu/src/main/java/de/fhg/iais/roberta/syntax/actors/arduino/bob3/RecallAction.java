@@ -4,6 +4,7 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
@@ -22,16 +23,16 @@ import de.fhg.iais.roberta.visitor.hardware.IBob3Visitor;
  */
 public class RecallAction<V> extends Action<V> {
 
-    private RecallAction(BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("BOB3_RECALL"), properties, comment);
+    private RecallAction(BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("BOB3_RECALL"), properties, comment, error);
         setReadOnly();
     }
 
     /**
      * Creates instance of {@link RecallAction}. This instance is read only and can not be modified.
      */
-    private static <V> RecallAction<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new RecallAction<>(properties, comment);
+    private static <V> RecallAction<V> make(BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new RecallAction<>(properties, comment, error);
     }
 
     @Override
@@ -52,7 +53,7 @@ public class RecallAction<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
-        return RecallAction.make(helper.extractBlockProperties(block), helper.extractComment(block));
+        return RecallAction.make(helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

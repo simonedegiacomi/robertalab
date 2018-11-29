@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
@@ -37,8 +38,8 @@ public class MethodCall<V> extends Method<V> {
         ExprList<V> parametersValues,
         BlocklyType returnType,
         BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("METHOD_CALL"), properties, comment);
+        BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("METHOD_CALL"), properties, comment, error);
         Assert.isTrue(!methodName.equals("") && parameters.isReadOnly() && parametersValues.isReadOnly());
         this.methodName = methodName;
         this.parameters = parameters;
@@ -64,8 +65,8 @@ public class MethodCall<V> extends Method<V> {
         ExprList<V> parametersValues,
         BlocklyType returnType,
         BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        return new MethodCall<V>(methodName, parameters, parametersValues, returnType, properties, comment);
+        BlocklyComment comment, BlocklyError error) {
+        return new MethodCall<V>(methodName, parameters, parametersValues, returnType, properties, comment, error);
     }
 
     /**
@@ -124,7 +125,7 @@ public class MethodCall<V> extends Method<V> {
 
         ExprList<V> parametersValues = helper.valuesToExprList(values, types, numberOfArguments, BlocklyConstants.ARG);
 
-        return MethodCall.make(methodName, parameters, parametersValues, outputType, helper.extractBlockProperties(block), helper.extractComment(block));
+        return MethodCall.make(methodName, parameters, parametersValues, outputType, helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

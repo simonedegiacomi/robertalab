@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
@@ -28,8 +29,8 @@ import de.fhg.iais.roberta.visitor.hardware.IMbotVisitor;
 public class LedMatrix<V> extends Expr<V> {
     private final String[][] image;
 
-    private LedMatrix(String[][] image, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("MAKEBLOCK_LED_MATRIX"), properties, comment);
+    private LedMatrix(String[][] image, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("MAKEBLOCK_LED_MATRIX"), properties, comment, error);
         this.image = image;
         setReadOnly();
     }
@@ -42,8 +43,8 @@ public class LedMatrix<V> extends Expr<V> {
      * @param comment added from the user,
      * @return read only object of class {@link Image}
      */
-    public static <V> LedMatrix<V> make(String[][] image, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new LedMatrix<>(image, properties, comment);
+    public static <V> LedMatrix<V> make(String[][] image, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new LedMatrix<>(image, properties, comment, error);
     }
 
     /**
@@ -101,7 +102,7 @@ public class LedMatrix<V> extends Expr<V> {
                 image[i][j] = helper.extractField(fields, "P" + j + i);
             }
         }
-        return LedMatrix.make(image, helper.extractBlockProperties(block), helper.extractComment(block));
+        return LedMatrix.make(image, helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

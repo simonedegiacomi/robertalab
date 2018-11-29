@@ -9,12 +9,13 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -32,8 +33,8 @@ public class AssignStmt<V> extends Stmt<V> {
     private final Var<V> name;
     private final Expr<V> expr;
 
-    private AssignStmt(Var<V> name, Expr<V> expr, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("ASSIGN_STMT"), properties, comment);
+    private AssignStmt(Var<V> name, Expr<V> expr, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("ASSIGN_STMT"), properties, comment, error);
         Assert.isTrue(name != null && expr != null && name.isReadOnly() && expr.isReadOnly());
         this.name = name;
         this.expr = expr;
@@ -49,8 +50,8 @@ public class AssignStmt<V> extends Stmt<V> {
      * @param comment added from the user,
      * @return instance of {@link AssignStmt}
      */
-    public static <V> AssignStmt<V> make(Var<V> name, Expr<V> expr, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new AssignStmt<V>(name, expr, properties, comment);
+    public static <V> AssignStmt<V> make(Var<V> name, Expr<V> expr, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new AssignStmt<V>(name, expr, properties, comment, error);
     }
 
     /**
@@ -92,7 +93,7 @@ public class AssignStmt<V> extends Stmt<V> {
         Phrase<V> p = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.CAPTURED_TYPE));
         Expr<V> exprr = helper.convertPhraseToExpr(p);
         return AssignStmt
-            .make((Var<V>) helper.extractVar(block), helper.convertPhraseToExpr(exprr), helper.extractBlockProperties(block), helper.extractComment(block));
+            .make((Var<V>) helper.extractVar(block), helper.convertPhraseToExpr(exprr), helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

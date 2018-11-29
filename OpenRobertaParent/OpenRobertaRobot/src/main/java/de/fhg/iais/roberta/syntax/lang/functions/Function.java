@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.syntax.lang.functions;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
@@ -21,8 +22,8 @@ public abstract class Function<V> extends Phrase<V> {
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment of the user for the specific block
      */
-    public Function(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(kind, properties, comment);
+    public Function(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(kind, properties, comment, error);
 
     }
 

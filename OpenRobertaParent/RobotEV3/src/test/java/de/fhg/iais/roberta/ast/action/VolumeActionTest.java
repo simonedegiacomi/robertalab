@@ -34,7 +34,7 @@ public class VolumeActionTest {
     public void invalideMode() throws Exception {
         try {
             @SuppressWarnings("unused")
-            VolumeAction<Void> va = VolumeAction.make(VolumeAction.Mode.valueOf("invalid"), null, null, null);
+            VolumeAction<Void> va = VolumeAction.make(VolumeAction.Mode.valueOf("invalid"), null, null, null, null);
             Assert.fail();
         } catch ( Exception e ) {
             Assert.assertEquals("No enum constant de.fhg.iais.roberta.syntax.action.sound.VolumeAction.Mode.invalid", e.getMessage());

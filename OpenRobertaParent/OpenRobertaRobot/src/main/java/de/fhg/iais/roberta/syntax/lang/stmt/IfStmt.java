@@ -12,11 +12,12 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -41,9 +42,10 @@ public class IfStmt<V> extends Stmt<V> {
         boolean ternary,
         BlocklyBlockProperties properties,
         BlocklyComment comment,
+        BlocklyError error,
         int _else,
         int _elseIf) {
-        super(BlockTypeContainer.getByName("IF_STMT"), properties, comment);
+        super(BlockTypeContainer.getByName("IF_STMT"), properties, comment, error);
         Assert.isTrue(expr.size() == thenList.size() && elseList.isReadOnly());
         this.expr = expr;
         this.thenList = thenList;
@@ -72,9 +74,10 @@ public class IfStmt<V> extends Stmt<V> {
         StmtList<V> elseList,
         BlocklyBlockProperties properties,
         BlocklyComment comment,
+        BlocklyError error,
         int _else,
         int _elseIf) {
-        return new IfStmt<V>(expr, thenList, elseList, false, properties, comment, _else, _elseIf);
+        return new IfStmt<V>(expr, thenList, elseList, false, properties, comment, error, _else, _elseIf);
     }
 
     /**
@@ -95,13 +98,14 @@ public class IfStmt<V> extends Stmt<V> {
         StmtList<V> elseList,
         BlocklyBlockProperties properties,
         BlocklyComment comment,
+        BlocklyError error,
         int _else,
         int _elseIf) {
         List<Expr<V>> exprsList = new ArrayList<Expr<V>>();
         List<StmtList<V>> thensList = new ArrayList<StmtList<V>>();
         exprsList.add(expr);
         thensList.add(thenList);
-        return new IfStmt<V>(exprsList, thensList, elseList, true, properties, comment, _else, _elseIf);
+        return new IfStmt<V>(exprsList, thensList, elseList, true, properties, comment, error, _else, _elseIf);
     }
 
     /**
@@ -120,11 +124,12 @@ public class IfStmt<V> extends Stmt<V> {
         List<StmtList<V>> thenList,
         BlocklyBlockProperties properties,
         BlocklyComment comment,
+        BlocklyError error,
         int _else,
         int _elseIf) {
         StmtList<V> elseList = StmtList.make();
         elseList.setReadOnly();
-        return new IfStmt<V>(expr, thenList, elseList, false, properties, comment, _else, _elseIf);
+        return new IfStmt<V>(expr, thenList, elseList, false, properties, comment, error, _else, _elseIf);
     }
 
     /**
@@ -216,7 +221,15 @@ public class IfStmt<V> extends Stmt<V> {
             elseList.addStmt(ExprStmt.make(helper.convertPhraseToExpr(elseStmt)));
             elseList.setReadOnly();
             return IfStmt
-                .make(helper.convertPhraseToExpr(ifExpr), thenList, elseList, helper.extractBlockProperties(block), helper.extractComment(block), 0, 0);
+                .make(
+                    helper.convertPhraseToExpr(ifExpr),
+                    thenList,
+                    elseList,
+                    helper.extractBlockProperties(block),
+                    helper.extractComment(block),
+                    helper.extractError(block),
+                    0,
+                    0);
         }
         Mutation mutation = block.getMutation();
         int _else = helper.getElse(mutation);

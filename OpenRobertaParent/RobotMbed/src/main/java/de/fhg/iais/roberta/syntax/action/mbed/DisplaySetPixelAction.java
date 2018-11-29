@@ -8,13 +8,14 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -33,8 +34,8 @@ public class DisplaySetPixelAction<V> extends Action<V> {
     private final Expr<V> y;
     private final Expr<V> brightness;
 
-    private DisplaySetPixelAction(Expr<V> x, Expr<V> y, Expr<V> brightness, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("DISPLAY_SET_BRIGHTNESS"), properties, comment);
+    private DisplaySetPixelAction(Expr<V> x, Expr<V> y, Expr<V> brightness, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("DISPLAY_SET_BRIGHTNESS"), properties, comment, error);
         Assert.notNull(x);
         Assert.notNull(y);
         Assert.notNull(brightness);
@@ -52,8 +53,14 @@ public class DisplaySetPixelAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link DisplaySetPixelAction}
      */
-    private static <V> DisplaySetPixelAction<V> make(Expr<V> x, Expr<V> y, Expr<V> brightness, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new DisplaySetPixelAction<>(x, y, brightness, properties, comment);
+    private static <V> DisplaySetPixelAction<V> make(
+        Expr<V> x,
+        Expr<V> y,
+        Expr<V> brightness,
+        BlocklyBlockProperties properties,
+        BlocklyComment comment,
+        BlocklyError error) {
+        return new DisplaySetPixelAction<>(x, y, brightness, properties, comment, error);
     }
 
     /**
@@ -100,12 +107,14 @@ public class DisplaySetPixelAction<V> extends Action<V> {
         Phrase<V> brightness = helper.extractValue(values, new ExprParam(BlocklyConstants.BRIGHTNESS, BlocklyType.NUMBER_INT));
         Phrase<V> x = helper.extractValue(values, new ExprParam(BlocklyConstants.X, BlocklyType.NUMBER_INT));
         Phrase<V> y = helper.extractValue(values, new ExprParam(BlocklyConstants.Y, BlocklyType.NUMBER_INT));
-        return DisplaySetPixelAction.make(
-            helper.convertPhraseToExpr(x),
-            helper.convertPhraseToExpr(y),
-            helper.convertPhraseToExpr(brightness),
-            helper.extractBlockProperties(block),
-            helper.extractComment(block));
+        return DisplaySetPixelAction
+            .make(
+                helper.convertPhraseToExpr(x),
+                helper.convertPhraseToExpr(y),
+                helper.convertPhraseToExpr(brightness),
+                helper.extractBlockProperties(block),
+                helper.extractComment(block),
+                helper.extractError(block));
 
     }
 

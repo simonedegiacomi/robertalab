@@ -10,12 +10,13 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -32,8 +33,8 @@ public final class TurnDegrees<V> extends Action<V> {
     private final TurnDirection turnDirection;
     private final Expr<V> degreesToTurn;
 
-    private TurnDegrees(TurnDirection turnDirection, Expr<V> degreesToTurn, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("TURN_DEGREES"), properties, comment);
+    private TurnDegrees(TurnDirection turnDirection, Expr<V> degreesToTurn, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("TURN_DEGREES"), properties, comment, error);
         Assert.notNull(turnDirection, "Missing degrees in TurnDegrees block!");
         this.turnDirection = turnDirection;
         this.degreesToTurn = degreesToTurn;
@@ -49,8 +50,8 @@ public final class TurnDegrees<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link TurnDegrees}
      */
-    private static <V> TurnDegrees<V> make(TurnDirection turnDirection, Expr<V> degreesToTurn, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new TurnDegrees<V>(turnDirection, degreesToTurn, properties, comment);
+    private static <V> TurnDegrees<V> make(TurnDirection turnDirection, Expr<V> degreesToTurn, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new TurnDegrees<V>(turnDirection, degreesToTurn, properties, comment, error);
     }
 
     public TurnDirection getTurnDirection() {
@@ -89,7 +90,7 @@ public final class TurnDegrees<V> extends Action<V> {
             TurnDirection.get(turnDirection),
             helper.convertPhraseToExpr(walkDistance),
             helper.extractBlockProperties(block),
-            helper.extractComment(block));
+            helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

@@ -1,10 +1,10 @@
 package de.fhg.iais.roberta.syntax.sensor.generic;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
@@ -21,8 +21,8 @@ import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
  */
 public class PinGetValueSensor<V> extends ExternalSensor<V> {
 
-    private PinGetValueSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(sensorMetaDataBean, BlockTypeContainer.getByName("PIN_VALUE"), properties, comment);
+    private PinGetValueSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(sensorMetaDataBean, BlockTypeContainer.getByName("PIN_VALUE"), properties, comment, error);
         setReadOnly();
     }
 
@@ -35,8 +35,8 @@ public class PinGetValueSensor<V> extends ExternalSensor<V> {
      * @param comment added from the user,
      * @return read only object of {@link PinGetValueSensor}
      */
-    public static <V> PinGetValueSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new PinGetValueSensor<>(sensorMetaDataBean, properties, comment);
+    public static <V> PinGetValueSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new PinGetValueSensor<>(sensorMetaDataBean, properties, comment, error);
     }
 
     @Override
@@ -52,6 +52,6 @@ public class PinGetValueSensor<V> extends ExternalSensor<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         SensorMetaDataBean sensorData = extractPortAndModeAndSlot(block, helper);
-        return PinGetValueSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
+        return PinGetValueSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 }

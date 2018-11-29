@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
@@ -29,8 +30,8 @@ public class MainTask<V> extends Task<V> {
     private final StmtList<V> variables;
     private final String debug;
 
-    private MainTask(StmtList<V> variables, String debug, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("MAIN_TASK"), properties, comment);
+    private MainTask(StmtList<V> variables, String debug, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("MAIN_TASK"), properties, comment, error);
         Assert.isTrue(variables.isReadOnly() && variables != null);
         this.variables = variables;
         this.debug = debug;
@@ -42,8 +43,8 @@ public class MainTask<V> extends Task<V> {
      *
      * @param variables read only list of declared variables
      */
-    public static <V> MainTask<V> make(StmtList<V> variables, String debug, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new MainTask<V>(variables, debug, properties, comment);
+    public static <V> MainTask<V> make(StmtList<V> variables, String debug, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new MainTask<V>(variables, debug, properties, comment, error);
     }
 
     /**
@@ -93,11 +94,11 @@ public class MainTask<V> extends Task<V> {
         if ( block.getMutation().isDeclare() == true ) {
             List<Statement> statements = helper.extractStatements(block, (short) 1);
             StmtList<V> statement = helper.extractStatement(statements, BlocklyConstants.ST);
-            return MainTask.make(statement, debug, helper.extractBlockProperties(block), helper.extractComment(block));
+            return MainTask.make(statement, debug, helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
         }
         StmtList<V> listOfVariables = StmtList.make();
         listOfVariables.setReadOnly();
-        return MainTask.make(listOfVariables, debug, helper.extractBlockProperties(block), helper.extractComment(block));
+        return MainTask.make(listOfVariables, debug, helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

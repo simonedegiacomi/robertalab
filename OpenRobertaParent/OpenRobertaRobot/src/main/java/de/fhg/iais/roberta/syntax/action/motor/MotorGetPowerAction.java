@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.MoveAction;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
@@ -25,8 +26,8 @@ import de.fhg.iais.roberta.visitor.hardware.actor.IMotorVisitor;
  */
 public class MotorGetPowerAction<V> extends MoveAction<V> {
 
-    private MotorGetPowerAction(String port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(port, BlockTypeContainer.getByName("MOTOR_GET_POWER_ACTION"), properties, comment);
+    private MotorGetPowerAction(String port, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(port, BlockTypeContainer.getByName("MOTOR_GET_POWER_ACTION"), properties, comment, error);
         Assert.isTrue(port != null);
 
         setReadOnly();
@@ -40,8 +41,8 @@ public class MotorGetPowerAction<V> extends MoveAction<V> {
      * @param comment added from the user,
      * @return read only object of class {@link MotorGetPowerAction}
      */
-    private static <V> MotorGetPowerAction<V> make(String port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new MotorGetPowerAction<V>(port, properties, comment);
+    private static <V> MotorGetPowerAction<V> make(String port, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new MotorGetPowerAction<V>(port, properties, comment, error);
     }
 
     @Override
@@ -65,7 +66,8 @@ public class MotorGetPowerAction<V> extends MoveAction<V> {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = helper.extractFields(block, (short) 1);
         String portName = helper.extractField(fields, BlocklyConstants.MOTORPORT);
-        return MotorGetPowerAction.make(factory.sanitizePort(portName), helper.extractBlockProperties(block), helper.extractComment(block));
+        return MotorGetPowerAction
+            .make(factory.sanitizePort(portName), helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

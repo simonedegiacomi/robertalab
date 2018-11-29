@@ -11,14 +11,15 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.MotionParam;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.MoveAction;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -34,8 +35,8 @@ public final class MotorOnAction<V> extends MoveAction<V> {
 
     private final MotionParam<V> param;
 
-    private MotorOnAction(String port, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(port, BlockTypeContainer.getByName("MOTOR_ON_ACTION"), properties, comment);
+    private MotorOnAction(String port, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(port, BlockTypeContainer.getByName("MOTOR_ON_ACTION"), properties, comment, error);
         Assert.isTrue((param != null) && (port != null));
         this.param = param;
 
@@ -51,8 +52,8 @@ public final class MotorOnAction<V> extends MoveAction<V> {
      * @param comment added from the user,
      * @return read only object of class {@link MotorOnAction}
      */
-    private static <V> MotorOnAction<V> make(String port, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new MotorOnAction<>(port, param, properties, comment);
+    private static <V> MotorOnAction<V> make(String port, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new MotorOnAction<>(port, param, properties, comment, error);
     }
 
     /**
@@ -92,7 +93,7 @@ public final class MotorOnAction<V> extends MoveAction<V> {
             }
             mp = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(left)).duration(md).build();
         }
-        return MotorOnAction.make(port, mp, helper.extractBlockProperties(block), helper.extractComment(block));
+        return MotorOnAction.make(port, mp, helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     /**

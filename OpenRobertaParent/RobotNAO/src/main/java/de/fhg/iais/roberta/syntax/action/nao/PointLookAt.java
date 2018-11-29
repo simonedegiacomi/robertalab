@@ -11,12 +11,13 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.INaoVisitor;
@@ -44,8 +45,8 @@ public final class PointLookAt<V> extends Action<V> {
         Expr<V> pointZ,
         Expr<V> speed,
         BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("POINT_LOOK_AT"), properties, comment);
+        BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("POINT_LOOK_AT"), properties, comment, error);
         //Assert.notNull(frame, "Missing frame in PointLookAt block!");
         //Assert.notNull(pointLook, "Missing point look in PointLookAt block!");
         this.frame = frame;
@@ -77,8 +78,8 @@ public final class PointLookAt<V> extends Action<V> {
         Expr<V> pointZ,
         Expr<V> speed,
         BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        return new PointLookAt<V>(frame, pointLook, pointX, pointY, pointZ, speed, properties, comment);
+        BlocklyComment comment, BlocklyError error) {
+        return new PointLookAt<V>(frame, pointLook, pointX, pointY, pointZ, speed, properties, comment, error);
     }
 
     public Frame getFrame() {
@@ -141,7 +142,7 @@ public final class PointLookAt<V> extends Action<V> {
             helper.convertPhraseToExpr(pointZ),
             helper.convertPhraseToExpr(speed),
             helper.extractBlockProperties(block),
-            helper.extractComment(block));
+            helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

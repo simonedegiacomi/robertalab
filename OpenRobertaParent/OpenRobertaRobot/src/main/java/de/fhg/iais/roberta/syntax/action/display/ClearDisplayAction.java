@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
@@ -22,8 +23,8 @@ import de.fhg.iais.roberta.visitor.hardware.actor.IDisplayVisitor;
 public final class ClearDisplayAction<V> extends Action<V> {
     private final String port;
 
-    private ClearDisplayAction(String port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("CLEAR_DISPLAY_ACTION"), properties, comment);
+    private ClearDisplayAction(String port, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("CLEAR_DISPLAY_ACTION"), properties, comment, error);
         this.port = port;
         setReadOnly();
     }
@@ -36,8 +37,8 @@ public final class ClearDisplayAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link ClearDisplayAction}
      */
-    public static <V> ClearDisplayAction<V> make(String port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ClearDisplayAction<>(port, properties, comment);
+    public static <V> ClearDisplayAction<V> make(String port, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new ClearDisplayAction<>(port, properties, comment, error);
     }
 
     @Override
@@ -68,7 +69,8 @@ public final class ClearDisplayAction<V> extends Action<V> {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = helper.extractFields(block, (short) 1);
         String port = helper.extractField(fields, BlocklyConstants.ACTORPORT, BlocklyConstants.NO_PORT);
-        return ClearDisplayAction.make(factory.sanitizePort(port), helper.extractBlockProperties(block), helper.extractComment(block));
+        return ClearDisplayAction
+            .make(factory.sanitizePort(port), helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

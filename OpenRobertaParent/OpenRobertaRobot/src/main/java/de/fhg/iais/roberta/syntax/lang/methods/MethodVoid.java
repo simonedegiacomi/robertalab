@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
@@ -27,8 +28,8 @@ import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 public class MethodVoid<V> extends Method<V> {
     private final StmtList<V> body;
 
-    private MethodVoid(String methodName, ExprList<V> parameters, StmtList<V> body, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("METHOD_VOID"), properties, comment);
+    private MethodVoid(String methodName, ExprList<V> parameters, StmtList<V> body, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("METHOD_VOID"), properties, comment, error);
         Assert.isTrue(!methodName.equals("") && parameters.isReadOnly() && body.isReadOnly());
         this.methodName = methodName;
         this.parameters = parameters;
@@ -52,8 +53,8 @@ public class MethodVoid<V> extends Method<V> {
         ExprList<V> parameters,
         StmtList<V> body,
         BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        return new MethodVoid<V>(methodName, parameters, body, properties, comment);
+        BlocklyComment comment, BlocklyError error) {
+        return new MethodVoid<V>(methodName, parameters, body, properties, comment, error);
     }
 
     /**
@@ -88,7 +89,7 @@ public class MethodVoid<V> extends Method<V> {
         ExprList<V> exprList = helper.statementsToExprs(statements, BlocklyConstants.ST);
         StmtList<V> statement = helper.extractStatement(statements, BlocklyConstants.STACK);
 
-        return MethodVoid.make(name, exprList, statement, helper.extractBlockProperties(block), helper.extractComment(block));
+        return MethodVoid.make(name, exprList, statement, helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

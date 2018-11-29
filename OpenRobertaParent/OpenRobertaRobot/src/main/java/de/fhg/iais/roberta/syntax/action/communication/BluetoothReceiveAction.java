@@ -9,12 +9,13 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.IBluetoothVisitor;
@@ -29,16 +30,17 @@ public class BluetoothReceiveAction<V> extends Action<V> {
         String channel,
         String dataType,
         BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("BLUETOOTH_RECEIVED_ACTION"), properties, comment);
+        BlocklyComment comment,
+        BlocklyError error) {
+        super(BlockTypeContainer.getByName("BLUETOOTH_RECEIVED_ACTION"), properties, comment, error);
         this.connection = bluetoothRecieveConnection;
         this.channel = channel;
         this.dataType = dataType;
         setReadOnly();
     }
 
-    private BluetoothReceiveAction(Expr<V> bluetoothRecieveConnection, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("BLUETOOTH_RECEIVED_ACTION"), properties, comment);
+    private BluetoothReceiveAction(Expr<V> bluetoothRecieveConnection, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("BLUETOOTH_RECEIVED_ACTION"), properties, comment, error);
         this.connection = bluetoothRecieveConnection;
         setReadOnly();
     }
@@ -48,12 +50,17 @@ public class BluetoothReceiveAction<V> extends Action<V> {
         String channel,
         String dataType,
         BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        return new BluetoothReceiveAction<V>(bluetoothRecieveConnection, channel, dataType, properties, comment);
+        BlocklyComment comment,
+        BlocklyError error) {
+        return new BluetoothReceiveAction<V>(bluetoothRecieveConnection, channel, dataType, properties, comment, error);
     }
 
-    public static <V> BluetoothReceiveAction<V> make(Expr<V> bluetoothRecieveConnection, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new BluetoothReceiveAction<V>(bluetoothRecieveConnection, properties, comment);
+    public static <V> BluetoothReceiveAction<V> make(
+        Expr<V> bluetoothRecieveConnection,
+        BlocklyBlockProperties properties,
+        BlocklyComment comment,
+        BlocklyError error) {
+        return new BluetoothReceiveAction<V>(bluetoothRecieveConnection, properties, comment, error);
     }
 
     public Expr<V> getConnection() {
@@ -93,10 +100,15 @@ public class BluetoothReceiveAction<V> extends Action<V> {
                     bluetoothRecieveChannel,
                     bluetoothRecieveDataType,
                     helper.extractBlockProperties(block),
-                    helper.extractComment(block));
+                    helper.extractComment(block),
+                    helper.extractError(block));
         } else {
             return BluetoothReceiveAction
-                .make(helper.convertPhraseToExpr(bluetoothRecieveConnection), helper.extractBlockProperties(block), helper.extractComment(block));
+                .make(
+                    helper.convertPhraseToExpr(bluetoothRecieveConnection),
+                    helper.extractBlockProperties(block),
+                    helper.extractComment(block),
+                    helper.extractError(block));
         }
     }
 

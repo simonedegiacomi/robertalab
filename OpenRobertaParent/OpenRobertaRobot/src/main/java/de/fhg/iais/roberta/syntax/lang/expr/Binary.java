@@ -11,13 +11,14 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.Sig;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -37,14 +38,14 @@ public final class Binary<V> extends Expr<V> {
     private final Expr<V> right;
     private final String operationRange;
 
-    private Binary(Op op, Expr<V> left, Expr<V> right, String operationRange, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("BINARY"), properties, comment);
+    private Binary(Op op, Expr<V> left, Expr<V> right, String operationRange, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("BINARY"), properties, comment, error);
         Assert.isTrue(op != null && left != null && right != null && left.isReadOnly() && right.isReadOnly());
         this.op = op;
         this.left = left;
         this.right = right;
         this.operationRange = operationRange;
-        this.setReadOnly();
+        setReadOnly();
     }
 
     /**
@@ -58,8 +59,15 @@ public final class Binary<V> extends Expr<V> {
      * @return Binary expression
      */
 
-    public static <V> Binary<V> make(Op op, Expr<V> left, Expr<V> right, String operationRange, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new Binary<>(op, left, right, operationRange, properties, comment);
+    public static <V> Binary<V> make(
+        Op op,
+        Expr<V> left,
+        Expr<V> right,
+        String operationRange,
+        BlocklyBlockProperties properties,
+        BlocklyComment comment,
+        BlocklyError error) {
+        return new Binary<>(op, left, right, operationRange, properties, comment, error);
     }
 
     /**
@@ -220,34 +228,41 @@ public final class Binary<V> extends Expr<V> {
                 values = helper.extractValues(block, (short) 2);
                 leftt = helper.extractValue(values, new ExprParam(BlocklyConstants.VAR, BlocklyType.STRING));
                 rightt = helper.extractValue(values, new ExprParam(BlocklyConstants.TEXT, BlocklyType.STRING));
-                return ExprStmt.make(
-                    Binary.make(
-                        Binary.Op.TEXT_APPEND,
-                        helper.convertPhraseToExpr(leftt),
-                        helper.convertPhraseToExpr(rightt),
-                        "",
-                        helper.extractBlockProperties(block),
-                        helper.extractComment(block)));
+                return ExprStmt
+                    .make(
+                        Binary
+                            .make(
+                                Binary.Op.TEXT_APPEND,
+                                helper.convertPhraseToExpr(leftt),
+                                helper.convertPhraseToExpr(rightt),
+                                "",
+                                helper.extractBlockProperties(block),
+                                helper.extractComment(block),
+                                helper.extractError(block)));
             case BlocklyConstants.ROB_MATH_CHANGE:
             case BlocklyConstants.MATH_CHANGE:
                 values = helper.extractValues(block, (short) 2);
                 leftt = helper.extractValue(values, new ExprParam(BlocklyConstants.VAR, BlocklyType.STRING));
                 rightt = helper.extractValue(values, new ExprParam(BlocklyConstants.DELTA, BlocklyType.NUMBER_INT));
-                return ExprStmt.make(
-                    Binary.make(
-                        Binary.Op.MATH_CHANGE,
-                        helper.convertPhraseToExpr(leftt),
-                        helper.convertPhraseToExpr(rightt),
-                        "",
-                        helper.extractBlockProperties(block),
-                        helper.extractComment(block)));
+                return ExprStmt
+                    .make(
+                        Binary
+                            .make(
+                                Binary.Op.MATH_CHANGE,
+                                helper.convertPhraseToExpr(leftt),
+                                helper.convertPhraseToExpr(rightt),
+                                "",
+                                helper.extractBlockProperties(block),
+                                helper.extractComment(block),
+                                helper.extractError(block)));
 
             case BlocklyConstants.MATH_MODULO:
-                return helper.blockToBinaryExpr(
-                    block,
-                    new ExprParam(BlocklyConstants.DIVIDEND, BlocklyType.NUMBER_INT),
-                    new ExprParam(BlocklyConstants.DIVISOR, BlocklyType.NUMBER_INT),
-                    BlocklyConstants.MOD);
+                return helper
+                    .blockToBinaryExpr(
+                        block,
+                        new ExprParam(BlocklyConstants.DIVIDEND, BlocklyType.NUMBER_INT),
+                        new ExprParam(BlocklyConstants.DIVISOR, BlocklyType.NUMBER_INT),
+                        BlocklyConstants.MOD);
 
             case BlocklyConstants.MATH_ARITHMETIC:
                 String opp = helper.extractOperation(block, BlocklyConstants.OP);
@@ -256,14 +271,15 @@ public final class Binary<V> extends Expr<V> {
                     exprParams.add(new ExprParam(BlocklyConstants.A, BlocklyType.NUMBER_INT));
                     exprParams.add(new ExprParam(BlocklyConstants.B, BlocklyType.NUMBER_INT));
                     List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
-                    return MathPowerFunct.make(FunctionNames.POWER, params, helper.extractBlockProperties(block), helper.extractComment(block));
+                    return MathPowerFunct.make(FunctionNames.POWER, params, helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
                 }
             default:
-                return helper.blockToBinaryExpr(
-                    block,
-                    new ExprParam(BlocklyConstants.A, BlocklyType.NUMBER_INT),
-                    new ExprParam(BlocklyConstants.B, BlocklyType.NUMBER_INT),
-                    BlocklyConstants.OP);
+                return helper
+                    .blockToBinaryExpr(
+                        block,
+                        new ExprParam(BlocklyConstants.A, BlocklyType.NUMBER_INT),
+                        new ExprParam(BlocklyConstants.B, BlocklyType.NUMBER_INT),
+                        BlocklyConstants.OP);
 
         }
     }

@@ -8,10 +8,11 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
@@ -29,8 +30,8 @@ public class RgbColor<V> extends Expr<V> {
     private final Expr<V> B;
     private final Expr<V> A;
 
-    private RgbColor(Expr<V> R, Expr<V> G, Expr<V> B, Expr<V> A, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("RGB_COLOR"), properties, comment);
+    private RgbColor(Expr<V> R, Expr<V> G, Expr<V> B, Expr<V> A, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("RGB_COLOR"), properties, comment, error);
         this.R = R;
         this.G = G;
         this.B = B;
@@ -46,8 +47,8 @@ public class RgbColor<V> extends Expr<V> {
      * @param comment added from the user,
      * @return read only object of class {@link RgbColor}
      */
-    public static <V> RgbColor<V> make(Expr<V> R, Expr<V> G, Expr<V> B, Expr<V> A, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new RgbColor<V>(R, G, B, A, properties, comment);
+    public static <V> RgbColor<V> make(Expr<V> R, Expr<V> G, Expr<V> B, Expr<V> A, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new RgbColor<V>(R, G, B, A, properties, comment, error);
     }
 
     public Expr<V> getR() {
@@ -113,7 +114,7 @@ public class RgbColor<V> extends Expr<V> {
             helper.convertPhraseToExpr(blue),
             helper.convertPhraseToExpr(alpha),
             helper.extractBlockProperties(block),
-            helper.extractComment(block));
+            helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

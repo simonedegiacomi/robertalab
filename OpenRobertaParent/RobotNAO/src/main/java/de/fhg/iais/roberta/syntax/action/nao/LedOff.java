@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
@@ -25,8 +26,8 @@ public final class LedOff<V> extends Action<V> {
 
     private final Led led;
 
-    private LedOff(Led led, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("LED_OFF"), properties, comment);
+    private LedOff(Led led, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("LED_OFF"), properties, comment, error);
         this.led = led;
         setReadOnly();
     }
@@ -38,8 +39,8 @@ public final class LedOff<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link LedOffTest}
      */
-    private static <V> LedOff<V> make(Led led, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new LedOff<V>(led, properties, comment);
+    private static <V> LedOff<V> make(Led led, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new LedOff<V>(led, properties, comment, error);
     }
 
     @Override
@@ -67,7 +68,7 @@ public final class LedOff<V> extends Action<V> {
         List<Field> fields = helper.extractFields(block, (short) 1);
         String leds = helper.extractField(fields, BlocklyConstants.LED);
 
-        return LedOff.make(Led.get(leds), helper.extractBlockProperties(block), helper.extractComment(block));
+        return LedOff.make(Led.get(leds), helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

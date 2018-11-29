@@ -4,6 +4,7 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
@@ -13,8 +14,8 @@ import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
 public final class GestureSensor<V> extends ExternalSensor<V> {
 
-    private GestureSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(sensorMetaDataBean, BlockTypeContainer.getByName("GESTURE_SENSING"), properties, comment);
+    private GestureSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(sensorMetaDataBean, BlockTypeContainer.getByName("GESTURE_SENSING"), properties, comment, error);
         setReadOnly();
     }
 
@@ -23,8 +24,8 @@ public final class GestureSensor<V> extends ExternalSensor<V> {
      *
      * @return read only object of class {@link GestureSensor}
      */
-    public static <V> GestureSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new GestureSensor<>(sensorMetaDataBean, properties, comment);
+    public static <V> GestureSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new GestureSensor<>(sensorMetaDataBean, properties, comment, error);
     }
 
     @Override
@@ -41,7 +42,7 @@ public final class GestureSensor<V> extends ExternalSensor<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         SensorMetaDataBean sensorData = extractPortAndModeAndSlot(block, helper);
-        return GestureSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
+        return GestureSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     Phrase<V> getSensor() {

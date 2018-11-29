@@ -8,12 +8,13 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.INaoVisitor;
@@ -28,8 +29,8 @@ public final class SetVolume<V> extends Action<V> {
 
     private final Expr<V> volume;
 
-    private SetVolume(Expr<V> volume, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("SET_VOLUME"), properties, comment);
+    private SetVolume(Expr<V> volume, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("SET_VOLUME"), properties, comment, error);
         this.volume = volume;
         setReadOnly();
     }
@@ -42,8 +43,8 @@ public final class SetVolume<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link SetVolume}
      */
-    private static <V> SetVolume<V> make(Expr<V> volume, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new SetVolume<V>(volume, properties, comment);
+    private static <V> SetVolume<V> make(Expr<V> volume, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new SetVolume<V>(volume, properties, comment, error);
     }
 
     public Expr<V> getVolume() {
@@ -72,7 +73,7 @@ public final class SetVolume<V> extends Action<V> {
 
         Phrase<V> volume = helper.extractValue(values, new ExprParam(BlocklyConstants.VOLUME, BlocklyType.NUMBER_INT));
 
-        return SetVolume.make(helper.convertPhraseToExpr(volume), helper.extractBlockProperties(block), helper.extractComment(block));
+        return SetVolume.make(helper.convertPhraseToExpr(volume), helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

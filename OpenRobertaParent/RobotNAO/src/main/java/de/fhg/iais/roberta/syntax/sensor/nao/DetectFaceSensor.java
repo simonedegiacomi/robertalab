@@ -4,6 +4,7 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
@@ -18,8 +19,8 @@ import de.fhg.iais.roberta.visitor.hardware.INaoVisitor;
  */
 public final class DetectFaceSensor<V> extends ExternalSensor<V> {
 
-    private DetectFaceSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(sensorMetaDataBean, BlockTypeContainer.getByName("DETECT_FACE"), properties, comment);
+    private DetectFaceSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(sensorMetaDataBean, BlockTypeContainer.getByName("DETECT_FACE"), properties, comment, error);
         setReadOnly();
     }
 
@@ -29,8 +30,8 @@ public final class DetectFaceSensor<V> extends ExternalSensor<V> {
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
      */
-    public static <V> DetectFaceSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new DetectFaceSensor<V>(sensorMetaDataBean, properties, comment);
+    public static <V> DetectFaceSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new DetectFaceSensor<V>(sensorMetaDataBean, properties, comment, error);
     }
 
     @Override
@@ -47,6 +48,6 @@ public final class DetectFaceSensor<V> extends ExternalSensor<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         SensorMetaDataBean sensorData = extractPortAndModeAndSlot(block, helper);
-        return DetectFaceSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
+        return DetectFaceSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 }

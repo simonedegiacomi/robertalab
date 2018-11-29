@@ -14,7 +14,7 @@ public class FunctionStmt<V> extends Stmt<V> {
     private final Function<V> function;
 
     private FunctionStmt(Function<V> function) {
-        super(BlockTypeContainer.getByName("SENSOR_STMT"), function.getProperty(), function.getComment());
+        super(BlockTypeContainer.getByName("SENSOR_STMT"), function.getProperty(), function.getComment(), function.getError());
         Assert.isTrue(function != null && function.isReadOnly());
         this.function = function;
         setReadOnly();

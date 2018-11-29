@@ -16,7 +16,7 @@ public class SensorExpr<V> extends Expr<V> {
     private final Sensor<V> sensor;
 
     private SensorExpr(Sensor<V> sens) {
-        super(BlockTypeContainer.getByName("SENSOR_EXPR"), sens.getProperty(), sens.getComment());
+        super(BlockTypeContainer.getByName("SENSOR_EXPR"), sens.getProperty(), sens.getComment(), sens.getError());
         Assert.isTrue(sens.isReadOnly());
         this.sensor = sens;
         setReadOnly();

@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
@@ -29,8 +30,8 @@ import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 public class TextJoinFunct<V> extends Function<V> {
     private final ExprList<V> param;
 
-    private TextJoinFunct(ExprList<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("TEXT_JOIN_FUNCT"), properties, comment);
+    private TextJoinFunct(ExprList<V> param, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("TEXT_JOIN_FUNCT"), properties, comment, error);
         Assert.isTrue(param != null);
         this.param = param;
         setReadOnly();
@@ -44,8 +45,8 @@ public class TextJoinFunct<V> extends Function<V> {
      * @param comment that user has added to the block,
      * @return read only object of class {@link TextJoinFunct}
      */
-    public static <V> TextJoinFunct<V> make(ExprList<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new TextJoinFunct<V>(param, properties, comment);
+    public static <V> TextJoinFunct<V> make(ExprList<V> param, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new TextJoinFunct<V>(param, properties, comment, error);
     }
 
     /**
@@ -89,7 +90,7 @@ public class TextJoinFunct<V> extends Function<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         ExprList<V> exprList = helper.blockToExprList(block, BlocklyType.STRING);
-        return TextJoinFunct.make(exprList, helper.extractBlockProperties(block), helper.extractComment(block));
+        return TextJoinFunct.make(exprList, helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
 
     }
 

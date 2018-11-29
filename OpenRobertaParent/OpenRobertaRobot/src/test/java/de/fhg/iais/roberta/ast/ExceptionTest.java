@@ -3,8 +3,8 @@ package de.fhg.iais.roberta.ast;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.util.test.GenericHelperForXmlTest;
 import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
+import de.fhg.iais.roberta.util.test.GenericHelperForXmlTest;
 
 public class ExceptionTest {
     AbstractHelperForXmlTest h = new GenericHelperForXmlTest();

@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.syntax.lang.blocksequence;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 
@@ -13,8 +14,8 @@ import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
  */
 public abstract class Task<V> extends Phrase<V> {
 
-    public Task(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(kind, properties, comment);
+    public Task(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(kind, properties, comment, error);
     }
 
     /**

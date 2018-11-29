@@ -14,7 +14,7 @@ public class ActionStmt<V> extends Stmt<V> {
     private final Action<V> action;
 
     private ActionStmt(Action<V> action) {
-        super(BlockTypeContainer.getByName("AKTION_STMT"), action.getProperty(), action.getComment());
+        super(BlockTypeContainer.getByName("AKTION_STMT"), action.getProperty(), action.getComment(), action.getError());
         Assert.isTrue(action.isReadOnly());
         this.action = action;
         setReadOnly();

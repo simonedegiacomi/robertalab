@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
@@ -29,8 +30,8 @@ import de.fhg.iais.roberta.visitor.hardware.INaoVisitor;
 public class ColorHexString<V> extends Expr<V> {
     private final String value;
 
-    private ColorHexString(String color, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("COLOR_HEX_STRING"), properties, comment);
+    private ColorHexString(String color, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("COLOR_HEX_STRING"), properties, comment, error);
         Assert.isTrue(color != null);
         this.value = color;
         setReadOnly();
@@ -44,8 +45,8 @@ public class ColorHexString<V> extends Expr<V> {
      * @param comment added from the user,
      * @return read only object of class {@link ColorHexString}.
      */
-    public static <V> ColorHexString<V> make(String value, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ColorHexString<V>(value, properties, comment);
+    public static <V> ColorHexString<V> make(String value, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new ColorHexString<V>(value, properties, comment, error);
     }
 
     /**
@@ -90,7 +91,7 @@ public class ColorHexString<V> extends Expr<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         List<Field> fields = helper.extractFields(block, (short) 1);
         String field = helper.extractField(fields, BlocklyConstants.COLOUR);
-        return ColorHexString.make(field, helper.extractBlockProperties(block), helper.extractComment(block));
+        return ColorHexString.make(field, helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

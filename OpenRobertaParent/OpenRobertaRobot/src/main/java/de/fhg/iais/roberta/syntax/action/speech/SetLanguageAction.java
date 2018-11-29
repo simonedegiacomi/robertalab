@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
@@ -28,8 +29,8 @@ public final class SetLanguageAction<V> extends Action<V> {
 
     private final ILanguage language;
 
-    private SetLanguageAction(ILanguage language, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("SET_LANGUAGE"), properties, comment);
+    private SetLanguageAction(ILanguage language, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("SET_LANGUAGE"), properties, comment, error);
         Assert.notNull(language, "Missing language in SetLanguage block!");
         this.language = language;
         setReadOnly();
@@ -48,8 +49,8 @@ public final class SetLanguageAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link SetLanguageAction}
      */
-    private static <V> SetLanguageAction<V> make(ILanguage language, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new SetLanguageAction<V>(language, properties, comment);
+    private static <V> SetLanguageAction<V> make(ILanguage language, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new SetLanguageAction<V>(language, properties, comment, error);
     }
 
     public ILanguage getLanguage() {
@@ -74,7 +75,8 @@ public final class SetLanguageAction<V> extends Action<V> {
 
         String language = helper.extractField(fields, BlocklyConstants.LANGUAGE);
 
-        return SetLanguageAction.make(factory.getLanguageMode(language), helper.extractBlockProperties(block), helper.extractComment(block));
+        return SetLanguageAction
+            .make(factory.getLanguageMode(language), helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

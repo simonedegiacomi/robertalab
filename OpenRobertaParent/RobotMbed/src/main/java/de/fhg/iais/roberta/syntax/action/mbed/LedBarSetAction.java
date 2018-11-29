@@ -8,13 +8,14 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -32,8 +33,8 @@ public class LedBarSetAction<V> extends Action<V> {
     private final Expr<V> x;
     private final Expr<V> brightness;
 
-    private LedBarSetAction(Expr<V> x, Expr<V> brightness, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("LEDBAR_SET_ACTION"), properties, comment);
+    private LedBarSetAction(Expr<V> x, Expr<V> brightness, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("LEDBAR_SET_ACTION"), properties, comment, error);
         Assert.notNull(x);
         Assert.notNull(brightness);
         this.x = x;
@@ -49,8 +50,8 @@ public class LedBarSetAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link LedBarSetAction}
      */
-    private static <V> LedBarSetAction<V> make(Expr<V> x, Expr<V> brightness, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new LedBarSetAction<>(x, brightness, properties, comment);
+    private static <V> LedBarSetAction<V> make(Expr<V> x, Expr<V> brightness, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new LedBarSetAction<>(x, brightness, properties, comment, error);
     }
 
     /**
@@ -90,7 +91,7 @@ public class LedBarSetAction<V> extends Action<V> {
         Phrase<V> brightness = helper.extractValue(values, new ExprParam(BlocklyConstants.BRIGHTNESS, BlocklyType.NUMBER_INT));
         Phrase<V> x = helper.extractValue(values, new ExprParam(BlocklyConstants.X, BlocklyType.NUMBER_INT));
         return LedBarSetAction
-            .make(helper.convertPhraseToExpr(x), helper.convertPhraseToExpr(brightness), helper.extractBlockProperties(block), helper.extractComment(block));
+            .make(helper.convertPhraseToExpr(x), helper.convertPhraseToExpr(brightness), helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
 
     }
 

@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
@@ -46,8 +47,9 @@ public class GetSampleSensor<V> extends Sensor<V> {
         boolean isPortInMutation,
         BlocklyBlockProperties properties,
         BlocklyComment comment,
+        BlocklyError error,
         BlocklyDropdownFactory factory) {
-        super(BlockTypeContainer.getByName("SENSOR_GET_SAMPLE"), properties, comment);
+        super(BlockTypeContainer.getByName("SENSOR_GET_SAMPLE"), properties, comment, error);
         Assert.isTrue(sensorType != null);
         this.port = port;
         this.slot = slot;
@@ -58,8 +60,12 @@ public class GetSampleSensor<V> extends Sensor<V> {
         switch ( sensorType.getSensorType() ) {
             case BlocklyConstants.TOUCH:
                 sensorMetaDataBean =
-                    new SensorMetaDataBean(factory.sanitizePort(port), factory.getMode(BlocklyConstants.VALUE), factory.sanitizeSlot(slot), this.isPortInMutation);
-                this.sensor = TouchSensor.make(sensorMetaDataBean, properties, comment);
+                    new SensorMetaDataBean(
+                        factory.sanitizePort(port),
+                        factory.getMode(BlocklyConstants.VALUE),
+                        factory.sanitizeSlot(slot),
+                        this.isPortInMutation);
+                this.sensor = TouchSensor.make(sensorMetaDataBean, properties, comment, error);
                 break;
             case BlocklyConstants.TIME:
                 sensorMetaDataBean =
@@ -68,7 +74,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
                         factory.getMode(BlocklyConstants.VALUE),
                         factory.sanitizeSlot(BlocklyConstants.EMPTY_SLOT),
                         isPortInMutation);
-                this.sensor = TimerSensor.make(sensorMetaDataBean, properties, comment);
+                this.sensor = TimerSensor.make(sensorMetaDataBean, properties, comment, error);
                 break;
             case BlocklyConstants.LIGHT_LEVEL:
                 sensorMetaDataBean =
@@ -77,7 +83,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
                         factory.getMode(BlocklyConstants.DEFAULT),
                         factory.sanitizeSlot(BlocklyConstants.EMPTY_SLOT),
                         isPortInMutation);
-                this.sensor = LightSensor.make(sensorMetaDataBean, properties, comment);
+                this.sensor = LightSensor.make(sensorMetaDataBean, properties, comment, error);
                 break;
             case BlocklyConstants.TEMPERATURE:
                 sensorMetaDataBean =
@@ -86,10 +92,10 @@ public class GetSampleSensor<V> extends Sensor<V> {
                         factory.getMode(BlocklyConstants.DEFAULT),
                         factory.sanitizeSlot(BlocklyConstants.EMPTY_SLOT),
                         isPortInMutation);
-                this.sensor = TemperatureSensor.make(sensorMetaDataBean, properties, comment);
+                this.sensor = TemperatureSensor.make(sensorMetaDataBean, properties, comment, error);
                 break;
             case BlocklyConstants.CODE:
-                this.sensor = CodePadSensor.make(properties, comment);
+                this.sensor = CodePadSensor.make(properties, comment, error);
                 break;
             default:
                 throw new DbcException("Invalid sensor " + sensorType.getSensorType() + "!");
@@ -114,8 +120,9 @@ public class GetSampleSensor<V> extends Sensor<V> {
         boolean isPortInMutation,
         BlocklyBlockProperties properties,
         BlocklyComment comment,
+        BlocklyError error,
         BlocklyDropdownFactory factory) {
-        return new GetSampleSensor<>(sensorType, armSide, armPart, isPortInMutation, properties, comment, factory);
+        return new GetSampleSensor<>(sensorType, armSide, armPart, isPortInMutation, properties, comment, error, factory);
     }
 
     /**
@@ -179,6 +186,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
                 isPortInMutation,
                 helper.extractBlockProperties(block),
                 helper.extractComment(block),
+                helper.extractError(block),
                 helper.getDropdownFactory());
     }
 

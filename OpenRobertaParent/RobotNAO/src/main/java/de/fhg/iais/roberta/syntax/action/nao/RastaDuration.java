@@ -8,12 +8,13 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.INaoVisitor;
@@ -33,8 +34,8 @@ public final class RastaDuration<V> extends Action<V> {
 
     private final Expr<V> duration;
 
-    private RastaDuration(Expr<V> duration, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("RASTA_DURATION"), properties, comment);
+    private RastaDuration(Expr<V> duration, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("RASTA_DURATION"), properties, comment, error);
         this.duration = duration;
         setReadOnly();
     }
@@ -47,8 +48,8 @@ public final class RastaDuration<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link RastaDuration}
      */
-    private static <V> RastaDuration<V> make(Expr<V> duration, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new RastaDuration<V>(duration, properties, comment);
+    private static <V> RastaDuration<V> make(Expr<V> duration, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new RastaDuration<V>(duration, properties, comment, error);
     }
 
     public Expr<V> getDuration() {
@@ -72,7 +73,7 @@ public final class RastaDuration<V> extends Action<V> {
 
         Phrase<V> duration = helper.extractValue(values, new ExprParam(BlocklyConstants.DURATION, BlocklyType.NUMBER_INT));
 
-        return RastaDuration.make(helper.convertPhraseToExpr(duration), helper.extractBlockProperties(block), helper.extractComment(block));
+        return RastaDuration.make(helper.convertPhraseToExpr(duration), helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

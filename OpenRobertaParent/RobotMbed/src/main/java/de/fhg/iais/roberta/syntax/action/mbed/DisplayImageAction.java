@@ -11,12 +11,13 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -35,8 +36,13 @@ public class DisplayImageAction<V> extends Action<V> {
     private final DisplayImageMode displayImageMode;
     private final Expr<V> valuesToDisplay;
 
-    private DisplayImageAction(DisplayImageMode displayImageMode, Expr<V> valuesToDisplay, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("DISPLAY_IMAGE_ACTION"), properties, comment);
+    private DisplayImageAction(
+        DisplayImageMode displayImageMode,
+        Expr<V> valuesToDisplay,
+        BlocklyBlockProperties properties,
+        BlocklyComment comment,
+        BlocklyError error) {
+        super(BlockTypeContainer.getByName("DISPLAY_IMAGE_ACTION"), properties, comment, error);
         Assert.isTrue(displayImageMode != null && valuesToDisplay != null);
         this.displayImageMode = displayImageMode;
         this.valuesToDisplay = valuesToDisplay;
@@ -56,8 +62,9 @@ public class DisplayImageAction<V> extends Action<V> {
         DisplayImageMode displayImageMode,
         Expr<V> valuesToDisplay,
         BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        return new DisplayImageAction<>(displayImageMode, valuesToDisplay, properties, comment);
+        BlocklyComment comment,
+        BlocklyError error) {
+        return new DisplayImageAction<>(displayImageMode, valuesToDisplay, properties, comment, error);
     }
 
     /**
@@ -97,7 +104,12 @@ public class DisplayImageAction<V> extends Action<V> {
         String mode = helper.extractField(fields, BlocklyConstants.TYPE);
         Phrase<V> image = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.STRING));
         return DisplayImageAction
-            .make(DisplayImageMode.get(mode), helper.convertPhraseToExpr(image), helper.extractBlockProperties(block), helper.extractComment(block));
+            .make(
+                DisplayImageMode.get(mode),
+                helper.convertPhraseToExpr(image),
+                helper.extractBlockProperties(block),
+                helper.extractComment(block),
+                helper.extractError(block));
     }
 
     @Override

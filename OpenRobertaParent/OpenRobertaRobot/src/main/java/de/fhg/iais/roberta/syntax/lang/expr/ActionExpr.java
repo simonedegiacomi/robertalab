@@ -15,7 +15,7 @@ public final class ActionExpr<V> extends Expr<V> {
     private final Action<V> action;
 
     private ActionExpr(Action<V> action) {
-        super(BlockTypeContainer.getByName("ACTION_EXPR"), action.getProperty(), action.getComment());
+        super(BlockTypeContainer.getByName("ACTION_EXPR"), action.getProperty(), action.getComment(), action.getError());
         Assert.isTrue(action.isReadOnly());
         this.action = action;
         setReadOnly();

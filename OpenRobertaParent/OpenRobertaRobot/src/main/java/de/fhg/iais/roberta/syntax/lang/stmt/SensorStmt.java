@@ -14,7 +14,7 @@ public class SensorStmt<V> extends Stmt<V> {
     private final Sensor<V> sensor;
 
     private SensorStmt(Sensor<V> sensor) {
-        super(BlockTypeContainer.getByName("SENSOR_STMT"), sensor.getProperty(), sensor.getComment());
+        super(BlockTypeContainer.getByName("SENSOR_STMT"), sensor.getProperty(), sensor.getComment(), sensor.getError());
         Assert.isTrue(sensor != null && sensor.isReadOnly());
         this.sensor = sensor;
         setReadOnly();

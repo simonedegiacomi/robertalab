@@ -4,6 +4,7 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
@@ -18,8 +19,8 @@ import de.fhg.iais.roberta.visitor.hardware.INaoVisitor;
  */
 public final class Stop<V> extends Action<V> {
 
-    private Stop(BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("Stop"), properties, comment);
+    private Stop(BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("Stop"), properties, comment, error);
         setReadOnly();
     }
 
@@ -30,8 +31,8 @@ public final class Stop<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link Stop}
      */
-    private static <V> Stop<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new Stop<V>(properties, comment);
+    private static <V> Stop<V> make(BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new Stop<V>(properties, comment, error);
     }
 
     @Override
@@ -53,7 +54,7 @@ public final class Stop<V> extends Action<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
 
-        return Stop.make(helper.extractBlockProperties(block), helper.extractComment(block));
+        return Stop.make(helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

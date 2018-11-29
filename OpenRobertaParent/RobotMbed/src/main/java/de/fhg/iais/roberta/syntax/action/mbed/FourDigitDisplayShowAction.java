@@ -8,12 +8,13 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -32,8 +33,8 @@ public class FourDigitDisplayShowAction<V> extends Action<V> {
     private final Expr<V> position;
     private final Expr<V> colon;
 
-    private FourDigitDisplayShowAction(Expr<V> value, Expr<V> position, Expr<V> colon, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("FOURDIGITDISPLAY_SHOW_ACTION"), properties, comment);
+    private FourDigitDisplayShowAction(Expr<V> value, Expr<V> position, Expr<V> colon, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("FOURDIGITDISPLAY_SHOW_ACTION"), properties, comment, error);
         Assert.isTrue(value != null && position != null && colon != null);
         this.value = value;
         this.position = position;
@@ -56,8 +57,8 @@ public class FourDigitDisplayShowAction<V> extends Action<V> {
         Expr<V> position,
         Expr<V> colon,
         BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        return new FourDigitDisplayShowAction<>(value, position, colon, properties, comment);
+        BlocklyComment comment, BlocklyError error) {
+        return new FourDigitDisplayShowAction<>(value, position, colon, properties, comment, error);
     }
 
     public Expr<V> getValue() {
@@ -99,7 +100,7 @@ public class FourDigitDisplayShowAction<V> extends Action<V> {
             helper.convertPhraseToExpr(position),
             helper.convertPhraseToExpr(colon),
             helper.extractBlockProperties(block),
-            helper.extractComment(block));
+            helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

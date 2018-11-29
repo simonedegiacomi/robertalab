@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
@@ -28,8 +29,8 @@ public class ListCreate<V> extends Expr<V> {
     private final BlocklyType typeVar;
     private final ExprList<V> exprList;
 
-    private ListCreate(BlocklyType typeVar, ExprList<V> exprList, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("LIST_CREATE"), properties, comment);
+    private ListCreate(BlocklyType typeVar, ExprList<V> exprList, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("LIST_CREATE"), properties, comment, error);
         Assert.isTrue(exprList != null && exprList.isReadOnly() && typeVar != null);
         this.exprList = exprList;
         this.typeVar = typeVar;
@@ -44,8 +45,13 @@ public class ListCreate<V> extends Expr<V> {
      * @param comment added from the user,
      * @return read only object of class {@link ListCreate}
      */
-    public static <V> ListCreate<V> make(BlocklyType typeVar, ExprList<V> exprList, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ListCreate<V>(typeVar, exprList, properties, comment);
+    public static <V> ListCreate<V> make(
+        BlocklyType typeVar,
+        ExprList<V> exprList,
+        BlocklyBlockProperties properties,
+        BlocklyComment comment,
+        BlocklyError error) {
+        return new ListCreate<V>(typeVar, exprList, properties, comment, error);
     }
 
     /**
@@ -97,11 +103,13 @@ public class ListCreate<V> extends Expr<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         List<Field> fields = helper.extractFields(block, (short) 1);
         String filename = helper.extractField(fields, BlocklyConstants.LIST_TYPE);
-        return ListCreate.make(
-            BlocklyType.get(filename),
-            helper.blockToExprList(block, BlocklyType.ARRAY),
-            helper.extractBlockProperties(block),
-            helper.extractComment(block));
+        return ListCreate
+            .make(
+                BlocklyType.get(filename),
+                helper.blockToExprList(block, BlocklyType.ARRAY),
+                helper.extractBlockProperties(block),
+                helper.extractComment(block),
+                helper.extractError(block));
     }
 
     @Override

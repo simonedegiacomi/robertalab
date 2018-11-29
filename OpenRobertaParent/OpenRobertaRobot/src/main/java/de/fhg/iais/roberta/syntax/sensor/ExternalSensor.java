@@ -11,6 +11,7 @@ import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
@@ -30,8 +31,8 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment of the user for the specific block
      */
-    public ExternalSensor(SensorMetaDataBean metaDataBean, BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(kind, properties, comment);
+    public ExternalSensor(SensorMetaDataBean metaDataBean, BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(kind, properties, comment, error);
         Assert.notNull(metaDataBean.getMode());
         Assert.notNull(metaDataBean.getPort());
         Assert.notNull(metaDataBean.getSlot());
@@ -124,7 +125,7 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         SensorMetaDataBean sensorData = extractPortAndModeAndSlot(block, helper);
-        return InfraredSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
+        return InfraredSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
 }

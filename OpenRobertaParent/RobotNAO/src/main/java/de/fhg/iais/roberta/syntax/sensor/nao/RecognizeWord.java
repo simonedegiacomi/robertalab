@@ -8,12 +8,13 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -28,8 +29,8 @@ import de.fhg.iais.roberta.visitor.hardware.INaoVisitor;
 public class RecognizeWord<V> extends Sensor<V> {
     private final Expr<V> vocabulary;
 
-    private RecognizeWord(Expr<V> vocabulary, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("RECOGNIZE_WORD"), properties, comment);
+    private RecognizeWord(Expr<V> vocabulary, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("RECOGNIZE_WORD"), properties, comment, error);
         Assert.isTrue(vocabulary != null);
         this.vocabulary = vocabulary;
         setReadOnly();
@@ -43,8 +44,8 @@ public class RecognizeWord<V> extends Sensor<V> {
      * @param comment added from the user,
      * @return read only object of class {@link DisplayTextAction}
      */
-    static <V> RecognizeWord<V> make(Expr<V> vocabulary, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new RecognizeWord<>(vocabulary, properties, comment);
+    static <V> RecognizeWord<V> make(Expr<V> vocabulary, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new RecognizeWord<>(vocabulary, properties, comment, error);
     }
 
     /**
@@ -75,7 +76,7 @@ public class RecognizeWord<V> extends Sensor<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         List<Value> values = helper.extractValues(block, (short) 1);
         Phrase<V> vocabulary = helper.extractValue(values, new ExprParam(BlocklyConstants.WORD, BlocklyType.ARRAY_STRING));
-        return RecognizeWord.make(helper.convertPhraseToExpr(vocabulary), helper.extractBlockProperties(block), helper.extractComment(block));
+        return RecognizeWord.make(helper.convertPhraseToExpr(vocabulary), helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
@@ -28,8 +29,8 @@ public final class SetMode<V> extends Action<V> {
 
     private final Modus modus;
 
-    private SetMode(Modus modus, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("SET_MODE"), properties, comment);
+    private SetMode(Modus modus, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("SET_MODE"), properties, comment, error);
         Assert.notNull(modus, "Missing modus in Mode block!");
         this.modus = modus;
         setReadOnly();
@@ -43,8 +44,8 @@ public final class SetMode<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link SetMode}
      */
-    private static <V> SetMode<V> make(Modus modus, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new SetMode<V>(modus, properties, comment);
+    private static <V> SetMode<V> make(Modus modus, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new SetMode<V>(modus, properties, comment, error);
     }
 
     public Modus getModus() {
@@ -73,7 +74,7 @@ public final class SetMode<V> extends Action<V> {
 
         String modus = helper.extractField(fields, BlocklyConstants.DIRECTION);
 
-        return SetMode.make(Modus.get(modus), helper.extractBlockProperties(block), helper.extractComment(block));
+        return SetMode.make(Modus.get(modus), helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

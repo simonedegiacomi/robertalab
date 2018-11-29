@@ -11,12 +11,13 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -27,8 +28,8 @@ public class PinWriteValueAction<V> extends Action<V> {
     private final String port;
     private final Expr<V> value;
 
-    private PinWriteValueAction(String pinValue, String port, Expr<V> value, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("WRITE_TO_PIN"), properties, comment);
+    private PinWriteValueAction(String pinValue, String port, Expr<V> value, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("WRITE_TO_PIN"), properties, comment, error);
         Assert.notNull(pinValue);
         Assert.notNull(port);
         Assert.notNull(value);
@@ -47,8 +48,8 @@ public class PinWriteValueAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of {@link PinWriteValue}
      */
-    public static <V> PinWriteValueAction<V> make(String pinValue, String port, Expr<V> value, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new PinWriteValueAction<>(pinValue, port, value, properties, comment);
+    public static <V> PinWriteValueAction<V> make(String pinValue, String port, Expr<V> value, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new PinWriteValueAction<>(pinValue, port, value, properties, comment, error);
     }
 
     public String getMode() {
@@ -88,7 +89,7 @@ public class PinWriteValueAction<V> extends Action<V> {
                 factory.sanitizePort(port),
                 helper.convertPhraseToExpr(value),
                 helper.extractBlockProperties(block),
-                helper.extractComment(block));
+                helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

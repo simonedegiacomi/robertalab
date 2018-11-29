@@ -4,6 +4,7 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
@@ -18,8 +19,8 @@ import de.fhg.iais.roberta.visitor.hardware.INaoVisitor;
  */
 public final class GetVolume<V> extends Action<V> {
 
-    private GetVolume(BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("GET_VOLUME"), properties, comment);
+    private GetVolume(BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("GET_VOLUME"), properties, comment, error);
         setReadOnly();
     }
 
@@ -30,8 +31,8 @@ public final class GetVolume<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link GetVolume}
      */
-    private static <V> GetVolume<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new GetVolume<V>(properties, comment);
+    private static <V> GetVolume<V> make(BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new GetVolume<V>(properties, comment, error);
     }
 
     @Override
@@ -53,7 +54,7 @@ public final class GetVolume<V> extends Action<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
 
-        return GetVolume.make(helper.extractBlockProperties(block), helper.extractComment(block));
+        return GetVolume.make(helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

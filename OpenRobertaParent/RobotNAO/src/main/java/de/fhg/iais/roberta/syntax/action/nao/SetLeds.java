@@ -11,12 +11,13 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -33,8 +34,8 @@ public final class SetLeds<V> extends Action<V> {
     private final Led led;
     private final Expr<V> Color;
 
-    private SetLeds(Led led, Expr<V> Color, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("RGB_LED"), properties, comment);
+    private SetLeds(Led led, Expr<V> Color, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("RGB_LED"), properties, comment, error);
         this.led = led;
         Assert.notNull(Color);
         this.Color = Color;
@@ -50,8 +51,8 @@ public final class SetLeds<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link SetLeds}
      */
-    private static <V> SetLeds<V> make(Led led, Expr<V> Color, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new SetLeds<V>(led, Color, properties, comment);
+    private static <V> SetLeds<V> make(Led led, Expr<V> Color, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new SetLeds<V>(led, Color, properties, comment, error);
     }
 
     public Led getLed() {
@@ -82,7 +83,7 @@ public final class SetLeds<V> extends Action<V> {
 
         String leds = helper.extractField(fields, BlocklyConstants.LED);
 
-        return SetLeds.make(Led.get(leds), helper.convertPhraseToExpr(Color), helper.extractBlockProperties(block), helper.extractComment(block));
+        return SetLeds.make(Led.get(leds), helper.convertPhraseToExpr(Color), helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

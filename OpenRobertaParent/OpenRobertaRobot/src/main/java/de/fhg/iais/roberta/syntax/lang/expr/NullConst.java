@@ -4,6 +4,7 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
@@ -19,8 +20,8 @@ import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
  */
 public class NullConst<V> extends Expr<V> {
 
-    private NullConst(BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("NULL_CONST"), properties, comment);
+    private NullConst(BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("NULL_CONST"), properties, comment, error);
         setReadOnly();
     }
 
@@ -31,8 +32,8 @@ public class NullConst<V> extends Expr<V> {
      * @param comment added from the user,
      * @return read only object of class {@link NullConst}
      */
-    public static <V> NullConst<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new NullConst<V>(properties, comment);
+    public static <V> NullConst<V> make(BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new NullConst<V>(properties, comment, error);
     }
 
     /**
@@ -75,7 +76,7 @@ public class NullConst<V> extends Expr<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
-        return NullConst.make(helper.extractBlockProperties(block), helper.extractComment(block));
+        return NullConst.make(helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

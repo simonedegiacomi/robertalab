@@ -9,12 +9,13 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -31,8 +32,8 @@ public class MathNumPropFunct<V> extends Function<V> {
     private final FunctionNames functName;
     private final List<Expr<V>> param;
 
-    private MathNumPropFunct(FunctionNames name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("MATH_NUM_PROP_FUNCT"), properties, comment);
+    private MathNumPropFunct(FunctionNames name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("MATH_NUM_PROP_FUNCT"), properties, comment, error);
         Assert.isTrue(name != null && param != null);
         this.functName = name;
         this.param = param;
@@ -48,8 +49,8 @@ public class MathNumPropFunct<V> extends Function<V> {
      * @param comment that user has added to the block,
      * @return read only object of class {@link MathNumPropFunct}
      */
-    public static <V> MathNumPropFunct<V> make(FunctionNames name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new MathNumPropFunct<V>(name, param, properties, comment);
+    public static <V> MathNumPropFunct<V> make(FunctionNames name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new MathNumPropFunct<V>(name, param, properties, comment, error);
     }
 
     /**
@@ -109,7 +110,7 @@ public class MathNumPropFunct<V> extends Function<V> {
             exprParams.add(new ExprParam(BlocklyConstants.DIVISOR, BlocklyType.NUMBER_INT));
         }
         List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
-        return MathNumPropFunct.make(FunctionNames.get(op), params, helper.extractBlockProperties(block), helper.extractComment(block));
+        return MathNumPropFunct.make(FunctionNames.get(op), params, helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

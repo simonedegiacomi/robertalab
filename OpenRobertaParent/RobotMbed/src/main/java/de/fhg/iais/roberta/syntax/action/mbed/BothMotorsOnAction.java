@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.MotionParam;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
@@ -30,8 +31,8 @@ public final class BothMotorsOnAction<V> extends Action<V> {
     private final Expr<V> speedA;
     private final Expr<V> speedB;
 
-    private BothMotorsOnAction(Expr<V> speedA, Expr<V> speedB, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("BOTH_MOTORS_ON_ACTION"), properties, comment);
+    private BothMotorsOnAction(Expr<V> speedA, Expr<V> speedB, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("BOTH_MOTORS_ON_ACTION"), properties, comment, error);
         Assert.isTrue((speedA != null) && speedA.isReadOnly());
         Assert.isTrue((speedB != null) && speedB.isReadOnly());
         this.speedA = speedA;
@@ -48,8 +49,13 @@ public final class BothMotorsOnAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link BothMotorsOnAction}
      */
-    private static <V> BothMotorsOnAction<V> make(Expr<V> speedA, Expr<V> speedB, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new BothMotorsOnAction<>(speedA, speedB, properties, comment);
+    private static <V> BothMotorsOnAction<V> make(
+        Expr<V> speedA,
+        Expr<V> speedB,
+        BlocklyBlockProperties properties,
+        BlocklyComment comment,
+        BlocklyError error) {
+        return new BothMotorsOnAction<>(speedA, speedB, properties, comment, error);
     }
 
     public Expr<V> getSpeedA() {
@@ -74,7 +80,12 @@ public final class BothMotorsOnAction<V> extends Action<V> {
         Phrase<V> speedB = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER_B, BlocklyType.NUMBER_INT));
 
         return BothMotorsOnAction
-            .make(helper.convertPhraseToExpr(speedA), helper.convertPhraseToExpr(speedB), helper.extractBlockProperties(block), helper.extractComment(block));
+            .make(
+                helper.convertPhraseToExpr(speedA),
+                helper.convertPhraseToExpr(speedB),
+                helper.extractBlockProperties(block),
+                helper.extractComment(block),
+                helper.extractError(block));
     }
 
     @Override

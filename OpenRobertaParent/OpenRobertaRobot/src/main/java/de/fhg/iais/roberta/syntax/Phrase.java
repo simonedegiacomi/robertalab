@@ -28,6 +28,7 @@ abstract public class Phrase<V> {
 
     private final BlocklyBlockProperties property;
     private final BlocklyComment comment;
+    private final BlocklyError error;
     private final BlockType kind;
 
     private final NepoInfos infos = new NepoInfos(); // the content of the info object is MUTABLE !!!
@@ -39,11 +40,12 @@ abstract public class Phrase<V> {
      * @param disabled,
      * @param comment that the user added to the block
      */
-    public Phrase(BlockType kind, BlocklyBlockProperties property, BlocklyComment comment) {
+    public Phrase(BlockType kind, BlocklyBlockProperties property, BlocklyComment comment, BlocklyError error) {
         Assert.isTrue(property != null, "block property is null!");
         this.kind = kind;
         this.property = property;
         this.comment = comment;
+        this.error = error;
     }
 
     /**
@@ -83,6 +85,13 @@ abstract public class Phrase<V> {
      */
     public final BlocklyComment getComment() {
         return this.comment;
+    }
+
+    /**
+     * @return error that blockly added to the block
+     */
+    public final BlocklyError getError() {
+        return this.error;
     }
 
     /**

@@ -14,7 +14,7 @@ public class ExprStmt<V> extends Stmt<V> {
     private final Expr<V> expr;
 
     private ExprStmt(Expr<V> expr) {
-        super(BlockTypeContainer.getByName("EXPR_STMT"), expr.getProperty(), expr.getComment());
+        super(BlockTypeContainer.getByName("EXPR_STMT"), expr.getProperty(), expr.getComment(), expr.getError());
         Assert.isTrue(expr.isReadOnly());
         this.expr = expr;
         setReadOnly();

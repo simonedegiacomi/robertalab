@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
@@ -28,8 +29,8 @@ import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
  */
 public class GyroSensor<V> extends ExternalSensor<V> {
 
-    private GyroSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(sensorMetaDataBean, BlockTypeContainer.getByName("GYRO_SENSING"), properties, comment);
+    private GyroSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(sensorMetaDataBean, BlockTypeContainer.getByName("GYRO_SENSING"), properties, comment, error);
         setReadOnly();
     }
 
@@ -42,8 +43,8 @@ public class GyroSensor<V> extends ExternalSensor<V> {
      * @param comment added from the user,
      * @return read only object of {@link GyroSensor}
      */
-    public static <V> GyroSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new GyroSensor<>(sensorMetaDataBean, properties, comment);
+    public static <V> GyroSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new GyroSensor<>(sensorMetaDataBean, properties, comment, error);
     }
 
     @Override
@@ -66,10 +67,10 @@ public class GyroSensor<V> extends ExternalSensor<V> {
             String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
             sensorMetaDataBean =
                 new SensorMetaDataBean(factory.sanitizePort(portName), factory.getMode("RESET"), factory.sanitizeSlot(BlocklyConstants.NO_SLOT), false);
-            return GyroSensor.make(sensorMetaDataBean, helper.extractBlockProperties(block), helper.extractComment(block));
+            return GyroSensor.make(sensorMetaDataBean, helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
         }
         sensorMetaDataBean = extractPortAndModeAndSlot(block, helper);
-        return GyroSensor.make(sensorMetaDataBean, helper.extractBlockProperties(block), helper.extractComment(block));
+        return GyroSensor.make(sensorMetaDataBean, helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

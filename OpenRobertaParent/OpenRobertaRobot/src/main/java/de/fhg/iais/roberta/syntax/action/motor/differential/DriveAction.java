@@ -12,13 +12,14 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.MotionParam;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -37,8 +38,8 @@ public class DriveAction<V> extends Action<V> {
     private final IDriveDirection direction;
     private final MotionParam<V> param;
 
-    private DriveAction(IDriveDirection direction, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("DRIVE_ACTION"), properties, comment);
+    private DriveAction(IDriveDirection direction, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("DRIVE_ACTION"), properties, comment, error);
         Assert.isTrue(direction != null && param != null);
         this.direction = direction;
         this.param = param;
@@ -55,8 +56,13 @@ public class DriveAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link DriveAction}
      */
-    private static <V> DriveAction<V> make(IDriveDirection direction, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new DriveAction<V>(direction, param, properties, comment);
+    private static <V> DriveAction<V> make(
+        IDriveDirection direction,
+        MotionParam<V> param,
+        BlocklyBlockProperties properties,
+        BlocklyComment comment,
+        BlocklyError error) {
+        return new DriveAction<V>(direction, param, properties, comment, error);
     }
 
     /**
@@ -111,7 +117,8 @@ public class DriveAction<V> extends Action<V> {
             power = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, BlocklyType.NUMBER_INT));
             mp = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(power)).build();
         }
-        return DriveAction.make(factory.getDriveDirection(mode), mp, helper.extractBlockProperties(block), helper.extractComment(block));
+        return DriveAction
+            .make(factory.getDriveDirection(mode), mp, helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

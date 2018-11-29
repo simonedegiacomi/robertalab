@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
@@ -27,8 +28,8 @@ import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
  */
 public class CompassSensor<V> extends ExternalSensor<V> {
 
-    private CompassSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(sensorMetaDataBean, BlockTypeContainer.getByName("COMPASS_SENSING"), properties, comment);
+    private CompassSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(sensorMetaDataBean, BlockTypeContainer.getByName("COMPASS_SENSING"), properties, comment, error);
         setReadOnly();
     }
 
@@ -41,8 +42,8 @@ public class CompassSensor<V> extends ExternalSensor<V> {
      * @param comment added from the user,
      * @return read only object of {@link CompassSensor}
      */
-    public static <V> CompassSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new CompassSensor<>(sensorMetaDataBean, properties, comment);
+    public static <V> CompassSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new CompassSensor<>(sensorMetaDataBean, properties, comment, error);
     }
 
     @Override
@@ -65,10 +66,10 @@ public class CompassSensor<V> extends ExternalSensor<V> {
             String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
             sensorMetaDataBean =
                 new SensorMetaDataBean(factory.sanitizePort(portName), factory.getMode("CALIBRATE"), factory.sanitizeSlot(BlocklyConstants.NO_SLOT), false);
-            return CompassSensor.make(sensorMetaDataBean, helper.extractBlockProperties(block), helper.extractComment(block));
+            return CompassSensor.make(sensorMetaDataBean, helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
         }
         SensorMetaDataBean sensorData = extractPortAndModeAndSlot(block, helper);
-        return CompassSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
+        return CompassSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

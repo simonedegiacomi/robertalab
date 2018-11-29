@@ -7,10 +7,11 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -30,8 +31,8 @@ public class Unary<V> extends Expr<V> {
     private final Op op;
     private final Expr<V> expr;
 
-    private Unary(Op op, Expr<V> expr, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("UNARY"), properties, comment);
+    private Unary(Op op, Expr<V> expr, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("UNARY"), properties, comment, error);
         Assert.isTrue(op != null && expr != null && expr.isReadOnly());
         this.op = op;
         this.expr = expr;
@@ -47,8 +48,8 @@ public class Unary<V> extends Expr<V> {
      * @param comment added from the user,
      * @return read only object of class {@link Unary}
      */
-    public static <V> Unary<V> make(Op op, Expr<V> expr, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new Unary<V>(op, expr, properties, comment);
+    public static <V> Unary<V> make(Op op, Expr<V> expr, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new Unary<V>(op, expr, properties, comment, error);
     }
 
     /**

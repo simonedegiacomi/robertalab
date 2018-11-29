@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.MotionParam;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
@@ -29,8 +30,8 @@ import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
 public final class SingleMotorOnAction<V> extends Action<V> {
     private final Expr<V> speed;
 
-    private SingleMotorOnAction(Expr<V> speed, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("SINGLE_MOTOR_ON_ACTION"), properties, comment);
+    private SingleMotorOnAction(Expr<V> speed, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("SINGLE_MOTOR_ON_ACTION"), properties, comment, error);
         Assert.isTrue((speed != null) && speed.isReadOnly());
         this.speed = speed;
 
@@ -45,8 +46,8 @@ public final class SingleMotorOnAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link SingleMotorOnAction}
      */
-    private static <V> SingleMotorOnAction<V> make(Expr<V> speed, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new SingleMotorOnAction<>(speed, properties, comment);
+    private static <V> SingleMotorOnAction<V> make(Expr<V> speed, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new SingleMotorOnAction<>(speed, properties, comment, error);
     }
 
     public Expr<V> getSpeed() {
@@ -65,7 +66,7 @@ public final class SingleMotorOnAction<V> extends Action<V> {
         List<Value> values = helper.extractValues(block, (short) 1);
         Phrase<V> speed = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, BlocklyType.NUMBER_INT));
 
-        return SingleMotorOnAction.make(helper.convertPhraseToExpr(speed), helper.extractBlockProperties(block), helper.extractComment(block));
+        return SingleMotorOnAction.make(helper.convertPhraseToExpr(speed), helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

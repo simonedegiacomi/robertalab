@@ -8,13 +8,14 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -31,8 +32,8 @@ import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
 public class LedOnAction<V> extends Action<V> {
     private final Expr<V> ledColor;
 
-    private LedOnAction(Expr<V> ledColor, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("LED_ON_ACTION"), properties, comment);
+    private LedOnAction(Expr<V> ledColor, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("LED_ON_ACTION"), properties, comment, error);
         Assert.notNull(ledColor);
         this.ledColor = ledColor;
         setReadOnly();
@@ -46,8 +47,8 @@ public class LedOnAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link LedOnAction}
      */
-    private static <V> LedOnAction<V> make(Expr<V> ledColor, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new LedOnAction<>(ledColor, properties, comment);
+    private static <V> LedOnAction<V> make(Expr<V> ledColor, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new LedOnAction<>(ledColor, properties, comment, error);
     }
 
     /**
@@ -79,7 +80,7 @@ public class LedOnAction<V> extends Action<V> {
 
         Phrase<V> ledColor = helper.extractValue(values, new ExprParam(BlocklyConstants.COLOR, BlocklyType.COLOR));
 
-        return LedOnAction.make(helper.convertPhraseToExpr(ledColor), helper.extractBlockProperties(block), helper.extractComment(block));
+        return LedOnAction.make(helper.convertPhraseToExpr(ledColor), helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
 
     }
 

@@ -4,6 +4,7 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
@@ -22,8 +23,8 @@ import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
  */
 public class FourDigitDisplayClearAction<V> extends Action<V> {
 
-    private FourDigitDisplayClearAction(BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("FOURDIGITDISPLAY_CLEAR_ACTION"), properties, comment);
+    private FourDigitDisplayClearAction(BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("FOURDIGITDISPLAY_CLEAR_ACTION"), properties, comment, error);
         setReadOnly();
     }
 
@@ -34,8 +35,8 @@ public class FourDigitDisplayClearAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link FourDigitDisplayClearAction}
      */
-    private static <V> FourDigitDisplayClearAction<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new FourDigitDisplayClearAction<>(properties, comment);
+    private static <V> FourDigitDisplayClearAction<V> make(BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new FourDigitDisplayClearAction<>(properties, comment, error);
     }
 
     @Override
@@ -57,7 +58,7 @@ public class FourDigitDisplayClearAction<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
-        return FourDigitDisplayClearAction.make(helper.extractBlockProperties(block), helper.extractComment(block));
+        return FourDigitDisplayClearAction.make(helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

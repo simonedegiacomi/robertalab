@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.syntax.sensor.generic;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -18,8 +19,8 @@ import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
  */
 public class InfraredSensor<V> extends ExternalSensor<V> {
 
-    private InfraredSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(sensorMetaDataBean, BlockTypeContainer.getByName("INFRARED_SENSING"), properties, comment);
+    private InfraredSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(sensorMetaDataBean, BlockTypeContainer.getByName("INFRARED_SENSING"), properties, comment, error);
         setReadOnly();
     }
 
@@ -32,8 +33,8 @@ public class InfraredSensor<V> extends ExternalSensor<V> {
      * @param comment added from the user,
      * @return read only object of class {@link InfraredSensor}
      */
-    public static <V> InfraredSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new InfraredSensor<V>(sensorMetaDataBean, properties, comment);
+    public static <V> InfraredSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new InfraredSensor<V>(sensorMetaDataBean, properties, comment, error);
     }
 
     @Override

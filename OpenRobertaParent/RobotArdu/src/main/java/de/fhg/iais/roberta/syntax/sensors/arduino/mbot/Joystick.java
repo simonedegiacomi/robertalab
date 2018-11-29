@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
@@ -20,8 +21,8 @@ import de.fhg.iais.roberta.visitor.hardware.IMbotVisitor;
 public class Joystick<V> extends ExternalSensor<V> {
     private final String joystickAxis;
 
-    public Joystick(String axis, SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(sensorMetaDataBean, BlockTypeContainer.getByName("ARDU_JOYSTICK_GETSAMPLE"), properties, comment);
+    public Joystick(String axis, SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(sensorMetaDataBean, BlockTypeContainer.getByName("ARDU_JOYSTICK_GETSAMPLE"), properties, comment, error);
         this.joystickAxis = axis;
         setReadOnly();
     }
@@ -33,8 +34,8 @@ public class Joystick<V> extends ExternalSensor<V> {
      * @param comment added from the user,
      * @return read only object of {@link Joystick}
      */
-    public static <V> Joystick<V> make(String axis, SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new Joystick<>(axis, sensorMetaDataBean, properties, comment);
+    public static <V> Joystick<V> make(String axis, SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new Joystick<>(axis, sensorMetaDataBean, properties, comment, error);
     }
 
     @Override
@@ -67,7 +68,7 @@ public class Joystick<V> extends ExternalSensor<V> {
         boolean isPortInMutation = (block.getMutation() != null) && (block.getMutation().getPort() != null);
         SensorMetaDataBean sensorData =
             new SensorMetaDataBean(factory.sanitizePort(port), factory.getMode(mode), factory.sanitizeSlot(BlocklyConstants.EMPTY_SLOT), isPortInMutation);
-        return Joystick.make(mode, sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
+        return Joystick.make(mode, sensorData, helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

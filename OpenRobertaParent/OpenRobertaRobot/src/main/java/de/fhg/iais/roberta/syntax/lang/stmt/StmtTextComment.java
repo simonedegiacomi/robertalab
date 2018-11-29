@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
@@ -22,8 +23,8 @@ import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 public class StmtTextComment<V> extends Stmt<V> {
     private final String textComment;
 
-    private StmtTextComment(String textComment, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("TEXT_COMMENT"), properties, comment);
+    private StmtTextComment(String textComment, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("TEXT_COMMENT"), properties, comment, error);
         Assert.isTrue(textComment != null);
         this.textComment = textComment;
         setReadOnly();
@@ -36,8 +37,8 @@ public class StmtTextComment<V> extends Stmt<V> {
      * @param comment added from the user,
      * @return read only object of class {@link StmtTextComment}
      */
-    public static <V> StmtTextComment<V> make(String textComment, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new StmtTextComment<V>(textComment, properties, comment);
+    public static <V> StmtTextComment<V> make(String textComment, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new StmtTextComment<V>(textComment, properties, comment, error);
     }
 
     /**
@@ -68,7 +69,7 @@ public class StmtTextComment<V> extends Stmt<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         List<Field> fields = helper.extractFields(block, (short) 1);
         String comment = helper.extractField(fields, BlocklyConstants.TEXT);
-        return StmtTextComment.make(comment, helper.extractBlockProperties(block), helper.extractComment(block));
+        return StmtTextComment.make(comment, helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

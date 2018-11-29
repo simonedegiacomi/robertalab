@@ -20,6 +20,7 @@ public class SensorStmtTest {
                 .make(
                     new SensorMetaDataBean("1", SC.TOUCH, "EMPTY_SLOT", false),
                     BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false),
+                    null,
                     null);
         SensorStmt<Void> sensorStmt = SensorStmt.make(touchSensor);
 
@@ -34,6 +35,7 @@ public class SensorStmtTest {
                 .make(
                     new SensorMetaDataBean("1", SC.TOUCH, "EMPTY_SLOT", false),
                     BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false),
+                    null,
                     null);
         SensorStmt<Void> sensorStmt = SensorStmt.make(touchSensor);
 

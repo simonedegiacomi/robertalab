@@ -11,6 +11,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
@@ -23,8 +24,8 @@ public class RelayAction<V> extends Action<V> {
     private final String port;
     private final IRelayMode mode;
 
-    private RelayAction(String port, IRelayMode mode, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("RELAY_ACTION"), properties, comment);
+    private RelayAction(String port, IRelayMode mode, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("RELAY_ACTION"), properties, comment, error);
         Assert.isTrue(mode != null);
         this.port = port;
         this.mode = mode;
@@ -40,8 +41,8 @@ public class RelayAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link RelayAction}
      */
-    private static <V> RelayAction<V> make(String port, IRelayMode mode, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new RelayAction<>(port, mode, properties, comment);
+    private static <V> RelayAction<V> make(String port, IRelayMode mode, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new RelayAction<>(port, mode, properties, comment, error);
     }
 
     /**
@@ -80,7 +81,7 @@ public class RelayAction<V> extends Action<V> {
         List<Field> fields = helper.extractFields(block, (short) 2);
         String port = helper.extractField(fields, BlocklyConstants.ACTORPORT, BlocklyConstants.NO_PORT);
         String mode = helper.extractField(fields, BlocklyConstants.RELAYSTATE, BlocklyConstants.DEFAULT);
-        return RelayAction.make(factory.sanitizePort(port), factory.getRelayMode(mode), helper.extractBlockProperties(block), helper.extractComment(block));
+        return RelayAction.make(factory.sanitizePort(port), factory.getRelayMode(mode), helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

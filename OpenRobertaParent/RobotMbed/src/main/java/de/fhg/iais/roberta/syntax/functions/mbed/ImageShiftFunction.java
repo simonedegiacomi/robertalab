@@ -12,13 +12,14 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.functions.Function;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -35,8 +36,8 @@ public class ImageShiftFunction<V> extends Function<V> {
     private final Expr<V> positions;
     private final IDirection shiftDirection;
 
-    private ImageShiftFunction(Expr<V> image, Expr<V> positions, IDirection shiftDirection, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("IMAGE_SHIFT"), properties, comment);
+    private ImageShiftFunction(Expr<V> image, Expr<V> positions, IDirection shiftDirection, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("IMAGE_SHIFT"), properties, comment, error);
         Assert.notNull(image);
         Assert.notNull(positions);
         Assert.notNull(shiftDirection);
@@ -61,8 +62,8 @@ public class ImageShiftFunction<V> extends Function<V> {
         Expr<V> positions,
         IDirection shiftDirection,
         BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        return new ImageShiftFunction<>(image, positions, shiftDirection, properties, comment);
+        BlocklyComment comment, BlocklyError error) {
+        return new ImageShiftFunction<>(image, positions, shiftDirection, properties, comment, error);
     }
 
     /**
@@ -128,7 +129,7 @@ public class ImageShiftFunction<V> extends Function<V> {
             helper.convertPhraseToExpr(numberOfPositions),
             shiftingDirection,
             helper.extractBlockProperties(block),
-            helper.extractComment(block));
+            helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

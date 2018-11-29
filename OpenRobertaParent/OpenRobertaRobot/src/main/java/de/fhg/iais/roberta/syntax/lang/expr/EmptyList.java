@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
@@ -26,8 +27,8 @@ import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 public class EmptyList<V> extends Expr<V> {
     private final BlocklyType typeVar;
 
-    private EmptyList(BlocklyType typeVar, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("EMPTY_LIST"), properties, comment);
+    private EmptyList(BlocklyType typeVar, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("EMPTY_LIST"), properties, comment, error);
         Assert.isTrue(typeVar != null);
         this.typeVar = typeVar;
         setReadOnly();
@@ -40,8 +41,8 @@ public class EmptyList<V> extends Expr<V> {
      * @param comment added from the user,
      * @return read only object of class {@link NullConst}
      */
-    public static <V> EmptyList<V> make(BlocklyType typeVar, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new EmptyList<V>(typeVar, properties, comment);
+    public static <V> EmptyList<V> make(BlocklyType typeVar, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new EmptyList<V>(typeVar, properties, comment, error);
     }
 
     /**
@@ -54,7 +55,7 @@ public class EmptyList<V> extends Expr<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         List<Field> fields = helper.extractFields(block, (short) 1);
         String filename = helper.extractField(fields, BlocklyConstants.LIST_TYPE);
-        return EmptyList.make(BlocklyType.get(filename), helper.extractBlockProperties(block), helper.extractComment(block));
+        return EmptyList.make(BlocklyType.get(filename), helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     /**

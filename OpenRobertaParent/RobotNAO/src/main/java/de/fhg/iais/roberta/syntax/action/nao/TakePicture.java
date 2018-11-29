@@ -10,13 +10,14 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.MotionParam;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -33,8 +34,8 @@ public final class TakePicture<V> extends Action<V> {
     private final Camera camera;
     private final Expr<V> pictureName;
 
-    private TakePicture(Camera camera, Expr<V> pictureName, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("TAKE_PICTURE"), properties, comment);
+    private TakePicture(Camera camera, Expr<V> pictureName, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("TAKE_PICTURE"), properties, comment, error);
         Assert.notNull(camera, "Missing camera in TakePicture block!");
         Assert.isTrue(pictureName != null);
         this.camera = camera;
@@ -55,8 +56,8 @@ public final class TakePicture<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link TakePicture}
      */
-    private static <V> TakePicture<V> make(Camera camera, Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new TakePicture<>(camera, msg, properties, comment);
+    private static <V> TakePicture<V> make(Camera camera, Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new TakePicture<>(camera, msg, properties, comment, error);
     }
 
     public Camera getCamera() {
@@ -86,7 +87,7 @@ public final class TakePicture<V> extends Action<V> {
         String camera = helper.extractField(fields, BlocklyConstants.CAMERA);
         Phrase<V> msg = helper.extractValue(values, new ExprParam(BlocklyConstants.FILENAME, BlocklyType.NUMBER_INT));
 
-        return TakePicture.make(Camera.get(camera), helper.convertPhraseToExpr(msg), helper.extractBlockProperties(block), helper.extractComment(block));
+        return TakePicture.make(Camera.get(camera), helper.convertPhraseToExpr(msg), helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

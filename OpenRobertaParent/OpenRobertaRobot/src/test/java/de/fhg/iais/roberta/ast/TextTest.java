@@ -3,8 +3,8 @@ package de.fhg.iais.roberta.ast;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.GenericHelperForXmlTest;
 import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
+import de.fhg.iais.roberta.util.test.GenericHelperForXmlTest;
 
 public class TextTest {
     AbstractHelperForXmlTest h = new GenericHelperForXmlTest();

@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
@@ -27,8 +28,8 @@ public final class ApplyPosture<V> extends Action<V> {
 
     private final Posture posture;
 
-    private ApplyPosture(Posture posture, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("APPLY_POSTURE"), properties, comment);
+    private ApplyPosture(Posture posture, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("APPLY_POSTURE"), properties, comment, error);
         Assert.notNull(posture, "Missing posture in ApplyPosture block!");
         this.posture = posture;
         setReadOnly();
@@ -42,8 +43,8 @@ public final class ApplyPosture<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link ApplyPosture}
      */
-    private static <V> ApplyPosture<V> make(Posture posture, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ApplyPosture<V>(posture, properties, comment);
+    private static <V> ApplyPosture<V> make(Posture posture, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new ApplyPosture<V>(posture, properties, comment, error);
     }
 
     public Posture getPosture() {
@@ -72,7 +73,7 @@ public final class ApplyPosture<V> extends Action<V> {
 
         String posture = helper.extractField(fields, BlocklyConstants.DIRECTION);
 
-        return ApplyPosture.make(Posture.get(posture), helper.extractBlockProperties(block), helper.extractComment(block));
+        return ApplyPosture.make(Posture.get(posture), helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

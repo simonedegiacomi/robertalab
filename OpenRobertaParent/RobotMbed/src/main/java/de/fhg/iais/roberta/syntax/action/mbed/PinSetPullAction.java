@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
@@ -28,8 +29,8 @@ public class PinSetPullAction<V> extends Action<V> {
     private final String pinPull;
     private final String port;
 
-    private PinSetPullAction(String pinPull, String port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("PIN_SET_PULL"), properties, comment);
+    private PinSetPullAction(String pinPull, String port, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("PIN_SET_PULL"), properties, comment, error);
         Assert.notNull(pinPull);
         Assert.notNull(port);
         this.pinPull = pinPull;
@@ -46,8 +47,8 @@ public class PinSetPullAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of {@link PinSetPullAction}
      */
-    public static <V> PinSetPullAction<V> make(String pinPull, String port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new PinSetPullAction<>(pinPull, port, properties, comment);
+    public static <V> PinSetPullAction<V> make(String pinPull, String port, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new PinSetPullAction<>(pinPull, port, properties, comment, error);
     }
 
     public String getMode() {
@@ -80,7 +81,7 @@ public class PinSetPullAction<V> extends Action<V> {
         List<Field> fields = helper.extractFields(block, (short) 2);
         String port = helper.extractField(fields, BlocklyConstants.PIN_PORT);
         String pinPull = helper.extractField(fields, BlocklyConstants.PIN_PULL);
-        return PinSetPullAction.make(factory.getMode(pinPull), factory.sanitizePort(port), helper.extractBlockProperties(block), helper.extractComment(block));
+        return PinSetPullAction.make(factory.getMode(pinPull), factory.sanitizePort(port), helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

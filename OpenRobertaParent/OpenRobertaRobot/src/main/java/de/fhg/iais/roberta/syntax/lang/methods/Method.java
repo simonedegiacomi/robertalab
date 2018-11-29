@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.syntax.lang.methods;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
@@ -25,8 +26,8 @@ public abstract class Method<V> extends Phrase<V> {
      * @param properties of the block,
      * @param comment of the user for the specific block
      */
-    public Method(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(kind, properties, comment);
+    public Method(BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(kind, properties, comment, error);
     }
 
     public String getMethodName() {

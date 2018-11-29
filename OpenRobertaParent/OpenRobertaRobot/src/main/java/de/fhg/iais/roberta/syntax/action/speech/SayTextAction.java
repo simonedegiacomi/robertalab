@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
@@ -30,8 +31,8 @@ public class SayTextAction<V> extends Action<V> {
     private final Expr<V> speed;
     private final Expr<V> pitch;
 
-    private SayTextAction(Expr<V> msg, Expr<V> speed, Expr<V> pitch, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("SAY_TEXT"), properties, comment);
+    private SayTextAction(Expr<V> msg, Expr<V> speed, Expr<V> pitch, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("SAY_TEXT"), properties, comment, error);
         Assert.isTrue(msg != null && speed != null && pitch != null);
         this.msg = msg;
         this.speed = speed;
@@ -47,8 +48,14 @@ public class SayTextAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link SayTextAction}
      */
-    private static <V> SayTextAction<V> make(Expr<V> msg, Expr<V> speed, Expr<V> pitch, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new SayTextAction<>(msg, speed, pitch, properties, comment);
+    private static <V> SayTextAction<V> make(
+        Expr<V> msg,
+        Expr<V> speed,
+        Expr<V> pitch,
+        BlocklyBlockProperties properties,
+        BlocklyComment comment,
+        BlocklyError error) {
+        return new SayTextAction<>(msg, speed, pitch, properties, comment, error);
     }
 
     /**
@@ -102,7 +109,8 @@ public class SayTextAction<V> extends Action<V> {
                 helper.convertPhraseToExpr(speed),
                 helper.convertPhraseToExpr(pitch),
                 helper.extractBlockProperties(block),
-                helper.extractComment(block));
+                helper.extractComment(block),
+                helper.extractError(block));
     }
 
     @Override

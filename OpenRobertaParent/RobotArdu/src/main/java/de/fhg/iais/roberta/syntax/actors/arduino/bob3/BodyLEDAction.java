@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
@@ -28,8 +29,8 @@ public class BodyLEDAction<V> extends Action<V> {
     private final String ledState;
     private final String side;
 
-    private BodyLEDAction(String side, String ledState, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("BOB3_BODYLED"), properties, comment);
+    private BodyLEDAction(String side, String ledState, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("BOB3_BODYLED"), properties, comment, error);
         this.ledState = ledState;
         this.side = side;
         setReadOnly();
@@ -43,8 +44,8 @@ public class BodyLEDAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link BodyLEDAction}
      */
-    private static <V> BodyLEDAction<V> make(String side, String ledState, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new BodyLEDAction<>(side, ledState, properties, comment);
+    private static <V> BodyLEDAction<V> make(String side, String ledState, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new BodyLEDAction<>(side, ledState, properties, comment, error);
     }
 
     /**
@@ -79,7 +80,7 @@ public class BodyLEDAction<V> extends Action<V> {
         List<Field> fields = helper.extractFields(block, (short) 2);
         String side = helper.extractField(fields, BlocklyConstants.LED + BlocklyConstants.SIDE);
         String ledState = helper.extractField(fields, BlocklyConstants.LED + BlocklyConstants.STATE);
-        return BodyLEDAction.make(side, ledState, helper.extractBlockProperties(block), helper.extractComment(block));
+        return BodyLEDAction.make(side, ledState, helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

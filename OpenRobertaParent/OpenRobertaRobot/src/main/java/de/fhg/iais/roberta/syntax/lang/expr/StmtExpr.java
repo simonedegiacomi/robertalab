@@ -16,7 +16,7 @@ public class StmtExpr<V> extends Expr<V> {
     private final Stmt<V> stmt;
 
     private StmtExpr(Stmt<V> stmt) {
-        super(BlockTypeContainer.getByName("SENSOR_EXPR"), stmt.getProperty(), stmt.getComment());
+        super(BlockTypeContainer.getByName("SENSOR_EXPR"), stmt.getProperty(), stmt.getComment(), stmt.getError());
         Assert.isTrue(stmt.isReadOnly());
         this.stmt = stmt;
         setReadOnly();

@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
@@ -26,8 +27,8 @@ public final class Autonomous<V> extends Action<V> {
 
     private final WorkingState onOff;
 
-    private Autonomous(WorkingState onOff, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("AUTONOMOUS"), properties, comment);
+    private Autonomous(WorkingState onOff, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("AUTONOMOUS"), properties, comment, error);
         Assert.notNull(onOff, "Missing onOff in Autonomous block!");
         this.onOff = onOff;
         setReadOnly();
@@ -40,8 +41,8 @@ public final class Autonomous<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link Autonomous}
      */
-    private static <V> Autonomous<V> make(WorkingState onOff, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new Autonomous<>(onOff, properties, comment);
+    private static <V> Autonomous<V> make(WorkingState onOff, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new Autonomous<>(onOff, properties, comment, error);
     }
 
     public WorkingState getOnOff() {
@@ -65,7 +66,7 @@ public final class Autonomous<V> extends Action<V> {
 
         String onOff = helper.extractField(fields, BlocklyConstants.MODE);
 
-        return Autonomous.make(WorkingState.get(onOff), helper.extractBlockProperties(block), helper.extractComment(block));
+        return Autonomous.make(WorkingState.get(onOff), helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

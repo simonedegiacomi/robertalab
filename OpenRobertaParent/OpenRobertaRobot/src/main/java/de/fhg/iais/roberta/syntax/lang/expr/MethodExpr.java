@@ -16,7 +16,7 @@ public class MethodExpr<V> extends Expr<V> {
     private final Method<V> method;
 
     private MethodExpr(Method<V> method) {
-        super(BlockTypeContainer.getByName("METHOD_EXPR"), method.getProperty(), method.getComment());
+        super(BlockTypeContainer.getByName("METHOD_EXPR"), method.getProperty(), method.getComment(), method.getError());
         Assert.isTrue(method.isReadOnly());
         this.method = method;
         setReadOnly();

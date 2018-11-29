@@ -11,6 +11,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
@@ -28,8 +29,8 @@ import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
 public class SingleMotorStopAction<V> extends Action<V> {
     private final IMotorStopMode mode;
 
-    private SingleMotorStopAction(IMotorStopMode mode, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("SINGLE_MOTOR_STOP_ACTION"), properties, comment);
+    private SingleMotorStopAction(IMotorStopMode mode, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("SINGLE_MOTOR_STOP_ACTION"), properties, comment, error);
         Assert.isTrue(mode != null);
         this.mode = mode;
         setReadOnly();
@@ -43,8 +44,8 @@ public class SingleMotorStopAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link SingleMotorStopAction}
      */
-    private static <V> SingleMotorStopAction<V> make(IMotorStopMode mode, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new SingleMotorStopAction<>(mode, properties, comment);
+    private static <V> SingleMotorStopAction<V> make(IMotorStopMode mode, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new SingleMotorStopAction<>(mode, properties, comment, error);
     }
 
     /**
@@ -75,7 +76,7 @@ public class SingleMotorStopAction<V> extends Action<V> {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = helper.extractFields(block, (short) 1);
         String modeName = helper.extractField(fields, BlocklyConstants.MODE);
-        return SingleMotorStopAction.make(factory.getMotorStopMode(modeName), helper.extractBlockProperties(block), helper.extractComment(block));
+        return SingleMotorStopAction.make(factory.getMotorStopMode(modeName), helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
 
     }
 

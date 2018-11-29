@@ -6,8 +6,8 @@ import org.junit.Test;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
-import de.fhg.iais.roberta.util.test.GenericHelperForXmlTest;
 import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
+import de.fhg.iais.roberta.util.test.GenericHelperForXmlTest;
 
 public class NumConstTest {
     AbstractHelperForXmlTest h = new GenericHelperForXmlTest();

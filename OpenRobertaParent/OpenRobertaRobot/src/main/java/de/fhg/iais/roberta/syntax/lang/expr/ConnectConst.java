@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
@@ -29,8 +30,8 @@ public class ConnectConst<V> extends Expr<V> {
     private final String value;
     private final String dataValue;
 
-    private ConnectConst(String dataValue, String value, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("CONNECTION_CONST"), properties, comment);
+    private ConnectConst(String dataValue, String value, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("CONNECTION_CONST"), properties, comment, error);
         Assert.isTrue(!value.equals(""));
         this.value = value;
         this.dataValue = dataValue;
@@ -45,8 +46,8 @@ public class ConnectConst<V> extends Expr<V> {
      * @param comment added from the user,
      * @return read only object of class {@link NumConst}
      */
-    public static <V> ConnectConst<V> make(String dataValue, String value, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ConnectConst<V>(dataValue, value, properties, comment);
+    public static <V> ConnectConst<V> make(String dataValue, String value, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new ConnectConst<V>(dataValue, value, properties, comment, error);
     }
 
     /**
@@ -93,7 +94,7 @@ public class ConnectConst<V> extends Expr<V> {
         Data data = block.getData();
         String datum = data.getValue();
         String field = helper.extractField(fields, BlocklyConstants.CONNECTION);
-        return ConnectConst.make(datum, field, helper.extractBlockProperties(block), helper.extractComment(block));
+        return ConnectConst.make(datum, field, helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

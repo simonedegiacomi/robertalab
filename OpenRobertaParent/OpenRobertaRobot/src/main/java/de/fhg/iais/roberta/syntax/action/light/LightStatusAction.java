@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
@@ -27,8 +28,8 @@ public class LightStatusAction<V> extends Action<V> {
     private final Status status;
     private final String port;
 
-    private LightStatusAction(String port, Status status, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("LIGHT_STATUS_ACTION"), properties, comment);
+    private LightStatusAction(String port, Status status, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("LIGHT_STATUS_ACTION"), properties, comment, error);
         Assert.isTrue(status != null);
         this.status = status;
         this.port = port;
@@ -43,8 +44,8 @@ public class LightStatusAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link LightStatusAction}
      */
-    public static <V> LightStatusAction<V> make(String port, Status status, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new LightStatusAction<>(port, status, properties, comment);
+    public static <V> LightStatusAction<V> make(String port, Status status, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new LightStatusAction<>(port, status, properties, comment, error);
     }
 
     /**
@@ -62,7 +63,7 @@ public class LightStatusAction<V> extends Action<V> {
     /**
      * @return port.
      */
-    public String  getPort() {
+    public String getPort() {
         return this.port;
     }
 
@@ -88,7 +89,8 @@ public class LightStatusAction<V> extends Action<V> {
             || block.getType().equals("robActions_leds_off") ) {
             status = LightStatusAction.Status.OFF;
         }
-        return LightStatusAction.make(factory.sanitizePort(port), status, helper.extractBlockProperties(block), helper.extractComment(block));
+        return LightStatusAction
+            .make(factory.sanitizePort(port), status, helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

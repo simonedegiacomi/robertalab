@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
@@ -20,8 +21,8 @@ public final class FlameSensor<V> extends Sensor<V> {
 
     private final String port;
 
-    private FlameSensor(String port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("FLAMESENSOR_GET_SAMPLE"), properties, comment);
+    private FlameSensor(String port, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("FLAMESENSOR_GET_SAMPLE"), properties, comment, error);
         this.port = port;
         setReadOnly();
     }
@@ -33,8 +34,8 @@ public final class FlameSensor<V> extends Sensor<V> {
      * @param comment added from the user,
      * @return read only object of class {@link FlameSensor}
      */
-    static <V> FlameSensor<V> make(String port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new FlameSensor<>(port, properties, comment);
+    static <V> FlameSensor<V> make(String port, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new FlameSensor<>(port, properties, comment, error);
     }
 
     public String getPort() {
@@ -57,7 +58,7 @@ public final class FlameSensor<V> extends Sensor<V> {
         final BlocklyDropdownFactory factory = helper.getDropdownFactory();
         final List<Field> fields = helper.extractFields(block, (short) 3);
         final String port = helper.extractField(fields, BlocklyConstants.SENSORPORT);
-        return FlameSensor.make(factory.sanitizePort(port), helper.extractBlockProperties(block), helper.extractComment(block));
+        return FlameSensor.make(factory.sanitizePort(port), helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

@@ -9,12 +9,13 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.actor.IBluetoothVisitor;
@@ -25,8 +26,15 @@ public class BluetoothSendAction<V> extends Action<V> {
     String _channel;
     String dataType;
 
-    private BluetoothSendAction(Expr<V> connection, Expr<V> msg, String channel, String dataType, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("BLUETOOTH_SEND_ACTION"), properties, comment);
+    private BluetoothSendAction(
+        Expr<V> connection,
+        Expr<V> msg,
+        String channel,
+        String dataType,
+        BlocklyBlockProperties properties,
+        BlocklyComment comment,
+        BlocklyError error) {
+        super(BlockTypeContainer.getByName("BLUETOOTH_SEND_ACTION"), properties, comment, error);
         this._connection = connection;
         this._msg = msg;
         this._channel = channel;
@@ -34,8 +42,8 @@ public class BluetoothSendAction<V> extends Action<V> {
         setReadOnly();
     }
 
-    private BluetoothSendAction(Expr<V> connection, Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("BLUETOOTH_SEND_ACTION"), properties, comment);
+    private BluetoothSendAction(Expr<V> connection, Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("BLUETOOTH_SEND_ACTION"), properties, comment, error);
         this._connection = connection;
         this._msg = msg;
         setReadOnly();
@@ -54,12 +62,18 @@ public class BluetoothSendAction<V> extends Action<V> {
         String channel,
         String dataType,
         BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        return new BluetoothSendAction<V>(connection, msg, channel, dataType, properties, comment);
+        BlocklyComment comment,
+        BlocklyError error) {
+        return new BluetoothSendAction<V>(connection, msg, channel, dataType, properties, comment, error);
     }
 
-    public static <V> BluetoothSendAction<V> make(Expr<V> connection, Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new BluetoothSendAction<V>(connection, msg, properties, comment);
+    public static <V> BluetoothSendAction<V> make(
+        Expr<V> connection,
+        Expr<V> msg,
+        BlocklyBlockProperties properties,
+        BlocklyComment comment,
+        BlocklyError error) {
+        return new BluetoothSendAction<V>(connection, msg, properties, comment, error);
     }
 
     public Expr<V> getConnection() {
@@ -110,14 +124,14 @@ public class BluetoothSendAction<V> extends Action<V> {
                     bluetoothSendChannel,
                     bluetoothRecieveDataType,
                     helper.extractBlockProperties(block),
-                    helper.extractComment(block));
+                    helper.extractComment(block), helper.extractError(block));
         } else {
             return BluetoothSendAction
                 .make(
                     helper.convertPhraseToExpr(bluetoothSendConnection),
                     helper.convertPhraseToExpr(bluetoothSendMessage),
                     helper.extractBlockProperties(block),
-                    helper.extractComment(block));
+                    helper.extractComment(block), helper.extractError(block));
         }
     }
 

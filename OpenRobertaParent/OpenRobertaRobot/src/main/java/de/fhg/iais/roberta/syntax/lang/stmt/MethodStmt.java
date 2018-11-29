@@ -14,7 +14,7 @@ public class MethodStmt<V> extends Stmt<V> {
     private final Method<V> method;
 
     private MethodStmt(Method<V> method) {
-        super(BlockTypeContainer.getByName("METHOD_STMT"), method.getProperty(), method.getComment());
+        super(BlockTypeContainer.getByName("METHOD_STMT"), method.getProperty(), method.getComment(), method.getError());
         Assert.isTrue(method != null && method.isReadOnly());
         this.method = method;
         setReadOnly();

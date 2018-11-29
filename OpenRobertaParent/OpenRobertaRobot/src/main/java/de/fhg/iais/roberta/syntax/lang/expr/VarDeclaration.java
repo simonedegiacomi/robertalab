@@ -10,10 +10,11 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -40,8 +41,8 @@ public class VarDeclaration<V> extends Expr<V> {
         boolean next,
         boolean global,
         BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("VAR_DECLARATION"), properties, comment);
+        BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("VAR_DECLARATION"), properties, comment, error);
         Assert.isTrue(!name.equals("") && typeVar != null && value.isReadOnly());
         this.name = name;
         this.typeVar = typeVar;
@@ -68,8 +69,8 @@ public class VarDeclaration<V> extends Expr<V> {
         boolean next,
         boolean global,
         BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        return new VarDeclaration<V>(typeVar, name, value, next, global, properties, comment);
+        BlocklyComment comment, BlocklyError error) {
+        return new VarDeclaration<V>(typeVar, name, value, next, global, properties, comment, error);
     }
 
     /**
@@ -149,7 +150,7 @@ public class VarDeclaration<V> extends Expr<V> {
         boolean next = block.getMutation().isNext();
 
         return VarDeclaration
-            .make(typeVar, name, helper.convertPhraseToExpr(expr), next, isGlobalVariable, helper.extractBlockProperties(block), helper.extractComment(block));
+            .make(typeVar, name, helper.convertPhraseToExpr(expr), next, isGlobalVariable, helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

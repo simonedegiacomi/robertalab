@@ -37,6 +37,7 @@ import de.fhg.iais.roberta.mode.general.WorkingState;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.sensor.GetSampleType;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
@@ -256,7 +257,8 @@ public class BlocklyDropdownFactory {
         String slot,
         boolean isPortInMutation,
         BlocklyBlockProperties properties,
-        BlocklyComment comment) {
+        BlocklyComment comment,
+        BlocklyError error) {
 
         WaitUntilSensorBean waBean = this.waMap.get(sensorKey);
         String implementingClass = waBean.getImplementingClass();
@@ -265,8 +267,9 @@ public class BlocklyDropdownFactory {
             Class<Sensor<?>> sensorClass = (Class<Sensor<?>>) BlocklyDropdownFactory.class.getClassLoader().loadClass(implementingClass);
             String mode = waBean.getMode();
             SensorMetaDataBean sensorMetaDataBean = new SensorMetaDataBean(sanitizePort(port), getMode(mode), sanitizeSlot(slot), isPortInMutation);
-            Method makeMethod = sensorClass.getDeclaredMethod("make", SensorMetaDataBean.class, BlocklyBlockProperties.class, BlocklyComment.class);
-            return (Sensor<?>) makeMethod.invoke(null, sensorMetaDataBean, properties, comment);
+            Method makeMethod =
+                sensorClass.getDeclaredMethod("make", SensorMetaDataBean.class, BlocklyBlockProperties.class, BlocklyComment.class, BlocklyError.class);
+            return (Sensor<?>) makeMethod.invoke(null, sensorMetaDataBean, properties, comment, error);
         } catch ( Exception e ) {
             LOG.error("Sensor " + sensorKey + " could not be created", e);
             throw new DbcException("Sensor " + sensorKey + " could not be created", e);

@@ -10,12 +10,13 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -35,8 +36,15 @@ public class ShowTextAction<V> extends Action<V> {
     private final Expr<V> y;
     private final String port;
 
-    private ShowTextAction(Expr<V> msg, Expr<V> column, Expr<V> row, String port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("SHOW_TEXT_ACTION"), properties, comment);
+    private ShowTextAction(
+        Expr<V> msg,
+        Expr<V> column,
+        Expr<V> row,
+        String port,
+        BlocklyBlockProperties properties,
+        BlocklyComment comment,
+        BlocklyError error) {
+        super(BlockTypeContainer.getByName("SHOW_TEXT_ACTION"), properties, comment, error);
         Assert.isTrue((msg != null) && (column != null) && (row != null));
         this.msg = msg;
         this.x = column;
@@ -56,8 +64,15 @@ public class ShowTextAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link ShowTextAction}
      */
-    private static <V> ShowTextAction<V> make(Expr<V> msg, Expr<V> x, Expr<V> y, String port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ShowTextAction<>(msg, x, y, port, properties, comment);
+    private static <V> ShowTextAction<V> make(
+        Expr<V> msg,
+        Expr<V> x,
+        Expr<V> y,
+        String port,
+        BlocklyBlockProperties properties,
+        BlocklyComment comment,
+        BlocklyError error) {
+        return new ShowTextAction<>(msg, x, y, port, properties, comment, error);
     }
 
     /**
@@ -84,7 +99,7 @@ public class ShowTextAction<V> extends Action<V> {
     /**
      * @return port of the display.
      */
-    public String  getPort() {
+    public String getPort() {
         return this.port;
     }
 
@@ -120,7 +135,8 @@ public class ShowTextAction<V> extends Action<V> {
                 helper.convertPhraseToExpr(row),
                 factory.sanitizePort(port),
                 helper.extractBlockProperties(block),
-                helper.extractComment(block));
+                helper.extractComment(block),
+                helper.extractError(block));
     }
 
     @Override

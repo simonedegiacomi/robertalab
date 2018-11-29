@@ -8,11 +8,12 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -25,8 +26,8 @@ import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 public class WaitTimeStmt<V> extends Stmt<V> {
     private final Expr<V> time;
 
-    private WaitTimeStmt(Expr<V> time, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("WAIT_TIME"), properties, comment);
+    private WaitTimeStmt(Expr<V> time, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("WAIT_TIME"), properties, comment, error);
         Assert.isTrue(time != null && time.isReadOnly());
         this.time = time;
         setReadOnly();
@@ -40,8 +41,8 @@ public class WaitTimeStmt<V> extends Stmt<V> {
      * @param comment for the block,
      * @return
      */
-    public static <V> WaitTimeStmt<V> make(Expr<V> time, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new WaitTimeStmt<>(time, properties, comment);
+    public static <V> WaitTimeStmt<V> make(Expr<V> time, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new WaitTimeStmt<>(time, properties, comment, error);
     }
 
     /**
@@ -66,7 +67,7 @@ public class WaitTimeStmt<V> extends Stmt<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         List<Value> values = helper.extractValues(block, (short) 1);
         Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.WAIT, BlocklyType.NUMBER_INT));
-        return WaitTimeStmt.make(helper.convertPhraseToExpr(expr), helper.extractBlockProperties(block), helper.extractComment(block));
+        return WaitTimeStmt.make(helper.convertPhraseToExpr(expr), helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

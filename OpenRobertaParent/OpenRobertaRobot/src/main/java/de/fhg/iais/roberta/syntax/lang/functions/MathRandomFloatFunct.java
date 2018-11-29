@@ -4,6 +4,7 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
@@ -20,8 +21,8 @@ import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
  * The enumeration {@link FunctionNames} contains all allowed functions.
  */
 public class MathRandomFloatFunct<V> extends Function<V> {
-    private MathRandomFloatFunct(BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("MATH_RANDOM_FLOAT_FUNCT"), properties, comment);
+    private MathRandomFloatFunct(BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("MATH_RANDOM_FLOAT_FUNCT"), properties, comment, error);
         setReadOnly();
     }
 
@@ -32,8 +33,8 @@ public class MathRandomFloatFunct<V> extends Function<V> {
      * @param comment that user has added to the block,
      * @return read only object of class {@link MathRandomFloatFunct}
      */
-    public static <V> MathRandomFloatFunct<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new MathRandomFloatFunct<V>(properties, comment);
+    public static <V> MathRandomFloatFunct<V> make(BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new MathRandomFloatFunct<V>(properties, comment, error);
     }
 
     @Override
@@ -69,7 +70,7 @@ public class MathRandomFloatFunct<V> extends Function<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
-        return MathRandomFloatFunct.make(helper.extractBlockProperties(block), helper.extractComment(block));
+        return MathRandomFloatFunct.make(helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

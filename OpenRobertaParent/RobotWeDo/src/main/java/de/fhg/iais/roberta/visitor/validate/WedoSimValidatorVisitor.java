@@ -4,7 +4,6 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
-import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
 
 public final class WedoSimValidatorVisitor extends AbstractSimValidatorVisitor {
 

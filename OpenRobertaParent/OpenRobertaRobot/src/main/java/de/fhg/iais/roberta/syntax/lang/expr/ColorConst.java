@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
@@ -29,8 +30,8 @@ import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 public class ColorConst<V> extends Expr<V> {
     private final Pair<String, String> color;
 
-    private ColorConst(Pair<String, String> color, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("COLOR_CONST"), properties, comment);
+    private ColorConst(Pair<String, String> color, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("COLOR_CONST"), properties, comment, error);
         Assert.isTrue(color != null);
         this.color = color;
         setReadOnly();
@@ -44,8 +45,8 @@ public class ColorConst<V> extends Expr<V> {
      * @param comment added from the user,
      * @return read only object of class {@link ColorConst}.
      */
-    public static <V> ColorConst<V> make(Pair<String, String> color, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ColorConst<V>(color, properties, comment);
+    public static <V> ColorConst<V> make(Pair<String, String> color, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new ColorConst<V>(color, properties, comment, error);
     }
 
     public Pair<String, String> getColor() {
@@ -88,7 +89,7 @@ public class ColorConst<V> extends Expr<V> {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = helper.extractFields(block, (short) 1);
         String field = helper.extractField(fields, BlocklyConstants.COLOUR);
-        return ColorConst.make(factory.getPickColor(field), helper.extractBlockProperties(block), helper.extractComment(block));
+        return ColorConst.make(factory.getPickColor(field), helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

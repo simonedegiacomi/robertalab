@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
@@ -27,8 +28,8 @@ import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
 public class Image<V> extends Expr<V> {
     private final String[][] image;
 
-    private Image(String[][] image, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("IMAGE"), properties, comment);
+    private Image(String[][] image, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("IMAGE"), properties, comment, error);
         this.image = image;
         setReadOnly();
     }
@@ -41,8 +42,8 @@ public class Image<V> extends Expr<V> {
      * @param comment added from the user,
      * @return read only object of class {@link Image}
      */
-    public static <V> Image<V> make(String[][] image, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new Image<>(image, properties, comment);
+    public static <V> Image<V> make(String[][] image, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new Image<>(image, properties, comment, error);
     }
 
     /**
@@ -103,7 +104,7 @@ public class Image<V> extends Expr<V> {
                 image[i][j] = helper.extractField(fields, "P" + j + i);
             }
         }
-        return Image.make(image, helper.extractBlockProperties(block), helper.extractComment(block));
+        return Image.make(image, helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

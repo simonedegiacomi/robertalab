@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
@@ -27,8 +28,8 @@ import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
  */
 public class TimerSensor<V> extends ExternalSensor<V> {
 
-    private TimerSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(sensorMetaDataBean, BlockTypeContainer.getByName("TIMER_SENSING"), properties, comment);
+    private TimerSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(sensorMetaDataBean, BlockTypeContainer.getByName("TIMER_SENSING"), properties, comment, error);
         setReadOnly();
     }
 
@@ -41,8 +42,8 @@ public class TimerSensor<V> extends ExternalSensor<V> {
      * @param comment added from the user,
      * @return read only object of {@link TimerSensor}
      */
-    static public <V> TimerSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new TimerSensor<>(sensorMetaDataBean, properties, comment);
+    static public <V> TimerSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new TimerSensor<>(sensorMetaDataBean, properties, comment, error);
     }
 
     @Override
@@ -66,10 +67,10 @@ public class TimerSensor<V> extends ExternalSensor<V> {
             String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
             sensorMetaDataBean =
                 new SensorMetaDataBean(factory.sanitizePort(portName), factory.getMode("RESET"), factory.sanitizeSlot(BlocklyConstants.NO_SLOT), false);
-            return TimerSensor.make(sensorMetaDataBean, helper.extractBlockProperties(block), helper.extractComment(block));
+            return TimerSensor.make(sensorMetaDataBean, helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
         }
         sensorMetaDataBean = extractPortAndModeAndSlot(block, helper);
-        return TimerSensor.make(sensorMetaDataBean, helper.extractBlockProperties(block), helper.extractComment(block));
+        return TimerSensor.make(sensorMetaDataBean, helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

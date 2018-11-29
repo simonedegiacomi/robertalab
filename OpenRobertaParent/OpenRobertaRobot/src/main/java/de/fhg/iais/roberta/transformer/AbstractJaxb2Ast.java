@@ -7,6 +7,7 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Arg;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Comment;
+import de.fhg.iais.roberta.blockly.generated.Error;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Shadow;
@@ -18,6 +19,7 @@ import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.ActionExpr;
@@ -118,7 +120,7 @@ abstract public class AbstractJaxb2Ast<V> {
         String op = getOperation(block, operationType);
         List<Value> values = extractValues(block, (short) 1);
         Phrase<V> expr = extractValue(values, exprParam);
-        return Unary.make(Unary.Op.get(op), convertPhraseToExpr(expr), extractBlockProperties(block), extractComment(block));
+        return Unary.make(Unary.Op.get(op), convertPhraseToExpr(expr), extractBlockProperties(block), extractComment(block), extractError(block));
     }
 
     /**
@@ -148,7 +150,8 @@ abstract public class AbstractJaxb2Ast<V> {
                 convertPhraseToExpr(right),
                 operationRange,
                 extractBlockProperties(block),
-                extractComment(block));
+                extractComment(block),
+                extractError(block));
     }
 
     /**
@@ -208,9 +211,9 @@ abstract public class AbstractJaxb2Ast<V> {
         }
 
         if ( _else != 0 ) {
-            return IfStmt.make(exprsList, thenList, elseList, extractBlockProperties(block), extractComment(block), _else, _elseIf);
+            return IfStmt.make(exprsList, thenList, elseList, extractBlockProperties(block), extractComment(block), extractError(block), _else, _elseIf);
         }
-        return IfStmt.make(exprsList, thenList, extractBlockProperties(block), extractComment(block), _else, _elseIf);
+        return IfStmt.make(exprsList, thenList, extractBlockProperties(block), extractComment(block), extractError(block), _else, _elseIf);
     }
 
     /**
@@ -283,6 +286,7 @@ abstract public class AbstractJaxb2Ast<V> {
                         BlocklyType.get(arg.getType()),
                         arg.getName(),
                         BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false),
+                        null,
                         null);
             parameters.addExpr(parametar);
         }
@@ -386,7 +390,7 @@ abstract public class AbstractJaxb2Ast<V> {
         String typeVar = block.getMutation() != null ? block.getMutation().getDatatype() : BlocklyConstants.NUMBER;
         List<Field> fields = extractFields(block, (short) 1);
         String field = extractField(fields, BlocklyConstants.VAR);
-        return Var.make(BlocklyType.get(typeVar), field, extractBlockProperties(block), extractComment(block));
+        return Var.make(BlocklyType.get(typeVar), field, extractBlockProperties(block), extractComment(block), extractError(block));
     }
 
     /**
@@ -576,6 +580,20 @@ abstract public class AbstractJaxb2Ast<V> {
     }
 
     /**
+     * Extracts the error from {@link Block}
+     *
+     * @param block as source
+     * @return
+     */
+    public BlocklyError extractError(Block block) {
+        if ( block.getError() != null ) {
+            Error error = block.getError();
+            return BlocklyError.make(error.getValue(), error.isPinned(), error.getH(), error.getW());
+        }
+        return null;
+    }
+
+    /**
      * Extracts the visual state of the {@link Block}.
      *
      * @param block as a source
@@ -656,7 +674,8 @@ abstract public class AbstractJaxb2Ast<V> {
     private Phrase<V> extractRepeatStatement(Block block, Phrase<V> expr, String mode, String location, int mutation) {
         List<Statement> statements = extractStatements(block, (short) mutation);
         StmtList<V> stmtList = extractStatement(statements, location);
-        return RepeatStmt.make(RepeatStmt.Mode.get(mode), convertPhraseToExpr(expr), stmtList, extractBlockProperties(block), extractComment(block));
+        return RepeatStmt
+            .make(RepeatStmt.Mode.get(mode), convertPhraseToExpr(expr), stmtList, extractBlockProperties(block), extractComment(block), extractError(block));
     }
 
     private boolean isDisabled(Block block) {

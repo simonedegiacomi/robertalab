@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
@@ -25,8 +26,8 @@ import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 public class StmtFlowCon<V> extends Stmt<V> {
     private final Flow flow;
 
-    private StmtFlowCon(Flow flow, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("STMT_FLOW_CONTROL"), properties, comment);
+    private StmtFlowCon(Flow flow, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("STMT_FLOW_CONTROL"), properties, comment, error);
         Assert.isTrue(flow != null);
         this.flow = flow;
         setReadOnly();
@@ -40,8 +41,8 @@ public class StmtFlowCon<V> extends Stmt<V> {
      * @param comment added from the user,
      * @return read only object of class {@link StmtFlowCon}
      */
-    public static <V> StmtFlowCon<V> make(Flow flow, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new StmtFlowCon<V>(flow, properties, comment);
+    public static <V> StmtFlowCon<V> make(Flow flow, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new StmtFlowCon<V>(flow, properties, comment, error);
     }
 
     /**
@@ -111,7 +112,7 @@ public class StmtFlowCon<V> extends Stmt<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         List<Field> fields = helper.extractFields(block, (short) 1);
         String mode = helper.extractField(fields, BlocklyConstants.FLOW);
-        return StmtFlowCon.make(Flow.get(mode), helper.extractBlockProperties(block), helper.extractComment(block));
+        return StmtFlowCon.make(Flow.get(mode), helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

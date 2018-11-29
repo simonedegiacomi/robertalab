@@ -11,6 +11,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
@@ -30,8 +31,8 @@ public class PlayNoteAction<V> extends Action<V> {
     private final String frequency;
     private final String port;
 
-    private PlayNoteAction(String port, String duration, String frequency, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("PLAY_NOTE_ACTION"), properties, comment);
+    private PlayNoteAction(String port, String duration, String frequency, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("PLAY_NOTE_ACTION"), properties, comment, error);
         Assert.isTrue(NumberUtils.isNumber(duration) && NumberUtils.isNumber(frequency));
         this.duration = duration;
         this.frequency = frequency;
@@ -48,14 +49,20 @@ public class PlayNoteAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link PlayNoteAction}
      */
-    private static <V> PlayNoteAction<V> make(String port, String duration, String frequency, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new PlayNoteAction<>(port, duration, frequency, properties, comment);
+    private static <V> PlayNoteAction<V> make(
+        String port,
+        String duration,
+        String frequency,
+        BlocklyBlockProperties properties,
+        BlocklyComment comment,
+        BlocklyError error) {
+        return new PlayNoteAction<>(port, duration, frequency, properties, comment, error);
     }
 
     /**
      * @return port.
      */
-    public String  getPort() {
+    public String getPort() {
         return this.port;
     }
 
@@ -96,7 +103,14 @@ public class PlayNoteAction<V> extends Action<V> {
         String duration = helper.extractField(fields, BlocklyConstants.DURATION);
         String port = helper.extractField(fields, BlocklyConstants.ACTORPORT, BlocklyConstants.NO_PORT);
         String frequency = helper.extractField(fields, BlocklyConstants.FREQUENCE);
-        return PlayNoteAction.make(factory.sanitizePort(port), duration, frequency, helper.extractBlockProperties(block), helper.extractComment(block));
+        return PlayNoteAction
+            .make(
+                factory.sanitizePort(port),
+                duration,
+                frequency,
+                helper.extractBlockProperties(block),
+                helper.extractComment(block),
+                helper.extractError(block));
     }
 
     @Override

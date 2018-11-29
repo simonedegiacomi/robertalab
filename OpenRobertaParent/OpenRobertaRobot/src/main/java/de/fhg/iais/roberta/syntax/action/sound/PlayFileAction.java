@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
@@ -25,8 +26,8 @@ import de.fhg.iais.roberta.visitor.hardware.actor.ISoundVisitor;
 public class PlayFileAction<V> extends Action<V> {
     private final String fileName;
 
-    private PlayFileAction(String fileName, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("PLAY_FILE_ACTION"), properties, comment);
+    private PlayFileAction(String fileName, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("PLAY_FILE_ACTION"), properties, comment, error);
         Assert.isTrue(!fileName.equals(""));
         this.fileName = fileName;
         setReadOnly();
@@ -40,8 +41,8 @@ public class PlayFileAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link PlayFileAction}
      */
-    private static <V> PlayFileAction<V> make(String filename, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new PlayFileAction<V>(filename, properties, comment);
+    private static <V> PlayFileAction<V> make(String filename, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new PlayFileAction<V>(filename, properties, comment, error);
     }
 
     /**
@@ -71,7 +72,7 @@ public class PlayFileAction<V> extends Action<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         List<Field> fields = helper.extractFields(block, (short) 1);
         String filename = helper.extractField(fields, BlocklyConstants.FILE);
-        return PlayFileAction.make(filename, helper.extractBlockProperties(block), helper.extractComment(block));
+        return PlayFileAction.make(filename, helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

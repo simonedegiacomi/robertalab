@@ -8,13 +8,14 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -30,8 +31,8 @@ public class VolumeAction<V> extends Action<V> {
     private final Mode mode;
     private final Expr<V> volume;
 
-    private VolumeAction(Mode mode, Expr<V> volume, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("VOLUME_ACTION"), properties, comment);
+    private VolumeAction(Mode mode, Expr<V> volume, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("VOLUME_ACTION"), properties, comment, error);
         Assert.isTrue(volume != null && volume.isReadOnly() && mode != null);
         this.volume = volume;
         this.mode = mode;
@@ -47,8 +48,8 @@ public class VolumeAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link VolumeAction}.
      */
-    public static <V> VolumeAction<V> make(Mode mode, Expr<V> volume, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new VolumeAction<V>(mode, volume, properties, comment);
+    public static <V> VolumeAction<V> make(Mode mode, Expr<V> volume, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new VolumeAction<V>(mode, volume, properties, comment, error);
     }
 
     /**
@@ -87,10 +88,21 @@ public class VolumeAction<V> extends Action<V> {
             List<Value> values = helper.extractValues(block, (short) 1);
             Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.VOLUME, BlocklyType.NUMBER_INT));
             return VolumeAction
-                .make(VolumeAction.Mode.SET, helper.convertPhraseToExpr(expr), helper.extractBlockProperties(block), helper.extractComment(block));
+                .make(
+                    VolumeAction.Mode.SET,
+                    helper.convertPhraseToExpr(expr),
+                    helper.extractBlockProperties(block),
+                    helper.extractComment(block),
+                    helper.extractError(block));
         }
-        NullConst<V> expr = NullConst.make(helper.extractBlockProperties(block), helper.extractComment(block));
-        return VolumeAction.make(VolumeAction.Mode.GET, helper.convertPhraseToExpr(expr), helper.extractBlockProperties(block), helper.extractComment(block));
+        NullConst<V> expr = NullConst.make(helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
+        return VolumeAction
+            .make(
+                VolumeAction.Mode.GET,
+                helper.convertPhraseToExpr(expr),
+                helper.extractBlockProperties(block),
+                helper.extractComment(block),
+                helper.extractError(block));
     }
 
     @Override

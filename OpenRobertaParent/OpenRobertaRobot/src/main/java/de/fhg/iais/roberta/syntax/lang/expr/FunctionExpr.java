@@ -16,7 +16,7 @@ public class FunctionExpr<V> extends Expr<V> {
     private final Function<V> function;
 
     private FunctionExpr(Function<V> function) {
-        super(BlockTypeContainer.getByName("FUNCTION_EXPR"), function.getProperty(), function.getComment());
+        super(BlockTypeContainer.getByName("FUNCTION_EXPR"), function.getProperty(), function.getComment(), function.getError());
         Assert.isTrue(function.isReadOnly());
         this.function = function;
         setReadOnly();

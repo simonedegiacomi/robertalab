@@ -33,7 +33,7 @@ public class VolumeActionTest {
     @Test(expected = Exception.class)
     public void invalideMode() throws Exception {
         @SuppressWarnings("unused")
-        VolumeAction<Void> va = VolumeAction.make(VolumeAction.Mode.valueOf("invalid"), null, null, null);
+        VolumeAction<Void> va = VolumeAction.make(VolumeAction.Mode.valueOf("invalid"), null, null, null, null);
     }
 
     @Test

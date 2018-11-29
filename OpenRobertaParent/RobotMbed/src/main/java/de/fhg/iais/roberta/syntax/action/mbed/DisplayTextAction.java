@@ -10,12 +10,13 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -33,8 +34,8 @@ public class DisplayTextAction<V> extends Action<V> {
     private final DisplayTextMode mode;
     private final Expr<V> msg;
 
-    private DisplayTextAction(DisplayTextMode mode, Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("DISPLAY_TEXT_ACTION"), properties, comment);
+    private DisplayTextAction(DisplayTextMode mode, Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("DISPLAY_TEXT_ACTION"), properties, comment, error);
         Assert.isTrue(msg != null && mode != null);
         this.msg = msg;
         this.mode = mode;
@@ -49,8 +50,13 @@ public class DisplayTextAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link DisplayTextAction}
      */
-    private static <V> DisplayTextAction<V> make(DisplayTextMode mode, Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new DisplayTextAction<>(mode, msg, properties, comment);
+    private static <V> DisplayTextAction<V> make(
+        DisplayTextMode mode,
+        Expr<V> msg,
+        BlocklyBlockProperties properties,
+        BlocklyComment comment,
+        BlocklyError error) {
+        return new DisplayTextAction<>(mode, msg, properties, comment, error);
     }
 
     public DisplayTextMode getMode() {
@@ -93,7 +99,12 @@ public class DisplayTextAction<V> extends Action<V> {
             displaMode = "TEXT";
         }
         return DisplayTextAction
-            .make(DisplayTextMode.get(displaMode), helper.convertPhraseToExpr(msg), helper.extractBlockProperties(block), helper.extractComment(block));
+            .make(
+                DisplayTextMode.get(displaMode),
+                helper.convertPhraseToExpr(msg),
+                helper.extractBlockProperties(block),
+                helper.extractComment(block),
+                helper.extractError(block));
     }
 
     @Override

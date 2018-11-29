@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
@@ -29,8 +30,8 @@ public final class Hand<V> extends Action<V> {
     private final TurnDirection turnDirection;
     private final Modus modus;
 
-    private Hand(TurnDirection turnDirection, Modus modus, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("HAND"), properties, comment);
+    private Hand(TurnDirection turnDirection, Modus modus, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("HAND"), properties, comment, error);
         Assert.notNull(turnDirection, "Missing turn direction in Hand block!");
         Assert.notNull(modus, "Missing modus in Hand block!");
         this.turnDirection = turnDirection;
@@ -46,8 +47,8 @@ public final class Hand<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link Hand}
      */
-    private static <V> Hand<V> make(TurnDirection turnDirection, Modus modus, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new Hand<V>(turnDirection, modus, properties, comment);
+    private static <V> Hand<V> make(TurnDirection turnDirection, Modus modus, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new Hand<V>(turnDirection, modus, properties, comment, error);
     }
 
     public TurnDirection getTurnDirection() {
@@ -76,7 +77,7 @@ public final class Hand<V> extends Action<V> {
         String turnDirection = helper.extractField(fields, BlocklyConstants.SIDE);
         String modus = helper.extractField(fields, BlocklyConstants.MODE);
 
-        return Hand.make(TurnDirection.get(turnDirection), Modus.get(modus), helper.extractBlockProperties(block), helper.extractComment(block));
+        return Hand.make(TurnDirection.get(turnDirection), Modus.get(modus), helper.extractBlockProperties(block), helper.extractComment(block), helper.extractError(block));
     }
 
     @Override

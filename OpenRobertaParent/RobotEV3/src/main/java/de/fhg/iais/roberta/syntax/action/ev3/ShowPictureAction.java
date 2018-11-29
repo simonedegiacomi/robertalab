@@ -12,12 +12,13 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.syntax.BlocklyError;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -34,8 +35,8 @@ public class ShowPictureAction<V> extends Action<V> {
     private final Expr<V> x;
     private final Expr<V> y;
 
-    private ShowPictureAction(IShowPicture pic, Expr<V> x, Expr<V> y, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("SHOW_PICTURE_ACTION"), properties, comment);
+    private ShowPictureAction(IShowPicture pic, Expr<V> x, Expr<V> y, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        super(BlockTypeContainer.getByName("SHOW_PICTURE_ACTION"), properties, comment, error);
         Assert.isTrue(pic != null && x != null && y != null);
         this.pic = pic;
         this.x = x;
@@ -53,8 +54,8 @@ public class ShowPictureAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link ShowPictureAction}
      */
-    private static <V> ShowPictureAction<V> make(IShowPicture pic, Expr<V> x, Expr<V> y, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ShowPictureAction<V>(pic, x, y, properties, comment);
+    private static <V> ShowPictureAction<V> make(IShowPicture pic, Expr<V> x, Expr<V> y, BlocklyBlockProperties properties, BlocklyComment comment, BlocklyError error) {
+        return new ShowPictureAction<V>(pic, x, y, properties, comment, error);
     }
 
     /**
@@ -108,7 +109,7 @@ public class ShowPictureAction<V> extends Action<V> {
                 helper.convertPhraseToExpr(x),
                 helper.convertPhraseToExpr(y),
                 helper.extractBlockProperties(block),
-                helper.extractComment(block));
+                helper.extractComment(block), helper.extractError(block));
     }
 
     @Override
