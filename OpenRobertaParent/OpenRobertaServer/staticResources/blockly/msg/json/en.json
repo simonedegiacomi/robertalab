@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2018-11-29 08:05:50.520032",
+		"lastupdated": "2018-11-30 14:27:28.128888",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -739,7 +739,7 @@
 	"MESSAGE_PROGRAM_DELETED": "Program »$« was deleted",
 	"MESSAGE_CONFIGURATION_DELETED": "Configuration »$« was deleted",
 	"MESSAGE_RESTART_ROBOT": "Please reconnect the robot to the Open Roberta Lab.",
-	"MESSAGE_FIRMWARE_ERROR": "The firmware of your robot is newer than that of the Open Roberta Lab. Please tell your server admin, that the server needs to be updated.",
+	"MESSAGE_FIRMWARE_ERROR": "There is a conflict with the firmware version of your robot and the Open Roberta Lab. Please contact us.",
 	"ORA_TOKEN_SET_SUCCESS": "Token set",
 	"ORA_ACCESS_RIGHT_CHANGED": "The shared right is updated!",
 	"ORA_ACCESS_RIGHT_DELETED": "The shared right is deleted!",
@@ -1472,6 +1472,5 @@
 	"ACTOR_MODE_DIGITALIN_TOOLTIP": "Writes a HIGH or a LOW value to a digital pin. Only the values HIGH »1« and LOW »0« should be used.",
 	"ACTION_INFRARED": "infrared emitter",
 	"LIST_CREATE_WITH_ERROR": "Error: This block may be used only within a variable declaration.",
-	"POPUP_SCANNED_ROBOTS": "found robots",
-	"POPUP_DISPLAY_HEADER": "output of your program"
+	"ORA_COMPILERWORKFLOW_ERROR_VISITOR_RECEIVED_BLOCK_WITH_ERROR": "There is an error in one of the blocks, please try to fix it and try again"
 }
