@@ -320,6 +320,8 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
         this.usedGlobalVarInFunctions.add("timer1");
         final StmtList<Void> variables = mainTask.getVariables();
         variables.visit(this);
+        this.sb.append("\n\n");
+
         generateUserDefinedMethods();
         this.sb.append("\n").append("def run():");
         incrIndentation();
@@ -335,7 +337,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
         if ( !withWrapping ) {
             return;
         }
-        this.sb.append("\n\n");
+        this.sb.append("\n");
         this.sb.append("def main():\n");
         this.sb.append(this.INDENT).append("try:\n");
         this.sb.append(this.INDENT).append(this.INDENT).append("run()\n");
@@ -863,7 +865,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
         this.sb.append("import microbit\n");
         this.sb.append("import random\n");
         this.sb.append("import math\n\n");
-        this.sb.append("_GOLDEN_RATIO = (1 + 5 ** 0.5) / 2\n\n");
+        this.sb.append("_GOLDEN_RATIO = (1 + 5 ** 0.5) / 2\n");
 
         if ( this.usedHardwareVisitor.isRadioUsed() ) {
             this.sb.append("import radio\n\n");

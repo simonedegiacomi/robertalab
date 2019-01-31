@@ -808,10 +808,12 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
             nlIndent();
             this.sb.append("long timer1;");
         }
-        //this.sb.append(this.tmpArr);
         mainTask.getVariables().visit(this);
+        if ( mainTask.getVariables().get().size() > 0 ) {
+            this.sb.append("\n");
+        }
         incrIndentation();
-        this.sb.append("\n").append("task main() {");
+        this.sb.append("task main() {");
         generateUsedVars();
         generateSensors();
         return null;
@@ -1226,7 +1228,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
         this.sb.append("#define WHEELDIAMETER " + this.brickConfiguration.getWheelDiameterCM() + "\n");
         this.sb.append("#define TRACKWIDTH " + this.brickConfiguration.getTrackWidthCM() + "\n");
         this.sb.append("#define MAXLINES 8 \n");
-        this.sb.append("#include \"NEPODefs.h\" // contains NEPO declarations for the NXC NXT API resources \n \n");
+        this.sb.append("#include \"NEPODefs.h\" // contains NEPO declarations for the NXC NXT API resources \n\n");
         decrIndentation();
         generateSignaturesOfUserDefinedMethods();
     }
@@ -1236,6 +1238,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
         if ( withWrapping ) {
             this.sb.append("\n}\n");
         }
+        this.sb.append("\n");
         generateUserDefinedMethods();
     }
 

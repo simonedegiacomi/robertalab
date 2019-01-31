@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 
-import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
@@ -394,25 +393,13 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
         if ( !mainTask.getVariables().toString().equals("") ) {
             nlIndent();
         }
-        ;
         nlIndent();
         //generateConfigurationVariables();
         if ( this.isTimerSensorUsed ) {
             this.sb.append("unsigned long __time = millis();");
             nlIndent();
         }
-        long numberConf =
-            this.programPhrases
-                .stream()
-                .filter(phrase -> (phrase.getKind().getCategory() == Category.METHOD) && !phrase.getKind().hasName("METHOD_CALL"))
-                .count();
-        if ( (this.configuration.getConfigurationComponents().isEmpty() || this.isTimerSensorUsed) && (numberConf == 0) ) {
-            nlIndent();
-        }
         generateUserDefinedMethods();
-        if ( numberConf != 0 ) {
-            nlIndent();
-        }
         this.sb.append("void setup()");
         nlIndent();
         this.sb.append("{");
@@ -493,6 +480,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
         generateActors();
         nlIndent();
         this.sb.append("RobertaFunctions rob;");
+        this.sb.append("\n");
     }
 
     @Override

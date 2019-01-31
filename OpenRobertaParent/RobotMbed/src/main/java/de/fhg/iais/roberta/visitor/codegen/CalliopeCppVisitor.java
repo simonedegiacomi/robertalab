@@ -178,13 +178,13 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     protected Void generateUsedVars() {
         for ( final VarDeclaration<Void> var : this.usedVars ) {
-            nlIndent();
             if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
                 this.sb.append(var.getName());
                 this.sb.append(whitespace() + "=" + whitespace());
                 var.getValue().visit(this);
                 this.sb.append(";");
             }
+            nlIndent();
         }
         return null;
     }
@@ -583,20 +583,20 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         nlIndent();
         // Initialise the micro:bit runtime.
         this.sb.append("_uBit.init();");
-        generateUsedVars();
         nlIndent();
+        generateUsedVars();
         if ( this.codePreprocess.isGreyScale() ) {
             this.sb.append("_uBit.display.setDisplayMode(DISPLAY_MODE_GREYSCALE);");
+            nlIndent();
         }
         if ( this.codePreprocess.isRadioUsed() ) {
-            nlIndent();
             this.sb.append("_uBit.radio.enable();");
+            nlIndent();
         }
         if ( this.codePreprocess.isAccelerometerUsed() ) {
-            nlIndent();
             this.sb.append("_uBit.accelerometer.updateSample();");
+            nlIndent();
         }
-
         return null;
     }
 
@@ -877,7 +877,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
                 throw new IllegalArgumentException("unhandled type");
         }
         return null;
-    };
+    }
 
     @Override
     public Void visitRadioSetChannelAction(RadioSetChannelAction<Void> radioSetChannelAction) {
@@ -995,9 +995,8 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     protected void generateProgramSuffix(boolean withWrapping) {
         if ( withWrapping ) {
-            nlIndent();
             this.sb.append("release_fiber();");
-            this.sb.append("\n}\n");
+            this.sb.append("\n}\n\n");
             generateUserDefinedMethods();
         }
 
@@ -1098,6 +1097,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         if ( this.codePreprocess.isLedBarUsed() ) {
             this.sb.append("Grove_LED_Bar ledBar(MICROBIT_PIN_P8, MICROBIT_PIN_P2);\n"); // Only works on the right UART Grove connector; Clock/Data pins are swapped compared to 4DigitDisplay
         }
+        this.sb.append("\n");
     }
 
     @Override
@@ -1108,8 +1108,8 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             this.sb.append(" " + phrase.getMethodName() + "(");
             phrase.getParameters().visit(this);
             this.sb.append(");");
-            nlIndent();
         }
+        this.sb.append("\n");
     }
 
     @Override

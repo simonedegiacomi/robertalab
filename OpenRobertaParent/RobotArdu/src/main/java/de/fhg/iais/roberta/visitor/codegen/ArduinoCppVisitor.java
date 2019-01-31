@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 
-import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedSensor;
@@ -421,7 +420,6 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
-
         mainTask.getVariables().visit(this);
         nlIndent();
         generateConfigurationVariables();
@@ -429,18 +427,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
             this.sb.append("unsigned long __time = millis();");
             nlIndent();
         }
-        long numberConf =
-            this.programPhrases
-                .stream()
-                .filter(phrase -> (phrase.getKind().getCategory() == Category.METHOD) && !phrase.getKind().hasName("METHOD_CALL"))
-                .count();
-        if ( (this.configuration.getConfigurationComponents().isEmpty() || this.isTimerSensorUsed) && (numberConf == 0) ) {
-            nlIndent();
-        }
         generateUserDefinedMethods();
-        if ( numberConf != 0 ) {
-            nlIndent();
-        }
         for ( UsedSensor usedSensor : this.usedSensors ) {
             if ( usedSensor.getType().equals(SC.INFRARED) ) {
                 measureIRValue(usedSensor);
@@ -555,6 +542,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         nlIndent();
         nlIndent();
         this.sb.append("RobertaFunctions rob;");
+        this.nlIndent();
     }
 
     @Override
@@ -797,6 +785,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                     throw new DbcException("Configuration block is not supported: " + cc.getComponentType());
             }
         }
+        nlIndent();
     }
 
     @Override

@@ -98,8 +98,8 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
             .stream()
             .filter(phrase -> phrase.getKind().getCategory() != Category.METHOD || phrase.getKind().hasName("METHOD_CALL"))
             .forEach(p -> {
-                nlIndent();
                 p.visit(this);
+                nlIndent();
             });
     }
 

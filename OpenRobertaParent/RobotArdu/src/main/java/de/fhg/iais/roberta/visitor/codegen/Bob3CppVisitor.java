@@ -125,13 +125,16 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
     public Void visitMainTask(MainTask<Void> mainTask) {
         decrIndentation();
         mainTask.getVariables().visit(this);
-        nlIndent();
+        if ( mainTask.getVariables().get().size() > 0 ) {
+            this.sb.append("\n\n");
+        } else {
+            this.sb.append("\n");
+        }
         if ( this.isTimerSensorUsed || this.usedTimer.toString().contains("TIMER") ) {
             this.sb.append("unsigned long __time = millis();");
             nlIndent();
         }
         generateUserDefinedMethods();
-        nlIndent();
         this.sb.append("void setup()");
         nlIndent();
         incrIndentation();

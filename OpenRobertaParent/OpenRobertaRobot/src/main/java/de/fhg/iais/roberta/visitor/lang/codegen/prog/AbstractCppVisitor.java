@@ -484,18 +484,19 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
-        this.sb.append("\n").append("void ");
+        this.sb.append("void ");
         this.sb.append(methodVoid.getMethodName() + "(");
         methodVoid.getParameters().visit(this);
         this.sb.append(") {");
         methodVoid.getBody().visit(this);
         this.sb.append("\n").append("}");
+        this.sb.append("\n");
         return null;
     }
 
     @Override
     public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
-        this.sb.append("\n").append(getLanguageVarTypeFromBlocklyType(methodReturn.getReturnType()));
+        this.sb.append(getLanguageVarTypeFromBlocklyType(methodReturn.getReturnType()));
         if ( methodReturn.getReturnType().toString().contains("ARRAY") ) {
             this.sb.append("M>");
         }
@@ -547,7 +548,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     public Void visitStmtTextComment(StmtTextComment<Void> stmtTextComment) {
         this.sb.append("// " + stmtTextComment.getTextComment());
         return null;
-    };
+    }
 
     @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {

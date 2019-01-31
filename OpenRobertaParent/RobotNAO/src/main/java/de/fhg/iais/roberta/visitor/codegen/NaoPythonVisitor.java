@@ -118,7 +118,6 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
         this.usedGlobalVarInFunctions = checker.getMarkedVariablesAsGlobal();
         this.isProgramEmpty = checker.isProgramEmpty();
         this.loopsLabels = checker.getloopsLabelContainer();
-
         this.language = language;
     }
 
@@ -207,8 +206,13 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     public Void visitMainTask(MainTask<Void> mainTask) {
         StmtList<Void> variables = mainTask.getVariables();
         variables.visit(this);
+        if ( variables.get().size() > 0 ) {
+            this.sb.append("\n\n");
+        } else {
+            this.sb.append("\n");
+        }
         generateUserDefinedMethods();
-        this.sb.append("\n\ndef run():");
+        this.sb.append("\ndef run():");
         incrIndentation();
         if ( mainTask.getDebug().equals("TRUE") ) {
             nlIndent();
@@ -1303,7 +1307,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
         if ( !withWrapping ) {
             return;
         }
-        this.sb.append("\n\n");
+        this.sb.append("\n");
         this.sb.append("def main():\n");
         this.sb.append(this.INDENT).append("try:\n");
         this.sb.append(this.INDENT).append(this.INDENT).append("run()\n");
@@ -1338,7 +1342,6 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
 
     private void generateSensors() {
         for ( UsedSensor usedSensor : this.usedSensors ) {
-
             switch ( usedSensor.getType() ) {
                 case SC.ULTRASONIC:
                     this.sb.append("h.sonar.subscribe(\"OpenRobertaApp\")\n");
@@ -1365,7 +1368,6 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
                 case SC.ACCELEROMETER:
                     break;
                 default:
-
                     throw new DbcException("Sensor is not supported!" + usedSensor.getType().toString());
             }
         }

@@ -432,13 +432,16 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
     public Void visitMainTask(MainTask<Void> mainTask) {
         decrIndentation();
         mainTask.getVariables().visit(this);
-        nlIndent();
+        if ( mainTask.getVariables().get().size() > 0 ) {
+            this.sb.append("\n\n");
+        } else {
+            this.sb.append("\n");
+        }
         if ( this.isTimerSensorUsed ) {
             nlIndent();
             this.sb.append("unsigned long __time = millis();");
         }
         generateUserDefinedMethods();
-        nlIndent();
         this.sb.append("void setup()");
         nlIndent();
         incrIndentation();
@@ -501,6 +504,7 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
         this.sb.append("#define MODULE_ADDRESS 0x2C \n");
         this.sb.append("byte colorsLeft[3]={0,0,0}; \n");
         this.sb.append("byte colorsRight[3]={0,0,0};");
+        this.sb.append("\n");
     }
 
     @Override
