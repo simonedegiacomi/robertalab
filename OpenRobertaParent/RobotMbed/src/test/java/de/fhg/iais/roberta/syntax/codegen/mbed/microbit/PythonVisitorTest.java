@@ -16,7 +16,7 @@ public class PythonVisitorTest {
             + "import microbit\n"
             + "import random\n"
             + "import math\n\n"
-            + "_GOLDEN_RATIO = (1 + 5 ** 0.5) / 2\n\n\n"
+            + "_GOLDEN_RATIO = (1 + 5 ** 0.5) / 2\n\n"
             + "class BreakOutOfALoop(Exception): pass\n"
             + "class ContinueLoop(Exception): pass\n\n"
             + "timer1 = microbit.running_time()\n";
@@ -36,15 +36,15 @@ public class PythonVisitorTest {
                 + "import random\n"
                 + "import math\n"
                 + "\n"
-                + "_GOLDEN_RATIO = (1 + 5 ** 0.5) / 2\n\n\n"
+                + "_GOLDEN_RATIO = (1 + 5 ** 0.5) / 2\n\n"
                 + "class BreakOutOfALoop(Exception): pass\n"
                 + "class ContinueLoop(Exception): pass\n"
                 + "\n"
-                + "timer1 = microbit.running_time()\n"
+                + "timer1 = microbit.running_time()\n\n"
                 + "\n"
                 + "def run():\n"
                 + "    global timer1\n"
-                + "\n"
+                + "    \n"
                 + "def main():\n"
                 + "    try:\n"
                 + "        run()\n"
@@ -62,11 +62,11 @@ public class PythonVisitorTest {
         String expectedResult =
             "" //
                 + IMPORTS
-                + "\ndef run():\n"
+                + "\n\ndef run():\n"
                 + "    global timer1\n"
                 + "    microbit.display.scroll('Hallo')\n"
                 + "    microbit.display.show('H')\n"
-                + "\n"
+                + "    \n"
                 + "def main():\n"
                 + "    try:\n"
                 + "        run()\n"
@@ -84,12 +84,11 @@ public class PythonVisitorTest {
         String expectedResult =
             "" //
                 + IMPORTS
-                + "\n"
                 + "Element = microbit.Image.HEART\n"
-                + "Element2 = microbit.Image.FABULOUS\n"
+                + "Element2 = microbit.Image.FABULOUS\n\n\n"
                 + "def run():\n"
                 + "    global timer1, Element, Element2\n"
-                + "\n"
+                + "    \n"
                 + "def main():\n"
                 + "    try:\n"
                 + "        run()\n"
@@ -107,12 +106,12 @@ public class PythonVisitorTest {
         String expectedResult =
             "" //
                 + IMPORTS
-                + "\n"
+                + "\n\n"
                 + "def run():\n"
                 + "    global timer1\n"
                 + "    microbit.display.show(microbit.Image.HEART)\n"
                 + "    microbit.display.show([microbit.Image.HEART_SMALL, microbit.Image.ASLEEP])\n"
-                + "\n"
+                + "    \n"
                 + "def main():\n"
                 + "    try:\n"
                 + "        run()\n"
@@ -130,11 +129,11 @@ public class PythonVisitorTest {
         String expectedResult =
             "" //
                 + IMPORTS
-                + "\n"
+                + "\n\n"
                 + "def run():\n"
                 + "    global timer1\n"
                 + "    microbit.display.show(\"\")\n"
-                + "\n"
+                + "    \n"
                 + "def main():\n"
                 + "    try:\n"
                 + "        run()\n"
@@ -152,11 +151,11 @@ public class PythonVisitorTest {
         String expectedResult =
             "" //
                 + IMPORTS
-                + "\n"
+                + "\n\n"
                 + "def run():\n"
                 + "    global timer1\n"
                 + "    microbit.display.clear()\n"
-                + "\n"
+                + "    \n"
                 + "def main():\n"
                 + "    try:\n"
                 + "        run()\n"
@@ -174,12 +173,12 @@ public class PythonVisitorTest {
         String expectedResult =
             "" //
                 + IMPORTS
-                + "\n"
+                + "\n\n"
                 + "def run():\n"
                 + "    global timer1\n"
                 + "    microbit.display.show(microbit.Image.SILLY.shift_up(1))\n"
                 + "    microbit.display.show(microbit.Image.SILLY.shift_down(2))\n"
-                + "\n"
+                + "    \n"
                 + "def main():\n"
                 + "    try:\n"
                 + "        run()\n"
@@ -197,11 +196,11 @@ public class PythonVisitorTest {
         String expectedResult =
             "" //
                 + IMPORTS
-                + "\n"
+                + "\n\n"
                 + "def run():\n"
                 + "    global timer1\n"
                 + "    microbit.pin0.write_digital(1);\n"
-                + "\n"
+                + "    \n"
                 + "def main():\n"
                 + "    try:\n"
                 + "        run()\n"
@@ -218,11 +217,11 @@ public class PythonVisitorTest {
         String expectedResult =
             "" //
                 + IMPORTS
-                + "\n"
+                + "\n\n"
                 + "def run():\n"
                 + "    global timer1\n"
                 + "    microbit.display.show(microbit.Image.SILLY.shift_up(0))\n"
-                + "\n"
+                + "    \n"
                 + "def main():\n"
                 + "    try:\n"
                 + "        run()\n"
@@ -240,11 +239,11 @@ public class PythonVisitorTest {
         String expectedResult =
             "" //
                 + IMPORTS
-                + "\n"
+                + "\n\n"
                 + "def run():\n"
                 + "    global timer1\n"
                 + "    microbit.display.show(microbit.Image.HEART.invert())\n"
-                + "\n"
+                + "    \n"
                 + "def main():\n"
                 + "    try:\n"
                 + "        run()\n"
@@ -262,11 +261,11 @@ public class PythonVisitorTest {
         String expectedResult =
             "" //
                 + IMPORTS
-                + "\n"
+                + "\n\n"
                 + "def run():\n"
                 + "    global timer1\n"
                 + "    microbit.display.show(microbit.Image.SILLY.invert())\n"
-                + "\n"
+                + "    \n"
                 + "def main():\n"
                 + "    try:\n"
                 + "        run()\n"
@@ -284,11 +283,11 @@ public class PythonVisitorTest {
         String expectedResult =
             "" //
                 + IMPORTS
-                + "\n"
+                + "\n\n"
                 + "def run():\n"
                 + "    global timer1\n"
                 + "    microbit.display.scroll(str(microbit.button_a.is_pressed()))\n"
-                + "\n"
+                + "    \n"
                 + "def main():\n"
                 + "    try:\n"
                 + "        run()\n"
@@ -306,11 +305,11 @@ public class PythonVisitorTest {
         String expectedResult =
             "" //
                 + IMPORTS
-                + "\n"
+                + "\n\n"
                 + "def run():\n"
                 + "    global timer1\n"
                 + "    microbit.display.scroll(str(microbit.compass.heading()))\n"
-                + "\n"
+                + "    \n"
                 + "def main():\n"
                 + "    try:\n"
                 + "        run()\n"
@@ -328,11 +327,11 @@ public class PythonVisitorTest {
         String expectedResult =
             "" //
                 + IMPORTS
-                + "\n"
+                + "\n\n"
                 + "def run():\n"
                 + "    global timer1\n"
                 + "    microbit.display.show(microbit.Image('99000:00009:03000:00090:02000'))\n"
-                + "\n"
+                + "    \n"
                 + "def main():\n"
                 + "    try:\n"
                 + "        run()\n"
@@ -350,12 +349,12 @@ public class PythonVisitorTest {
         String expectedResult =
             "" //
                 + IMPORTS
-                + "\n"
+                + "\n\n"
                 + "def run():\n"
                 + "    global timer1\n"
                 + "    microbit.display.scroll(str(\"face down\" == microbit.accelerometer.current_gesture()))\n"
                 + "    microbit.display.scroll(str(\"left\" == microbit.accelerometer.current_gesture()))\n"
-                + "\n"
+                + "    \n"
                 + "def main():\n"
                 + "    try:\n"
                 + "        run()\n"
@@ -373,11 +372,11 @@ public class PythonVisitorTest {
         String expectedResult =
             "" //
                 + IMPORTS
-                + "\n"
+                + "\n\n"
                 + "def run():\n"
                 + "    global timer1\n"
                 + "    microbit.display.scroll(str(microbit.temperature()))\n"
-                + "\n"
+                + "    \n"
                 + "def main():\n"
                 + "    try:\n"
                 + "        run()\n"
@@ -395,12 +394,12 @@ public class PythonVisitorTest {
         String expectedResult =
             "" //
                 + IMPORTS
-                + "\n"
+                + "\n\n"
                 + "def run():\n"
                 + "    global timer1\n"
                 + "    microbit.display.scroll(str(microbit.pin0.is_touched()))\n"
                 + "    microbit.display.scroll(str(microbit.pin2.is_touched()))\n"
-                + "\n"
+                + "    \n"
                 + "def main():\n"
                 + "    try:\n"
                 + "        run()\n"
@@ -418,12 +417,12 @@ public class PythonVisitorTest {
         String expectedResult =
             "" //
                 + IMPORTS
-                + "\n"
+                + "\n\n"
                 + "def run():\n"
                 + "    global timer1\n"
                 + "    microbit.display.scroll(str(microbit.pin1.read_analog()))\n"
                 + "    microbit.display.scroll(str(microbit.pin0.read_digital()))\n"
-                + "\n"
+                + "    \n"
                 + "def main():\n"
                 + "    try:\n"
                 + "        run()\n"
@@ -441,14 +440,14 @@ public class PythonVisitorTest {
         String expectedResult =
             "" //
                 + IMPORTS
-                + "\n"
+                + "\n\n"
                 + "def run():\n"
                 + "    global timer1\n"
                 + "    microbit.display.scroll(str(microbit.accelerometer.get_x()))\n"
                 + "    microbit.display.scroll(str(microbit.accelerometer.get_y()))\n"
                 + "    microbit.display.scroll(str(microbit.accelerometer.get_z()))\n"
                 + "    microbit.display.scroll(str(math.sqrt(microbit.accelerometer.get_x()**2 + microbit.accelerometer.get_y()**2 + microbit.accelerometer.get_z()**2)))\n"
-                + "\n"
+                + "    \n"
                 + "def main():\n"
                 + "    try:\n"
                 + "        run()\n"
@@ -466,14 +465,14 @@ public class PythonVisitorTest {
         String a =
             "" //
                 + IMPORTS
-                + "\n"
+                + "\n\n"
                 + "def run():\n"
                 + "    global timer1\n"
                 + "    if 20 == 30:\n"
                 + "        while True:\n"
                 + "            if microbit.button_a.is_pressed() == True:\n"
                 + "                break\n"
-                + "\n"
+                + "    \n"
                 + "def main():\n"
                 + "    try:\n"
                 + "        run()\n"
@@ -491,7 +490,7 @@ public class PythonVisitorTest {
         String a =
             "" //
                 + IMPORTS
-                + "\n"
+                + "\n\n"
                 + "def run():\n"
                 + "    global timer1\n"
                 + "    while True:\n"
@@ -501,7 +500,7 @@ public class PythonVisitorTest {
                 + "                    break\n"
                 + "        for i in range(int(1), int(10), int(1)):\n"
                 + "            pass\n"
-                + "\n"
+                + "    \n"
                 + "def main():\n"
                 + "    try:\n"
                 + "        run()\n"
@@ -519,7 +518,7 @@ public class PythonVisitorTest {
         String a =
             "" //
                 + IMPORTS
-                + "\n"
+                + "\n\n"
                 + "def run():\n"
                 + "    global timer1\n"
                 + "    while True:\n"
@@ -535,7 +534,7 @@ public class PythonVisitorTest {
                 + "            break\n"
                 + "        except ContinueLoop:\n"
                 + "            continue\n"
-                + "\n"
+                + "    \n"
                 + "def main():\n"
                 + "    try:\n"
                 + "        run()\n"
@@ -553,7 +552,7 @@ public class PythonVisitorTest {
         String a =
             "" //
                 + IMPORTS
-                + "\n"
+                + "\n\n"
                 + "def run():\n"
                 + "    global timer1\n"
                 + "    while True:\n"
@@ -572,7 +571,7 @@ public class PythonVisitorTest {
                 + "    for i in range(int(1), int(10), int(1)):\n"
                 + "        if i < 10:\n"
                 + "            continue\n"
-                + "\n"
+                + "    \n"
                 + "def main():\n"
                 + "    try:\n"
                 + "        run()\n"
@@ -590,7 +589,7 @@ public class PythonVisitorTest {
         String a =
             "" //
                 + IMPORTS
-                + "\n"
+                + "\n\n"
                 + "def run():\n"
                 + "    global timer1\n"
                 + "    while True:\n"
@@ -609,7 +608,7 @@ public class PythonVisitorTest {
                 + "            break\n"
                 + "        except ContinueLoop:\n"
                 + "            continue\n"
-                + "\n"
+                + "    \n"
                 + "def main():\n"
                 + "    try:\n"
                 + "        run()\n"
@@ -627,7 +626,7 @@ public class PythonVisitorTest {
         String a =
             "" //
                 + IMPORTS
-                + "\n"
+                + "\n\n"
                 + "def run():\n"
                 + "    global timer1\n"
                 + "    while True:\n"
@@ -649,7 +648,7 @@ public class PythonVisitorTest {
                 + "            break\n"
                 + "        except ContinueLoop:\n"
                 + "            continue\n"
-                + "\n"
+                + "    \n"
                 + "def main():\n"
                 + "    try:\n"
                 + "        run()\n"
@@ -667,7 +666,7 @@ public class PythonVisitorTest {
         String a =
             "" //
                 + IMPORTS
-                + "\ndef run():\n"
+                + "\n\ndef run():\n"
                 + "    global timer1\n"
                 + "    while True:\n"
                 + "        try:\n"
@@ -698,7 +697,7 @@ public class PythonVisitorTest {
                 + "            break\n"
                 + "        except ContinueLoop:\n"
                 + "            continue\n"
-                + "\n"
+                + "    \n"
                 + "def main():\n"
                 + "    try:\n"
                 + "        run()\n"
@@ -716,7 +715,7 @@ public class PythonVisitorTest {
         String a =
             "" //
                 + IMPORTS
-                + "\n"
+                + "\n\n"
                 + "def run():\n"
                 + "    global timer1\n"
                 + "    while True:\n"
@@ -764,7 +763,7 @@ public class PythonVisitorTest {
                 + "            break\n"
                 + "        except ContinueLoop:\n"
                 + "            continue\n"
-                + "\n"
+                + "    \n"
                 + "def main():\n"
                 + "    try:\n"
                 + "        run()\n"

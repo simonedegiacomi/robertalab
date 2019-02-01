@@ -957,7 +957,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
         this.sb.append(generateUsedImages());
         this.sb.append(generateRegenerateConfiguration()).append("\n");
         this.sb.append("hal = Hal(_brickConfiguration)");
-
+        this.sb.append("\n");
         if ( this.isSayTextUsed ) {
             this.sb.append("\nhal.setLanguage(\"");
             this.sb.append(this.getLanguageString(this.language));

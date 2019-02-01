@@ -86,7 +86,7 @@ public class AstToEv3PythonVisitorTest {
 
     private static final String MAIN_METHOD =
         "" //
-            + "def main():\n"
+            + "\ndef main():\n"
             + "    try:\n"
             + "        run()\n"
             + "    except Exception as e:\n"
@@ -137,7 +137,7 @@ public class AstToEv3PythonVisitorTest {
                 + IMPORTS
                 + GLOBALS
                 + "\ndef run():\n"
-                + "    hal.drawText(\"Hallo\", 0, 3)\n\n"
+                + "    hal.drawText(\"Hallo\", 0, 3)\n    \n"
                 + MAIN_METHOD;
 
         assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator.xml");
@@ -151,7 +151,7 @@ public class AstToEv3PythonVisitorTest {
                 + GLOBALS
                 + "\ndef run():\n"
                 + "    for k0 in range(int(0), int(10), int(1)):\n"
-                + "        hal.drawText(\"Hallo\", 0, 3)\n\n"
+                + "        hal.drawText(\"Hallo\", 0, 3)\n    \n"
                 + MAIN_METHOD;
 
         assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator1.xml");
@@ -177,7 +177,7 @@ public class AstToEv3PythonVisitorTest {
                 + "    hal.playFile(1)\n"
                 + "    hal.setVolume(50)\n"
                 + "    for i in range(int(1), int(10), int(1)):\n"
-                + "        hal.rotateRegulatedMotor('B', 30, 'rotations', 1)\n\n"
+                + "        hal.rotateRegulatedMotor('B', 30, 'rotations', 1)\n    \n"
                 + MAIN_METHOD;
 
         assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator2.xml");
@@ -203,7 +203,7 @@ public class AstToEv3PythonVisitorTest {
                 + "            hal.drawPicture(predefinedImages['FLOWERS'], 15, 15)\n"
                 + "        else:\n"
                 + "            while not hal.isKeyPressed('up'):\n"
-                + "                hal.turnOnRegulatedMotor('B', 30)\n\n"
+                + "                hal.turnOnRegulatedMotor('B', 30)\n    \n"
                 + MAIN_METHOD;
 
         assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator3.xml");
@@ -249,7 +249,7 @@ public class AstToEv3PythonVisitorTest {
                 + "    hal.rotateRegulatedMotor('B', 30, 'rotations', 0)\n"
                 + "    hal.rotateDirectionRegulated('A', 'B', False, 'right', 0)\n"
                 + "    hal.setVolume(50)\n"
-                + "    hal.playTone(0, 0)\n\n"
+                + "    hal.playTone(0, 0)\n    \n"
                 + MAIN_METHOD;
 
         assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator5.xml");
@@ -271,7 +271,7 @@ public class AstToEv3PythonVisitorTest {
                 + "    hal.drawText(str(item), 0, 0)\n"
                 + "    hal.drawText(str(item2), 0, 0)\n"
                 + "    hal.drawText(str(item3), 0, 0)\n"
-                + "    item3 = False\n\n"
+                + "    item3 = False\n    \n"
                 + MAIN_METHOD;
 
         assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator8.xml");
@@ -291,7 +291,7 @@ public class AstToEv3PythonVisitorTest {
                 + "def run():\n"
                 + "    global variablenName\n"
                 + "    hal.regulatedDrive('A', 'B', False, 'foreward', 50)\n"
-                + "    hal.drawPicture(predefinedImages['OLDGLASSES'], 0, 0)\n\n"
+                + "    hal.drawPicture(predefinedImages['OLDGLASSES'], 0, 0)\n    \n"
                 + MAIN_METHOD;
 
         assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator9.xml");
@@ -395,7 +395,7 @@ public class AstToEv3PythonVisitorTest {
                 + "    if x: return None\n"
                 + "    hal.ledOn('green', 'on')\n\n"
                 + "def run():\n"
-                + "    test(True)\n"
+                + "    test(True)\n    "
                 + "\n"
                 + MAIN_METHOD;
 
@@ -416,7 +416,7 @@ public class AstToEv3PythonVisitorTest {
                 + "    return 'none'\n\n"
                 + "def run():\n"
                 + "    global variablenName\n"
-                + "    hal.drawText(str(test()), 0, 0)\n"
+                + "    hal.drawText(str(test()), 0, 0)\n    "
                 + "\n"
                 + MAIN_METHOD;
 
@@ -436,7 +436,7 @@ public class AstToEv3PythonVisitorTest {
                 + "    return x\n\n"
                 + "def run():\n"
                 + "    global variablenName\n"
-                + "    hal.drawText(str(test(0, variablenName)), 0, 0)\n"
+                + "    hal.drawText(str(test(0, variablenName)), 0, 0)\n    "
                 + "\n"
                 + MAIN_METHOD;
 
@@ -456,7 +456,7 @@ public class AstToEv3PythonVisitorTest {
                 + "    return 'none'\n\n"
                 + "def run():\n"
                 + "    global variablenName\n"
-                + "    hal.drawText(str(test()), 0, 0)\n"
+                + "    hal.drawText(str(test()), 0, 0)\n    "
                 + "\n"
                 + MAIN_METHOD;
 
@@ -496,7 +496,7 @@ public class AstToEv3PythonVisitorTest {
                 + "    hal.drawPicture(predefinedImages['OLDGLASSES'], x, x2)\n\n"
                 + "def run():\n"
                 + "    hal.rotateRegulatedMotor('B', 30, 'rotations', 1)\n"
-                + "    macheEtwas(10, 10)\n"
+                + "    macheEtwas(10, 10)\n    "
                 + "\n"
                 + MAIN_METHOD;
 
@@ -512,7 +512,7 @@ public class AstToEv3PythonVisitorTest {
                 + "\ndef test():\n"
                 + "    hal.ledOn('green', 'on')\n\n"
                 + "def run():\n"
-                + "    test()\n\n"
+                + "    test()\n    \n"
                 + MAIN_METHOD;
 
         assertCodeIsOk(a, "/syntax/methods/method_void_2.xml");
@@ -536,7 +536,7 @@ public class AstToEv3PythonVisitorTest {
                 + "def run():\n"
                 + "    global variablenName, variablenName2\n"
                 + "    test1(0, 0)\n"
-                + "    test2()\n\n"
+                + "    test2()\n    \n"
                 + MAIN_METHOD;
 
         assertCodeIsOk(a, "/syntax/methods/method_void_3.xml");
@@ -555,7 +555,7 @@ public class AstToEv3PythonVisitorTest {
                 + "    hal.drawText(str(hal.getUltraSonicSensorDistance('4')), 0, 0)\n\n"
                 + "def run():\n"
                 + "    global variablenName\n"
-                + "    macheEtwas(hal.getInfraredSensorDistance('4'))\n\n"
+                + "    macheEtwas(hal.getInfraredSensorDistance('4'))\n    \n"
                 + MAIN_METHOD;
 
         assertCodeIsOk(a, "/syntax/methods/method_void_4.xml");
@@ -625,7 +625,7 @@ public class AstToEv3PythonVisitorTest {
                 + "def run():\n"
                 + "    global variablenName\n"
                 + "    for variablenName2 in variablenName:\n"
-                + "        hal.drawText(str(variablenName2), 0, 0)\n\n"
+                + "        hal.drawText(str(variablenName2), 0, 0)\n    \n"
                 + MAIN_METHOD;
 
         assertCodeIsOk(a, "/syntax/stmt/forEach_stmt.xml");
@@ -731,7 +731,7 @@ public class AstToEv3PythonVisitorTest {
                 + "def run():\n"
                 + "    global message\n"
                 + "    if message == \"exit\":\n"
-                + "        hal.drawText(\"done\", 0, 0)\n\n"
+                + "        hal.drawText(\"done\", 0, 0)\n    \n"
                 + MAIN_METHOD;
 
         assertCodeIsOk(a, "/syntax/stmt/if_stmt4.xml");
@@ -768,7 +768,7 @@ public class AstToEv3PythonVisitorTest {
                 + "\ndef doSomething():\n"
                 + "    pass\n\n"
                 + "def run():\n"
-                + "    pass\n\n"
+                + "    pass\n    \n"
                 + MAIN_METHOD;
 
         assertCodeIsOk(a, "/syntax/code_generator/empty_program_with_empty_procedure.xml");
@@ -787,7 +787,7 @@ public class AstToEv3PythonVisitorTest {
                 + "    global Element, Element3, Element2\n"
                 + "    Element3 = 'none'\n\n"
                 + "def run():\n"
-                + "    global Element, Element3, Element2\n"
+                + "    global Element, Element3, Element2\n    "
                 + "\n"
                 + MAIN_METHOD;
 
@@ -811,7 +811,7 @@ public class AstToEv3PythonVisitorTest {
                 + "    Element = 0\n"
                 + "    return Element2\n\n"
                 + "def run():\n"
-                + "    global Element, Element3, Element2\n"
+                + "    global Element, Element3, Element2\n    "
                 + "\n"
                 + MAIN_METHOD;
 

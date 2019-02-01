@@ -575,5 +575,5 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
     public Void visitStmtTextComment(StmtTextComment<Void> stmtTextComment) {
         this.sb.append("# " + stmtTextComment.getTextComment());
         return null;
-    };
+    }
 }

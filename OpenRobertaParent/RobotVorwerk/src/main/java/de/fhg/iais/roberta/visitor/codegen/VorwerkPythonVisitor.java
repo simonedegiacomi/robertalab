@@ -564,6 +564,8 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
         this.sb.append("class ContinueLoop(Exception): pass\n\n");
 
         this.sb.append("hal = Hal()");
+        nlIndent();
+        nlIndent();
 
     }
 
@@ -572,7 +574,7 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
         if ( !withWrapping ) {
             return;
         }
-        this.sb.append("\n\n");
+        this.sb.append("\n");
         this.sb.append("def main():\n");
         this.sb.append(this.INDENT).append("try:\n");
         this.sb.append(this.INDENT).append(this.INDENT).append("run()\n");
@@ -582,7 +584,7 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
         // FIXME: we can only print about 30 chars
         this.sb.append(this.INDENT).append(this.INDENT).append("print(e)");
 
-        this.sb.append("\n");
+        this.sb.append("\n\n");
         this.sb.append("if __name__ == \"__main__\":\n");
         this.sb.append(this.INDENT).append("main()");
     }

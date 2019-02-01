@@ -20,7 +20,7 @@ public class PythonVisitorTest {
             + "class BreakOutOfALoop(Exception): pass\n"
             + "class ContinueLoop(Exception): pass\n\n";
 
-    private static final String GLOBALS = "hal = Hal()\n";
+    private static final String GLOBALS = "hal = Hal()\n\n";
 
     private static final String MAIN_METHOD =
         "" //
@@ -30,7 +30,7 @@ public class PythonVisitorTest {
             + "    except Exception as e:\n"
             + "        print('Fehler im Vorwerk')\n"
             + "        print(e.__class__.__name__)\n"
-            + "        print(e)\n"
+            + "        print(e)\n\n"
             + "if __name__ == \"__main__\":\n"
             + "    main()";
     private static VorwerkConfiguration brickConfiguration;
@@ -54,7 +54,7 @@ public class PythonVisitorTest {
                 + "    item = hal.sample_touch_sensor('left', 'side')\n"
                 + "    item = hal.sample_touch_sensor('right', 'front')\n"
                 + "    item = hal.sample_touch_sensor('right', 'side')\n"
-                + "\n"
+                + "    \n"
                 + MAIN_METHOD;
 
         assertCodeIsOk(expectedResult, "/sensors/touch.xml");
@@ -78,7 +78,7 @@ public class PythonVisitorTest {
                 + "    item = hal.sample_ultrasonic_sensor('right_ultrasonic', 'left')\n"
                 + "    item = hal.sample_ultrasonic_sensor('right_ultrasonic', 'center')\n"
                 + "    item = hal.sample_ultrasonic_sensor('right_ultrasonic', 'right')\n"
-                + "\n"
+                + "    \n"
                 + MAIN_METHOD;
 
         assertCodeIsOk(expectedResult, "/sensors/ultrasonic.xml");
@@ -96,7 +96,7 @@ public class PythonVisitorTest {
                 + "    item = hal.sample_accelerometer_sensor('x')\n"
                 + "    item = hal.sample_accelerometer_sensor('y')\n"
                 + "    item = hal.sample_accelerometer_sensor('z')\n"
-                + "\n"
+                + "    \n"
                 + MAIN_METHOD;
 
         assertCodeIsOk(expectedResult, "/sensors/accelerometer.xml");
@@ -113,7 +113,7 @@ public class PythonVisitorTest {
                 + "    global item\n"
                 + "    item = hal.sample_dropoff_sensor('left')\n"
                 + "    item = hal.sample_dropoff_sensor('right')\n"
-                + "\n"
+                + "    \n"
                 + MAIN_METHOD;
 
         assertCodeIsOk(expectedResult, "/sensors/drop_off.xml");
@@ -129,7 +129,7 @@ public class PythonVisitorTest {
                 + "def run():\n"
                 + "    global item\n"
                 + "    item = hal.sample_wall_sensor()\n"
-                + "\n"
+                + "    \n"
                 + MAIN_METHOD;
 
         assertCodeIsOk(expectedResult, "/sensors/wall.xml");
@@ -144,7 +144,7 @@ public class PythonVisitorTest {
                 + "\ndef run():\n"
                 + "    hal.drive_distance('foreward', 30, 20)\n"
                 + "    hal.drive_distance('backward', 30, 20)\n"
-                + "\n"
+                + "    \n"
                 + MAIN_METHOD;
 
         assertCodeIsOk(expectedResult, "/actors/drive.xml");
@@ -158,7 +158,7 @@ public class PythonVisitorTest {
                 + GLOBALS
                 + "\ndef run():\n"
                 + "    hal.stop_motors()\n"
-                + "\n"
+                + "    \n"
                 + MAIN_METHOD;
 
         assertCodeIsOk(expectedResult, "/actors/stop.xml");
@@ -175,7 +175,7 @@ public class PythonVisitorTest {
                 + "    hal.play_sound(1)\n"
                 + "    hal.play_sound(2)\n"
                 + "    hal.play_sound(3)\n"
-                + "\n"
+                + "    \n"
                 + MAIN_METHOD;
 
         assertCodeIsOk(expectedResult, "/actors/play_sound.xml");
@@ -189,7 +189,7 @@ public class PythonVisitorTest {
                 + GLOBALS
                 + "\ndef run():\n"
                 + "    hal.brush_on(50)\n"
-                + "\n"
+                + "    \n"
                 + MAIN_METHOD;
 
         assertCodeIsOk(expectedResult, "/actors/brush_on.xml");
@@ -203,7 +203,7 @@ public class PythonVisitorTest {
                 + GLOBALS
                 + "\ndef run():\n"
                 + "    hal.brush_off()\n"
-                + "\n"
+                + "    \n"
                 + MAIN_METHOD;
 
         assertCodeIsOk(expectedResult, "/actors/brush_off.xml");
@@ -217,7 +217,7 @@ public class PythonVisitorTest {
                 + GLOBALS
                 + "\ndef run():\n"
                 + "    hal.vacuum_on(60)\n"
-                + "\n"
+                + "    \n"
                 + MAIN_METHOD;
 
         assertCodeIsOk(expectedResult, "/actors/vacuum_on.xml");
@@ -231,7 +231,7 @@ public class PythonVisitorTest {
                 + GLOBALS
                 + "\ndef run():\n"
                 + "    hal.vacuum_off()\n"
-                + "\n"
+                + "    \n"
                 + MAIN_METHOD;
 
         assertCodeIsOk(expectedResult, "/actors/vacuum_off.xml");
@@ -246,7 +246,7 @@ public class PythonVisitorTest {
                 + "\ndef run():\n"
                 + "    hal.left_motor_on(30, 20)\n"
                 + "    hal.right_motor_on(30, 20)\n"
-                + "\n"
+                + "    \n"
                 + MAIN_METHOD;
 
         assertCodeIsOk(expectedResult, "/actors/motor_on.xml");
@@ -261,7 +261,7 @@ public class PythonVisitorTest {
                 + "\ndef run():\n"
                 + "    hal.left_motor_stop()\n"
                 + "    hal.right_motor_stop()\n"
-                + "\n"
+                + "    \n"
                 + MAIN_METHOD;
 
         assertCodeIsOk(expectedResult, "/actors/motor_stop.xml");
