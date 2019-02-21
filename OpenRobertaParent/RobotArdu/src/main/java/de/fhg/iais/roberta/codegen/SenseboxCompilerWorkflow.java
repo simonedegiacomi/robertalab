@@ -50,9 +50,9 @@ public class SenseboxCompilerWorkflow extends AbstractCompilerWorkflow {
 
     @Override
     public void compileSourceCode(String token, String programName, ILanguage language, Object flagProvider) {
-        this.storeGeneratedProgram(token, programName, ".ino");
+        storeGeneratedProgram(token, programName, ".ino");
         if ( this.workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
-            this.workflowResult = this.runBuild(token, programName, "generated.main");
+            this.workflowResult = runBuild(token, programName, "generated.main");
             if ( this.workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
                 LOG.info("compile arduino program {} successful", programName);
             } else {
@@ -119,6 +119,7 @@ public class SenseboxCompilerWorkflow extends AbstractCompilerWorkflow {
                     "-hardware=" + compilerResourcesDir + "hardware/additional",
                     "-tools=" + compilerResourcesDir + "/" + os + "/tools-builder",
                     "-tools=" + compilerResourcesDir + "hardware/additional",
+                    "-tools=" + compilerResourcesDir + "packages/arduino/tools",
                     "-libraries=" + compilerResourcesDir + "/libraries",
                     fqbnArg,
                     "-prefs=compiler.path=" + compilerBinDir,
@@ -129,7 +130,7 @@ public class SenseboxCompilerWorkflow extends AbstractCompilerWorkflow {
                     "-prefs=runtime.tools.CMSIS.path=" + compilerResourcesDir + "hardware/additional/arduino/tools/CMSIS/4.5.0",
                     "-prefs=runtime.tools.CMSIS-Atmel.path=" + compilerResourcesDir + "hardware/additional/arduino/tools/CMSIS-Atmel/1.1.0",
                     "-prefs=runtime.tools.openocd.path=" + compilerResourcesDir + "hardware/additional/arduino/tools/openocd/0.9.0-arduino6-static",
-                    "-prefs=runtime.tools.arm-none-eabi-gcc.path=" + compilerResourcesDir + "hardware/additional/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1",
+                    "-prefs=runtime.tools.arm-none-eabi-gcc.path=" + compilerResourcesDir + "packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1",
                     "-prefs=runtime.tools.bossac.path=" + compilerResourcesDir + "hardware/additional/arduino/tools/bossac/1.7.0",
 
                     "-build-path=" + base.resolve(path).toAbsolutePath().normalize().toString() + "/target/",
