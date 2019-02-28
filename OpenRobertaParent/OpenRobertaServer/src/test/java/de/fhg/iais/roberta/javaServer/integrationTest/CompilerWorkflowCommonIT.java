@@ -60,7 +60,7 @@ import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 @RunWith(MockitoJUnitRunner.class)
 public class CompilerWorkflowCommonIT {
     private static final Logger LOG = LoggerFactory.getLogger(CompilerWorkflowIT.class);
-    private static final boolean CROSSCOMPILER_CALL = false;
+    private static final boolean CROSSCOMPILER_CALL = true;
     private static final boolean SHOW_SUCCESS = false;
     private static final List<String> EMPTY_STRING_LIST = Collections.emptyList();
     private static final String RESOURCE_BASE = "/crossCompilerTests/common/";
