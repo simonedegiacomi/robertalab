@@ -59,5 +59,4 @@ progs:
           bob3: ".text overflow. Test must be splitted"
        fragment: mathLogic
        decl: mathLogic
-       exclude:
        remark: "trigonometric functions (min, sin, pi, ...)"
