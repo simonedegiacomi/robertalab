@@ -55,6 +55,8 @@ progs:
        decl: mathLogic
        remark: "math functions (min, random, ...)"
     mathLogic-2:
+       exclude:
+          bob3: ".text overflow. Test must be splitted"
        fragment: mathLogic
        decl: mathLogic
        exclude:
