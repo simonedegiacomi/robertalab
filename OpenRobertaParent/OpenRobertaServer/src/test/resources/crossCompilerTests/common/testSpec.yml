@@ -29,6 +29,8 @@ progs:
        exclude:
        remark: "simple assignment. For testing the test only"
     functionWithWithoutParameter:
+       fragment: functionWithWithoutParameter
+       decl: functionWithWithoutParameter
        exclude:
           bob3: "LedColor is used in the program. Doesn't work here"
        remark: "functions with various return types, with and without parameters"
@@ -47,6 +49,8 @@ progs:
           bob3: ".text overflow. Test must be splitted"
        remark: "some math functions (min, sin, pi, ...), similar to mathLogic. For testing the test only"
     mathLogic-1:
+       exclude:
+          bob3: ".text overflow. Test must be splitted"
        fragment: mathLogic
        decl: mathLogic
        remark: "math functions (min, random, ...)"

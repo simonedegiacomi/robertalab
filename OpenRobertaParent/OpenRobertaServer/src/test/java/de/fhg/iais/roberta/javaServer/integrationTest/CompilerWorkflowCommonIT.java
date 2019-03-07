@@ -18,7 +18,6 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -61,7 +60,7 @@ import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 public class CompilerWorkflowCommonIT {
     private static final Logger LOG = LoggerFactory.getLogger(CompilerWorkflowIT.class);
     private static final boolean CROSSCOMPILER_CALL = true;
-    private static final boolean SHOW_SUCCESS = false;
+    private static final boolean SHOW_SUCCESS = true;
     private static final List<String> EMPTY_STRING_LIST = Collections.emptyList();
     private static final String RESOURCE_BASE = "/crossCompilerTests/common/";
 
@@ -149,10 +148,9 @@ public class CompilerWorkflowCommonIT {
      * - supply the program name<br>
      * - supply the list of robots - copy from the console
      */
-    @Ignore
     @Test
     public void testShowAllGeneratedProgram() {
-        String progName = "listOperations";
+        String progName = "functionWithWithoutParameter";
         List<String> robots = Arrays.asList("nano", "calliope2017", "ev3lejosv1");
         for ( String robot : robots ) {
             String robotDir = ROBOTS.getJSONObject(robot).getString("dir");
