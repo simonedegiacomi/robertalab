@@ -11,7 +11,7 @@ public class RadioReciveActionTest {
     @Test
     public void make_ByDefault_ReturnInstanceOfRadioReciveActionClass() throws Exception {
         String expectedResult =
-            "BlockAST [project=[[Location [x=38, y=38], " + "MainTask [], " + "DisplayTextAction [TEXT, ActionExpr [BluetoothReceiveAction [STRING]]]]]]";
+            "BlockAST [project=[[Location [x=38, y=38], " + "MainTask [], " + "DisplayTextAction [TEXT, ActionExpr [CommunicationReceiveAction [STRING]]]]]]";
 
         String result = this.h.generateTransformerString("/action/radio_receive_message.xml");
 

@@ -19,16 +19,21 @@ import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.IBluetoothVisitor;
+import de.fhg.iais.roberta.visitor.hardware.actor.ICommunicationVisitor;
 
-public class BluetoothSendAction<V> extends Action<V> {
+public class CommunicationSendAction<V> extends Action<V> {
     private final Expr<V> _connection;
     private final Expr<V> _msg;
     String _channel;
     String dataType;
+    String protocol;
     private final String dataValue;
 
-    private BluetoothSendAction(
+    /**
+     * Constructor used for NXT
+     */
+    private CommunicationSendAction(
+        String protocol,
         String dataValue,
         Expr<V> connection,
         Expr<V> msg,
@@ -37,30 +42,25 @@ public class BluetoothSendAction<V> extends Action<V> {
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
         super(BlockTypeContainer.getByName("BLUETOOTH_SEND_ACTION"), properties, comment);
+        this.protocol = protocol;
         this._connection = connection;
         this._msg = msg;
         this._channel = channel;
         this.dataType = dataType;
-        this.dataValue = dataValue;
-        setReadOnly();
-    }
-
-    private BluetoothSendAction(String dataValue, Expr<V> connection, Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("BLUETOOTH_SEND_ACTION"), properties, comment);
-        this._connection = connection;
-        this._msg = msg;
+        this.protocol = protocol;
         this.dataValue = dataValue;
         setReadOnly();
     }
 
     /**
-     * Creates instance of {@link BluetoothSendAction}. This instance is read only and can not be modified.
+     * Creates instance of {@link CommunicationSendAction}. This instance is read only and can not be modified.
      *
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link BluetoothSendAction}
+     * @return read only object of class {@link CommunicationSendAction}
      */
-    public static <V> BluetoothSendAction<V> make(
+    public static <V> CommunicationSendAction<V> make(
+        String protocol,
         String dataValue,
         Expr<V> connection,
         Expr<V> msg,
@@ -68,16 +68,7 @@ public class BluetoothSendAction<V> extends Action<V> {
         String dataType,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
-        return new BluetoothSendAction<>(dataValue, connection, msg, channel, dataType, properties, comment);
-    }
-
-    public static <V> BluetoothSendAction<V> make(
-        String dataValue,
-        Expr<V> connection,
-        Expr<V> msg,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        return new BluetoothSendAction<>(dataValue, connection, msg, properties, comment);
+        return new CommunicationSendAction<>(protocol, dataValue, connection, msg, channel, dataType, properties, comment);
     }
 
     public Expr<V> getConnection() {
@@ -96,14 +87,18 @@ public class BluetoothSendAction<V> extends Action<V> {
         return this.dataType;
     }
 
+    public String getProtocol() {
+        return protocol;
+    }
+
     @Override
     public String toString() {
-        return "BluetoothSendAction [" + getConnection().toString() + ", " + getMsg().toString() + ", " + getChannel() + "]";
+        return "CommunicationSendAction [" + getConnection().toString() + ", " + getMsg().toString() + ", " + getChannel() + "]";
     }
 
     @Override
     protected V accept(IVisitor<V> visitor) {
-        return ((IBluetoothVisitor<V>) visitor).visitBluetoothSendAction(this);
+        return ((ICommunicationVisitor<V>) visitor).visitCommunicationSendAction(this);
     }
 
     /**
@@ -120,23 +115,26 @@ public class BluetoothSendAction<V> extends Action<V> {
         Phrase<V> bluetoothSendConnection = helper.extractValue(values, new ExprParam(BlocklyConstants.CONNECTION, BlocklyType.NULL));
         Data data = block.getData();
         String datum = data.getValue();
-        if ( fields.size() == 3 ) {
+        if ( fields.size() == 3 ) { // NXT
             String bluetoothSendChannel = helper.extractField(fields, BlocklyConstants.CHANNEL);
-            String bluetoothRecieveDataType = helper.extractField(fields, BlocklyConstants.TYPE);
-            return BluetoothSendAction
+            String bluetoothReceiveDataType = helper.extractField(fields, BlocklyConstants.TYPE);
+            return CommunicationSendAction
                 .make(
+                    "BLUETOOTH",
                     datum,
                     helper.convertPhraseToExpr(bluetoothSendConnection),
                     helper.convertPhraseToExpr(bluetoothSendMessage),
                     bluetoothSendChannel,
-                    bluetoothRecieveDataType,
+                    bluetoothReceiveDataType,
                     helper.extractBlockProperties(block),
                     helper.extractComment(block));
-        } else {
+        } else { // EV3
             String bluetoothSendChannel = "-1";
             String bluetoothRecieveDataType = helper.extractField(fields, BlocklyConstants.TYPE);
-            return BluetoothSendAction
+            String protocol = fields.get(1).getValue();
+            return CommunicationSendAction
                 .make(
+                    protocol,
                     datum,
                     helper.convertPhraseToExpr(bluetoothSendConnection),
                     helper.convertPhraseToExpr(bluetoothSendMessage),
@@ -151,13 +149,18 @@ public class BluetoothSendAction<V> extends Action<V> {
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
+
         Mutation mutation = new Mutation();
         mutation.setDatatype(this.dataType);
+        mutation.setProtocol(this.protocol);
         jaxbDestination.setMutation(mutation);
+
         Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.TYPE, this.dataType);
-        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.PROTOCOL, "BLUETOOTH");
+        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.PROTOCOL, this.protocol);
         Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.CHANNEL, getChannel());
+
         Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
+
         Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.MESSAGE, getMsg());
         Ast2JaxbHelper.addValue(jaxbDestination, BlocklyConstants.CONNECTION, getConnection());
         Data data = new Data();

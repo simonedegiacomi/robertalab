@@ -38,7 +38,7 @@ public class RadioReceiveAction<V> extends Action<V> {
 
     @Override
     public String toString() {
-        return "BluetoothReceiveAction [" + getType().toString() + "]";
+        return "CommunicationReceiveAction [" + getType().toString() + "]";
     }
 
     public BlocklyType getType() {

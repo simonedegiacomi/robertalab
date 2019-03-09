@@ -19,8 +19,8 @@ import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
+import de.fhg.iais.roberta.syntax.action.communication.CommunicationReceiveAction;
+import de.fhg.iais.roberta.syntax.action.communication.CommunicationSendAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
@@ -1170,7 +1170,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     }
 
     @Override
-    public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReadAction) {
+    public Void visitCommunicationReceiveAction(CommunicationReceiveAction<Void> bluetoothReadAction) {
         String methodName;
         switch ( bluetoothReadAction.getDataType() ) {
             case "Boolean":
@@ -1197,10 +1197,10 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     }
 
     @Override
-    public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
+    public Void visitCommunicationSendAction(CommunicationSendAction<Void> communicationSendAction) {
         String methodName;
 
-        switch ( bluetoothSendAction.getDataType() ) {
+        switch ( communicationSendAction.getDataType() ) {
             case "Boolean":
                 methodName = "SendRemoteBool(";
                 break;
@@ -1212,11 +1212,11 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
         }
 
         this.sb.append(methodName);
-        bluetoothSendAction.getConnection().visit(this);
+        communicationSendAction.getConnection().visit(this);
         this.sb.append(", ");
-        this.sb.append(bluetoothSendAction.getChannel());
+        this.sb.append(communicationSendAction.getChannel());
         this.sb.append(", ");
-        bluetoothSendAction.getMsg().visit(this);
+        communicationSendAction.getMsg().visit(this);
         this.sb.append(");");
         return null;
     }

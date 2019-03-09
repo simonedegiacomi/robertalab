@@ -353,7 +353,7 @@ block:
       type: [robCommunication_startConnection]
   BLUETOOTH_SEND_ACTION:
       category: ACTOR
-      implementor: de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction
+      implementor: de.fhg.iais.roberta.syntax.action.communication.CommunicationSendAction
       type: [robCommunication_sendBlock]
   BLUETOOTH_WAIT_FOR_CONNECTION_ACTION:
       category: ACTOR
@@ -361,7 +361,7 @@ block:
       type: [robCommunication_waitForConnection]
   BLUETOOTH_RECEIVED_ACTION:
       category: ACTOR
-      implementor: de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction
+      implementor: de.fhg.iais.roberta.syntax.action.communication.CommunicationReceiveAction
       type: [robCommunication_receiveBlock]
   WRITE_TO_SERIAL:
       category: ACTOR

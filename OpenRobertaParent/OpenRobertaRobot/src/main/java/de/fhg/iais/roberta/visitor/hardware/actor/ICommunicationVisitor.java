@@ -1,20 +1,17 @@
 package de.fhg.iais.roberta.visitor.hardware.actor;
 
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectionAction;
+import de.fhg.iais.roberta.syntax.action.communication.*;
+import de.fhg.iais.roberta.syntax.action.communication.CommunicationReceiveAction;
 import de.fhg.iais.roberta.visitor.hardware.IHardwareVisitor;
 
-public interface IBluetoothVisitor<V> extends IHardwareVisitor<V> {
+public interface ICommunicationVisitor<V> extends IHardwareVisitor<V> {
 
     /**
-     * visit a {@link BluetoothRecieveAction}.
+     * visit a {@link CommunicationReceiveAction}.
      *
      * @param bluetoothReceiveActionbluetoothReceiveAction to be visited
      */
-    V visitBluetoothReceiveAction(BluetoothReceiveAction<V> bluetoothReceiveAction);
+    V visitCommunicationReceiveAction(CommunicationReceiveAction<V> communicationReceiveAction);
 
     /**
      * visit a {@link BluetoothConnectAction}.
@@ -24,11 +21,11 @@ public interface IBluetoothVisitor<V> extends IHardwareVisitor<V> {
     V visitBluetoothConnectAction(BluetoothConnectAction<V> bluetoothConnectAction);
 
     /**
-     * visit a {@link BluetoothSendAction}.
+     * visit a {@link CommunicationSendAction}.
      *
-     * @param bluetoothSendAction to be visited
+     * @param communicationSendAction to be visited
      */
-    V visitBluetoothSendAction(BluetoothSendAction<V> bluetoothSendAction);
+    V visitCommunicationSendAction(CommunicationSendAction<V> communicationSendAction);
 
     /**
      * visit a {@link BluetoothWaitForConnectionAction}.

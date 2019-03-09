@@ -5,12 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.communication.*;
 import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectionAction;
+import de.fhg.iais.roberta.syntax.action.communication.CommunicationReceiveAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
@@ -657,7 +654,7 @@ public class TypecheckVisitor implements ILanguageVisitor<BlocklyType>, ISensorV
     }
 
     @Override
-    public BlocklyType visitBluetoothReceiveAction(BluetoothReceiveAction<BlocklyType> clearDisplayAction) {
+    public BlocklyType visitCommunicationReceiveAction(CommunicationReceiveAction<BlocklyType> clearDisplayAction) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -669,7 +666,7 @@ public class TypecheckVisitor implements ILanguageVisitor<BlocklyType>, ISensorV
     }
 
     @Override
-    public BlocklyType visitBluetoothSendAction(BluetoothSendAction<BlocklyType> clearDisplayAction) {
+    public BlocklyType visitCommunicationSendAction(CommunicationSendAction<BlocklyType> clearDisplayAction) {
         // TODO Auto-generated method stub
         return null;
     }

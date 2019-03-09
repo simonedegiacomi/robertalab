@@ -4,12 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.communication.*;
 import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectionAction;
+import de.fhg.iais.roberta.syntax.action.communication.CommunicationReceiveAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
@@ -616,7 +613,7 @@ public class InfoCollector<T> implements ILanguageVisitor<T>, ISensorVisitor<T>,
     }
 
     @Override
-    public T visitBluetoothReceiveAction(BluetoothReceiveAction<T> clearDisplayAction) {
+    public T visitCommunicationReceiveAction(CommunicationReceiveAction<T> clearDisplayAction) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -628,7 +625,7 @@ public class InfoCollector<T> implements ILanguageVisitor<T>, ISensorVisitor<T>,
     }
 
     @Override
-    public T visitBluetoothSendAction(BluetoothSendAction<T> clearDisplayAction) {
+    public T visitCommunicationSendAction(CommunicationSendAction<T> clearDisplayAction) {
         // TODO Auto-generated method stub
         return null;
     }

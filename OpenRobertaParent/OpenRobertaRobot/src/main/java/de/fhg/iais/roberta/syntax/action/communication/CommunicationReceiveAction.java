@@ -18,36 +18,38 @@ import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.IBluetoothVisitor;
+import de.fhg.iais.roberta.visitor.hardware.actor.ICommunicationVisitor;
 
-public class BluetoothReceiveAction<V> extends Action<V> {
+public class CommunicationReceiveAction<V> extends Action<V> {
     private final Expr<V> connection;
     String channel;
     String dataType;
+    String protocol;
 
-    private BluetoothReceiveAction(
+    private CommunicationReceiveAction(
+        String protocol,
         Expr<V> bluetoothRecieveConnection,
         String channel,
         String dataType,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
         super(BlockTypeContainer.getByName("BLUETOOTH_RECEIVED_ACTION"), properties, comment);
+        this.protocol = protocol;
         this.connection = bluetoothRecieveConnection;
         this.channel = channel;
         this.dataType = dataType;
         setReadOnly();
     }
 
-
-    public static <V> BluetoothReceiveAction<V> make(
+    public static <V> CommunicationReceiveAction<V> make(
+        String protocol,
         Expr<V> bluetoothRecieveConnection,
         String channel,
         String dataType,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
-        return new BluetoothReceiveAction<V>(bluetoothRecieveConnection, channel, dataType, properties, comment);
+        return new CommunicationReceiveAction<V>(protocol, bluetoothRecieveConnection, channel, dataType, properties, comment);
     }
-
 
     public Expr<V> getConnection() {
         return this.connection;
@@ -61,9 +63,13 @@ public class BluetoothReceiveAction<V> extends Action<V> {
         return this.dataType;
     }
 
+    public String getProtocol() {
+        return protocol;
+    }
+
     @Override
     protected V accept(IVisitor<V> visitor) {
-        return ((IBluetoothVisitor<V>) visitor).visitBluetoothReceiveAction(this);
+        return ((ICommunicationVisitor<V>) visitor).visitCommunicationReceiveAction(this);
     }
 
     /**
@@ -80,8 +86,9 @@ public class BluetoothReceiveAction<V> extends Action<V> {
         if ( fields.size() == 3 ) {
             String bluetoothRecieveChannel = helper.extractField(fields, BlocklyConstants.CHANNEL);
             String bluetoothRecieveDataType = helper.extractField(fields, BlocklyConstants.TYPE);
-            return BluetoothReceiveAction
+            return CommunicationReceiveAction
                 .make(
+                    "BLUETOOTH",
                     helper.convertPhraseToExpr(bluetoothRecieveConnection),
                     bluetoothRecieveChannel,
                     bluetoothRecieveDataType,
@@ -90,8 +97,11 @@ public class BluetoothReceiveAction<V> extends Action<V> {
         } else {
             String bluetoothReceiveChannel = "-1";
             String bluetoothRecieveDataType = helper.extractField(fields, BlocklyConstants.TYPE);
-            return BluetoothReceiveAction
+
+            String protocol = fields.get(1).getValue();
+            return CommunicationReceiveAction
                 .make(
+                    protocol,
                     helper.convertPhraseToExpr(bluetoothRecieveConnection),
                     bluetoothReceiveChannel,
                     bluetoothRecieveDataType,
@@ -107,10 +117,11 @@ public class BluetoothReceiveAction<V> extends Action<V> {
 
         Mutation mutation = new Mutation();
         mutation.setDatatype(this.dataType);
+        mutation.setProtocol(this.protocol);
         jaxbDestination.setMutation(mutation);
 
         Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.TYPE, this.dataType);
-        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.PROTOCOL, "BLUETOOTH");
+        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.PROTOCOL, this.protocol);
         Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.CHANNEL, getChannel());
 
         Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
@@ -121,7 +132,7 @@ public class BluetoothReceiveAction<V> extends Action<V> {
 
     @Override
     public String toString() {
-        return "BluetoothReceiveAction [connection=" + this.connection + ", " + this.channel + ", " + this.dataType + "]";
+        return "CommunicationReceiveAction [connection=" + this.connection + ", " + this.channel + ", " + this.dataType + "]";
     }
 
 }

@@ -8,12 +8,9 @@ import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.SC;
+import de.fhg.iais.roberta.syntax.action.communication.*;
 import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectionAction;
+import de.fhg.iais.roberta.syntax.action.communication.CommunicationReceiveAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
@@ -359,8 +356,8 @@ public abstract class AbstractUsedHardwareCollectorVisitor extends AbstractColle
     }
 
     @Override
-    public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReceiveAction) {
-        bluetoothReceiveAction.getConnection().visit(this);
+    public Void visitCommunicationReceiveAction(CommunicationReceiveAction<Void> communicationReceiveAction) {
+        communicationReceiveAction.getConnection().visit(this);
         return null;
     }
 
@@ -371,9 +368,9 @@ public abstract class AbstractUsedHardwareCollectorVisitor extends AbstractColle
     }
 
     @Override
-    public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
-        bluetoothSendAction.getConnection().visit(this);
-        bluetoothSendAction.getMsg().visit(this);
+    public Void visitCommunicationSendAction(CommunicationSendAction<Void> communicationSendAction) {
+        communicationSendAction.getConnection().visit(this);
+        communicationSendAction.getMsg().visit(this);
         return null;
     }
 

@@ -27,11 +27,8 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectionAction;
+import de.fhg.iais.roberta.syntax.action.communication.*;
+import de.fhg.iais.roberta.syntax.action.communication.CommunicationReceiveAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction;
@@ -1084,9 +1081,21 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
     }
 
     @Override
-    public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReadAction) {
-        this.sb.append("hal.readMessage(");
-        bluetoothReadAction.getConnection().visit(this);
+    public Void visitCommunicationReceiveAction(CommunicationReceiveAction<Void> receiveAction) {
+        if ( "BLUETOOTH".equals(receiveAction.getProtocol())) {
+            this.sb.append("hal.readBluetoothMessage(");
+        } else if ( "HTTP".equals(receiveAction.getProtocol()))  {
+            this.sb.append("hal.readHTTPMessage(");
+        }
+
+        if ( "BLUETOOTH".equals(receiveAction.getProtocol()) || receiveAction.getConnection().getKind().hasName("STRING_CONST") ) {
+            receiveAction.getConnection().visit(this);
+        } else {
+            this.sb.append("String.valueOf(");
+            receiveAction.getConnection().visit(this);
+            this.sb.append(")");
+        }
+
         this.sb.append(")");
         return null;
     }
@@ -1106,18 +1115,33 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
     }
 
     @Override
-    public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
-        this.sb.append("hal.sendMessage(");
-        if ( !bluetoothSendAction.getMsg().getKind().hasName("STRING_CONST") ) {
+    public Void visitCommunicationSendAction(CommunicationSendAction<Void> sendAction) {
+        if ( "BLUETOOTH".equals(sendAction.getProtocol())) {
+            this.sb.append("hal.sendBluetoothMessage(");
+        } else if ( "HTTP".equals(sendAction.getProtocol()))  {
+            this.sb.append("hal.sendHTTPMessage(");
+        }
+
+        if ( !sendAction.getMsg().getKind().hasName("STRING_CONST") ) {
             this.sb.append("String.valueOf(");
-            bluetoothSendAction.getMsg().visit(this);
+            sendAction.getMsg().visit(this);
             this.sb.append(")");
         } else {
-            bluetoothSendAction.getMsg().visit(this);
+            sendAction.getMsg().visit(this);
         }
+
         this.sb.append(", ");
-        bluetoothSendAction.getConnection().visit(this);
+
+        if ( "BLUETOOTH".equals(sendAction.getProtocol()) || sendAction.getConnection().getKind().hasName("STRING_CONST") ) {
+            sendAction.getConnection().visit(this);
+        } else {
+            this.sb.append("String.valueOf(");
+            sendAction.getConnection().visit(this);
+            this.sb.append(")");
+        }
+
         this.sb.append(");");
+
         return null;
     }
 

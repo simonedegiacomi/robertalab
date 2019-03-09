@@ -29,7 +29,7 @@ public class BluetoothTest {
 
     @Test
     public void connectionSend() throws Exception {
-        String a = "BlockAST [project=[[Location [x=384, y=50], MainTask [], BluetoothSendAction [ConnectConst [2], NumConst [0], 5]]]]";
+        String a = "BlockAST [project=[[Location [x=384, y=50], MainTask [], CommunicationSendAction [ConnectConst [2], NumConst [0], 5]]]]";
 
         System.out.println(this.h.generateTransformerString("/ast/actions/action_BluetoothSend.xml"));
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/actions/action_BluetoothSend.xml"));

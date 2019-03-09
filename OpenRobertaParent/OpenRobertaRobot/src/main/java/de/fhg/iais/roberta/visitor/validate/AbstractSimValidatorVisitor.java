@@ -2,11 +2,8 @@ package de.fhg.iais.roberta.visitor.validate;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectionAction;
+import de.fhg.iais.roberta.syntax.action.communication.*;
+import de.fhg.iais.roberta.syntax.action.communication.CommunicationSendAction;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
@@ -81,9 +78,9 @@ public abstract class AbstractSimValidatorVisitor extends AbstractProgramValidat
     }
 
     @Override
-    public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReceiveAction) {
-        super.visitBluetoothReceiveAction(bluetoothReceiveAction);
-        bluetoothReceiveAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
+    public Void visitCommunicationReceiveAction(CommunicationReceiveAction<Void> communicationReceiveAction) {
+        super.visitCommunicationReceiveAction(communicationReceiveAction);
+        communicationReceiveAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
         return null;
     }
 
@@ -95,9 +92,9 @@ public abstract class AbstractSimValidatorVisitor extends AbstractProgramValidat
     }
 
     @Override
-    public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
-        super.visitBluetoothSendAction(bluetoothSendAction);
-        bluetoothSendAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
+    public Void visitCommunicationSendAction(CommunicationSendAction<Void> communicationSendAction) {
+        super.visitCommunicationSendAction(communicationSendAction);
+        communicationSendAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
         return null;
     }
 
