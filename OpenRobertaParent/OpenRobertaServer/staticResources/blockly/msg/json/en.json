@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2019-03-06 11:32:17.571488",
+		"lastupdated": "2019-03-13 12:55:42.568404",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -590,7 +590,9 @@
 	"CONNECTION_TO_ROBOT": "to robot",
 	"CONNECTION_FROM_ROBOT": "from robot",
 	"CONNECTION_TO_CONNECTION": "to connection",
+	"CONNECTION_TO_URL": "to URL",
 	"CONNECTION_FROM_CONNECTION": "from connection",
+	"CONNECTION_FROM_URL": "from URL",
 	"CONNECTION_OVER_CHANNEL": "over channel",
 	"CONNECTION_RECEIVED_DATA": "receive message",
 	"CONNECTION_CONNECT": "connect to robot name",
@@ -603,6 +605,7 @@
 	"CONNECTION_CHECK": "connection to robot %1 active?",
 	"CONNECTION_CHECK_TOOLTIP": "Check if the connection to the robot is active.",
 	"CONNECTION_PROTOCOL_BLUETOOTH": "Bluetooth",
+	"CONNECTION_PROTOCOL_HTTP": "HTTP",
 	"TOOLBOX_ACTION": "Action",
 	"TOOLBOX_COMMUNICATION": "Messages",
 	"TOOLBOX_PIN": "Pin",

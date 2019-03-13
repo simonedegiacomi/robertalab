@@ -1,4 +1,4 @@
-<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nxt" xmlversion="" description="" tags="">
   <instance x="97" y="7">
     <block type="robControls_start" id="47" deletable="false">
       <mutation declare="true"></mutation>
@@ -19,7 +19,7 @@
         <block type="robCommunication_receiveBlock" id="187" inline="false">
           <value name="CONNECTION">
             <block type="variables_get" id="190">
-              <mutation datatype="Connection"></mutation>
+              <mutation datatype="Connection"/>
               <field name="VAR">variablenName2</field>
             </block>
           </value>

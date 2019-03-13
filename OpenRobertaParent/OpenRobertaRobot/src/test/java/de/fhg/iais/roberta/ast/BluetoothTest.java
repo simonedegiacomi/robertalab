@@ -31,8 +31,8 @@ public class BluetoothTest {
     public void connectionSend() throws Exception {
         String a = "BlockAST [project=[[Location [x=384, y=50], MainTask [], CommunicationSendAction [ConnectConst [2], NumConst [0], 5]]]]";
 
-        System.out.println(this.h.generateTransformerString("/ast/actions/action_BluetoothSend.xml"));
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/actions/action_BluetoothSend.xml"));
+        System.out.println(this.h.generateTransformerString("/ast/actions/action_CommunicationSend.xml"));
+        Assert.assertEquals(a, this.h.generateTransformerString("/ast/actions/action_CommunicationSend.xml"));
     }
 
     @Test
@@ -40,9 +40,9 @@ public class BluetoothTest {
         String a =
             "BlockAST [project=[[Location [x=97, y=7], MainTask [\n"
                 + "exprStmt VarDeclaration [CONNECTION, variablenName2, ActionExpr [BluetoothWaitForConnectionAction []], false, true]], "
-                + "ShowTextAction [ActionExpr [BluetoothReceiveAction [connection=Var [variablenName2], -1, String]], NumConst [0], NumConst [0]]]]]";
+                + "ShowTextAction [ActionExpr [CommunicationReceiveAction [connection=Var [variablenName2], -1, String]], NumConst [0], NumConst [0]]]]]";
 
-        Assert.assertEquals(a, this.h.generateTransformerString("/ast/actions/action_BluetoothReceive.xml"));
+        Assert.assertEquals(a, this.h.generateTransformerString("/ast/actions/action_CommunicationReceive.xml"));
     }
 
     @Test
@@ -57,12 +57,12 @@ public class BluetoothTest {
 
     @Test
     public void reverseTransformatinSend() throws Exception {
-        this.h.assertTransformationIsOk("/ast/actions/action_BluetoothSend.xml");
+        this.h.assertTransformationIsOk("/ast/actions/action_CommunicationSend.xml");
     }
 
     @Test
     public void reverseTransformatinReceive() throws Exception {
-        this.h.assertTransformationIsOk("/ast/actions/action_BluetoothReceive.xml");
+        this.h.assertTransformationIsOk("/ast/actions/action_CommunicationReceive.xml");
     }
 
 }

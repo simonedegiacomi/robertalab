@@ -28,7 +28,7 @@
       </value>
       <value name="CONNECTION">
         <block type="variables_get" id="155">
-          <mutation datatype="Connection"></mutation>
+          <mutation datatype="Connection" protocol="BLUETOOTH"/>
           <field name="VAR">variablenName2</field>
         </block>
       </value>

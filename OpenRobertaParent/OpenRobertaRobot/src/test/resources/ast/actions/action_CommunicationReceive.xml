@@ -1,10 +1,12 @@
-<block_set  xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly"
+           robottype="ev3" xmlversion="" description="" tags="">
   <instance x="97" y="7">
     <block type="robControls_start" id="47" deletable="false">
       <mutation declare="true"></mutation>
       <field name="DEBUG">FALSE</field>
       <statement name="ST">
-        <block type="robGlobalvariables_declare" id="122" inline="true" deletable="false" movable="false">
+        <block type="robGlobalvariables_declare" id="122"
+               inline="true" deletable="false" movable="false">
           <mutation next="false" declaration_type="Connection"></mutation>
           <field name="VAR">variablenName2</field>
           <field name="TYPE">Connection</field>
@@ -16,8 +18,9 @@
     </block>
     <block type="robActions_display_text" id="173" inline="false">
       <value name="OUT">
-        <block type="robCommunication_receiveBlock" id="187" inline="false">
-          <mutation datatype="String"/>
+        <block type="robCommunication_receiveBlock" id="187"
+               inline="false">
+          <mutation datatype="String" protocol="BLUETOOTH"/>
           <field name="TYPE">String</field>
           <field name="PROTOCOL">BLUETOOTH</field>
           <field name="CHANNEL">-1</field>

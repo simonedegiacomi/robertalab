@@ -23,16 +23,16 @@ public class BluetoothTest {
 
     @Test
     public void send() throws Exception {
-        String a = "NXTConnectionvariablenName2=hal.establishConnectionTo(\"\");publicvoidrun()throwsException{hal.sendMessage(\"\", variablenName2);}";
+        String a = "NXTConnectionvariablenName2=hal.establishConnectionTo(\"\");publicvoidrun()throwsException{hal.sendBluetoothMessage(\"\", variablenName2);}";
         System.out.println(a);
-        this.h.assertCodeIsOk(a, "/syntax/actions/action_BluetoothSend.xml");
+        this.h.assertCodeIsOk(a, "/syntax/actions/action_CommunicationSend.xml");
     }
 
     @Test
     public void recive() throws Exception {
         String a =
-            "NXTConnectionvariablenName2=hal.waitForConnection();publicvoidrun()throwsException{hal.drawText(String.valueOf(hal.readMessage(variablenName2)),0,0);}";
+            "NXTConnectionvariablenName2=hal.waitForConnection();publicvoidrun()throwsException{hal.drawText(String.valueOf(hal.readBluetoothMessage(variablenName2)),0,0);}";
 
-        this.h.assertCodeIsOk(a, "/syntax/actions/action_BluetoothReceive.xml");
+        this.h.assertCodeIsOk(a, "/syntax/actions/action_CommunicationReceive.xml");
     }
 }
