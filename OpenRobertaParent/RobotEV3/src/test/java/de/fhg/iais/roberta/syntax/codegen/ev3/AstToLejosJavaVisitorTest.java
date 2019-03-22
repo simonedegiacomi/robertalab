@@ -104,6 +104,7 @@ public class AstToLejosJavaVisitorTest {
 
         Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
         ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", BlocklyConstants.NO_SLOT, "B", motorBproperties);
+
         ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", BlocklyConstants.NO_SLOT, "1", Collections.emptyMap());
         ConfigurationComponent ultrasonicSensor = new ConfigurationComponent("ULTRASONIC", false, "S2", BlocklyConstants.NO_SLOT, "2", Collections.emptyMap());
         //        ConfigurationComponent colorSensor = new ConfigurationComponent("COLOR", false, "S3", BlocklyConstants.NO_SLOT, "3", Collections.emptyMap());
@@ -298,6 +299,13 @@ public class AstToLejosJavaVisitorTest {
 
         Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
         ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", BlocklyConstants.NO_SLOT, "B", motorBproperties);
+
+        Map<String, String> motorCproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "NONE");
+        ConfigurationComponent motorC = new ConfigurationComponent("MEDIUM", true, "C", BlocklyConstants.NO_SLOT, "C", motorCproperties);
+
+        Map<String, String> motorDproperties = createMap("MOTOR_REGULATION", "FALSE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "NONE");
+        ConfigurationComponent motorD = new ConfigurationComponent("OTHER", true, "D", BlocklyConstants.NO_SLOT, "D", motorDproperties);
+
         ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", BlocklyConstants.NO_SLOT, "1", Collections.emptyMap());
         ConfigurationComponent gyro = new ConfigurationComponent("GYRO", false, "S2", BlocklyConstants.NO_SLOT, "2", Collections.emptyMap());
         ConfigurationComponent infrared = new ConfigurationComponent("INFRARED", false, "S3", BlocklyConstants.NO_SLOT, "3", Collections.emptyMap());
@@ -307,7 +315,7 @@ public class AstToLejosJavaVisitorTest {
             builder
                 .setTrackWidth(17f)
                 .setWheelDiameter(5.6f)
-                .addComponents(Arrays.asList(motorA, motorB, touchSensor, infrared, ultrasonicSensor4, gyro))
+                .addComponents(Arrays.asList(motorA, motorB, motorC, motorD, touchSensor, infrared, ultrasonicSensor4, gyro))
                 .build();
         brickConfigurationNew.setRobotName("lejosEv3V1");
 
@@ -318,6 +326,8 @@ public class AstToLejosJavaVisitorTest {
                 + "    .setTrackWidth(17.0)\n"
                 + "    .addActor(ActorPort.A, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.NONE))\n"
                 + "    .addActor(ActorPort.B, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT))\n"
+                + "    .addActor(ActorPort.C, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.NONE))\n"
+                + "    .addActor(ActorPort.D, new Actor(ActorType.OTHER, false, DriveDirection.FOREWARD, MotorSide.NONE))\n"
                 + "    .addSensor(SensorPort.S1, new Sensor(SensorType.TOUCH))\n"
                 + "    .addSensor(SensorPort.S2, new Sensor(SensorType.GYRO))\n"
                 + "    .addSensor(SensorPort.S3, new Sensor(SensorType.INFRARED))\n"
@@ -339,6 +349,8 @@ public class AstToLejosJavaVisitorTest {
                 + "            hal.turnOnRegulatedMotor(ActorPort.B,30);\n"
                 + "            hal.rotateRegulatedMotor(ActorPort.B,30,MotorMoveMode.ROTATIONS,1);\n"
                 + "            hal.rotateDirectionRegulated(TurnDirection.RIGHT, 50);\n"
+                + "            hal.rotateRegulatedMotor(ActorPort.C, 30, MotorMoveMode.ROTATIONS, 1);\n"
+                + "            hal.setUnregulatedMotorSpeed(ActorPort.D, 30);\n"
                 + "        }\n"
                 + "        if ( (hal.getRegulatedMotorTachoValue(ActorPort.A, MotorTachoMode.ROTATION) + hal.getInfraredSensorDistance(SensorPort.S3)) == hal.getUltraSonicSensorDistance(SensorPort.S4) ) {\n"
                 + "            hal.ledOff();\n"

@@ -1076,13 +1076,17 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
                 throw new IllegalArgumentException("no mapping for " + actor.getComponentType() + "to ev3dev-lang-python");
         }
 
-        sb.append("Hal.make").append(name).append("(ev3dev.OUTPUT_").append(port.toString());
-        boolean isRegulated = actor.getProperty(SC.MOTOR_REGULATION).equals(SC.TRUE);
-        boolean isReverse = actor.getProperty(SC.MOTOR_REVERSE).equals(SC.ON);
+        sb.append("Hal.make").append(name).append("(ev3dev.OUTPUT_").append(port);
+        boolean isRegulated = SC.TRUE.equals(actor.getOptProperty(SC.MOTOR_REGULATION));
+        boolean isReverse = SC.ON.equals(actor.getOptProperty(SC.MOTOR_REVERSE));
 
         sb.append(", ").append(isRegulated ? "'on'" : "'off'");
         sb.append(", ").append(isReverse ? "'backward'" : "'foreward'");
-        sb.append(", ").append("'").append(actor.getProperty(SC.MOTOR_DRIVE).toLowerCase()).append("'");
+        if ( actor.getComponentType().equals(SC.LARGE) ) {
+            sb.append(", ").append("'").append(actor.getProperty(SC.MOTOR_DRIVE).toLowerCase()).append("'");
+        } else {
+            sb.append(", 'none'");
+        }
         sb.append(")");
         return sb.toString();
     }

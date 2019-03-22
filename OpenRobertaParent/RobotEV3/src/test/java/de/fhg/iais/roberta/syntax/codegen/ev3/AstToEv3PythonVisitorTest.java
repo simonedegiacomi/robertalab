@@ -55,10 +55,17 @@ public class AstToEv3PythonVisitorTest {
         "" //
             + "        'B':Hal.makeLargeMotor(ev3dev.OUTPUT_B, 'on', 'foreward', 'right'),\n";
 
-    private static final String CFG_MOTORS =
+    private static final String CFG_MOTORS_AB =
         "" //
             + "        'A':Hal.makeLargeMotor(ev3dev.OUTPUT_A, 'on', 'foreward', 'left'),\n"
             + "        'B':Hal.makeLargeMotor(ev3dev.OUTPUT_B, 'on', 'foreward', 'right'),\n";
+
+    private static final String CFG_MOTORS_ALL =
+        "" //
+            + "        'A':Hal.makeLargeMotor(ev3dev.OUTPUT_A, 'on', 'foreward', 'left'),\n"
+            + "        'B':Hal.makeLargeMotor(ev3dev.OUTPUT_B, 'on', 'foreward', 'right'),\n"
+            + "        'C':Hal.makeMediumMotor(ev3dev.OUTPUT_C, 'on', 'foreward', 'none'),\n"
+            + "        'D':Hal.makeOtherConsumer(ev3dev.OUTPUT_D, 'on', 'foreward', 'none'),\n";
 
     private static final String CFG_TOUCH_SENSOR =
         "" //
@@ -115,6 +122,13 @@ public class AstToEv3PythonVisitorTest {
 
         Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
         ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", BlocklyConstants.NO_SLOT, "B", motorBproperties);
+
+        Map<String, String> motorCproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "NONE");
+        ConfigurationComponent motorC = new ConfigurationComponent("MEDIUM", true, "C", BlocklyConstants.NO_SLOT, "C", motorCproperties);
+
+        Map<String, String> motorDproperties = createMap("MOTOR_REGULATION", "FALSE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "NONE");
+        ConfigurationComponent motorD = new ConfigurationComponent("OTHER", true, "D", BlocklyConstants.NO_SLOT, "D", motorDproperties);
+
         ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", BlocklyConstants.NO_SLOT, "1", Collections.emptyMap());
         ConfigurationComponent ultrasonicSensor = new ConfigurationComponent("ULTRASONIC", false, "S2", BlocklyConstants.NO_SLOT, "2", Collections.emptyMap());
         ConfigurationComponent colorSensor = new ConfigurationComponent("COLOR", false, "S3", BlocklyConstants.NO_SLOT, "3", Collections.emptyMap());
@@ -126,7 +140,7 @@ public class AstToEv3PythonVisitorTest {
             builder
                 .setTrackWidth(17f)
                 .setWheelDiameter(5.6f)
-                .addComponents(Arrays.asList(motorA, motorB, touchSensor, ultrasonicSensor, colorSensor, ultrasonicSensor2, gyro))
+                .addComponents(Arrays.asList(motorA, motorB, motorC, motorD, touchSensor, ultrasonicSensor, colorSensor, ultrasonicSensor2, gyro))
                 .build();
     }
 
@@ -219,12 +233,14 @@ public class AstToEv3PythonVisitorTest {
                 + "    'OLDGLASSES': "
                 + IMG_OLDGLASSES
                 + ",\n}\n"
-                + make_globals(CFG_MOTORS, CFG_TOUCH_SENSOR)
+                + make_globals(CFG_MOTORS_ALL, CFG_TOUCH_SENSOR)
                 + "def run():\n"
                 + "    if 5 < hal.getRegulatedMotorSpeed('B'):\n"
                 + "        hal.turnOnRegulatedMotor('B', 30)\n"
                 + "        hal.rotateRegulatedMotor('B', 30, 'rotations', 1)\n"
                 + "        hal.rotateDirectionRegulated('A', 'B', False, 'right', 50)\n"
+                + "        hal.rotateRegulatedMotor('C', 30, 'rotations', 1)\n"
+                + "        hal.turnOnUnregulatedMotor('D', 30)\n"
                 + "    if ( hal.getMotorTachoValue('A', 'rotation') + hal.getInfraredSensorDistance('4') ) == hal.getUltraSonicSensorDistance('4'):\n"
                 + "        hal.ledOff()\n"
                 + "    else:\n"
@@ -243,7 +259,7 @@ public class AstToEv3PythonVisitorTest {
         String a =
             "" //
                 + IMPORTS
-                + make_globals(CFG_MOTORS, "")
+                + make_globals(CFG_MOTORS_AB, "")
                 + "def run():\n"
                 + "    hal.turnOnRegulatedMotor('B', 0)\n"
                 + "    hal.rotateRegulatedMotor('B', 30, 'rotations', 0)\n"
@@ -286,7 +302,7 @@ public class AstToEv3PythonVisitorTest {
                 + "    'OLDGLASSES': "
                 + IMG_OLDGLASSES
                 + ",\n}\n"
-                + make_globals(CFG_MOTORS, "")
+                + make_globals(CFG_MOTORS_AB, "")
                 + "variablenName = 0\n"
                 + "def run():\n"
                 + "    global variablenName\n"
